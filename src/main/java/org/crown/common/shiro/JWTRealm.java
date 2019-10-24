@@ -23,7 +23,7 @@ import org.springframework.stereotype.Service;
 /**
  * JWT Realm 适用于shiro
  *
- * @author WenHao
+ * @author whZhang
  */
 @Service
 public class JWTRealm extends AuthorizingRealm {

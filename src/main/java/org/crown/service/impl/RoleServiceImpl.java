@@ -40,7 +40,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
  * 角色表 服务实现类
  * </p>
  *
- * @author WenHao
+ * @author whZhang
  */
 @Service
 public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, Role> implements IRoleService {

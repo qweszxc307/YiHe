@@ -40,7 +40,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * Request 请求工具类
  *
- * @author WenHao
+ * @author whZhang
  */
 @SuppressWarnings("ALL")
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

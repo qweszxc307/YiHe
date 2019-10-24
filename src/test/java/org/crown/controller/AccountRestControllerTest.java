@@ -40,7 +40,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
  * AccountRestControllerTest
  * </p>
  *
- * @author WenHao
+ * @author whZhang
  */
 public class AccountRestControllerTest extends SuperRestControllerTest implements ControllerTest {
 

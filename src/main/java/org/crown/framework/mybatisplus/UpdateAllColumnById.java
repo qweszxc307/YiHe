@@ -39,7 +39,7 @@ import com.baomidou.mybatisplus.core.toolkit.sql.SqlScriptUtils;
  * 根据 ID 更新所有字段
  * </p>
  *
- * @author WenHao
+ * @author whZhang
  */
 public class UpdateAllColumnById extends AbstractMethod {
 

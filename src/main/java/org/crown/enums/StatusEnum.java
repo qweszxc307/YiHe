@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
  * 状态枚举
  * </p>
  *
- * @author WenHao
+ * @author whZhang
  */
 public enum StatusEnum implements IEnum {
 

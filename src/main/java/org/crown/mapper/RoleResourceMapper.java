@@ -29,7 +29,7 @@ import org.crown.model.entity.RoleResource;
  * 角色资源关系表 Mapper 接口
  * </p>
  *
- * @author WenHao
+ * @author whZhang
  */
 @Mapper
 public interface RoleResourceMapper extends BaseMapper<RoleResource> {

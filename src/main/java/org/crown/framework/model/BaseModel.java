@@ -31,7 +31,7 @@ import lombok.NoArgsConstructor;
  * 自增主键父类
  * </p>
  *
- * @author WenHao
+ * @author whZhang
  */
 @Data
 @NoArgsConstructor

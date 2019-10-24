@@ -37,7 +37,7 @@ import org.springframework.http.HttpStatus;
  * DELETE: 204 No Content
  * 接口返回(多态)
  *
- * @author WenHao
+ * @author whZhang
  */
 public class ApiResponses<T> implements Serializable {
 

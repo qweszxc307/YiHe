@@ -32,7 +32,7 @@ import lombok.NoArgsConstructor;
  * 下拉框DTO
  * </p>
  *
- * @author WenHao
+ * @author whZhang
  */
 @Data
 @NoArgsConstructor

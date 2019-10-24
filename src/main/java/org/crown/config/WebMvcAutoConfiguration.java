@@ -47,7 +47,7 @@ import io.undertow.Undertow;
  * Spring Boot 配置
  * </p>
  *
- * @author WenHao
+ * @author whZhang
  */
 @Configuration
 public class WebMvcAutoConfiguration implements WebMvcConfigurer {

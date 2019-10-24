@@ -29,7 +29,7 @@ import org.crown.model.entity.User;
  * 系统用户表 Mapper 接口
  * </p>
  *
- * @author WenHao
+ * @author whZhang
  */
 @Mapper
 public interface UserMapper extends BaseMapper<User> {

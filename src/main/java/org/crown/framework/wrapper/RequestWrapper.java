@@ -42,7 +42,7 @@ import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
  * 2.拓展requestbody无限获取(HttpServletRequestWrapper只能获取一次)
  * </p>
  *
- * @author WenHao
+ * @author whZhang
  */
 public class RequestWrapper extends HttpServletRequestWrapper {
 

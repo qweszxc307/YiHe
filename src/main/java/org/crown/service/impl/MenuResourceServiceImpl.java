@@ -34,7 +34,7 @@ import org.springframework.stereotype.Service;
  * 菜单资源关系表 服务实现类
  * </p>
  *
- * @author WenHao
+ * @author whZhang
  */
 @Service
 public class MenuResourceServiceImpl extends BaseServiceImpl<MenuResourceMapper, MenuResource> implements IMenuResourceService {

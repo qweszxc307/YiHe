@@ -56,7 +56,7 @@ import lombok.NoArgsConstructor;
 /**
  * Jackson 工具类
  *
- * @author WenHao
+ * @author whZhang
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public abstract class JacksonUtils {

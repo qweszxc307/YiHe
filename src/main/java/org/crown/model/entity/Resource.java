@@ -41,7 +41,7 @@ import lombok.NoArgsConstructor;
  * 资源表
  * </p>
  *
- * @author WenHao
+ * @author whZhang
  */
 @Data
 @NoArgsConstructor

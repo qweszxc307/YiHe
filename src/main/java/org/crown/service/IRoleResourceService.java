@@ -28,7 +28,7 @@ import org.crown.model.entity.RoleResource;
  * 角色资源关系表 服务类
  * </p>
  *
- * @author WenHao
+ * @author whZhang
  */
 public interface IRoleResourceService extends BaseService<RoleResource> {
 

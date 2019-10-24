@@ -59,7 +59,7 @@ import io.swagger.annotations.ApiOperation;
  * 账户 前端控制器
  * </p>
  *
- * @author WenHao
+ * @author whZhang
  */
 @Api(tags = {"Account"}, description = "账号操作相关接口")
 @RestController

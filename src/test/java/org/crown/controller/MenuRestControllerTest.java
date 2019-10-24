@@ -43,7 +43,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
  * MenuRestControllerTest
  * </p>
  *
- * @author WenHao
+ * @author whZhang
  */
 public class MenuRestControllerTest extends SuperRestControllerTest implements ControllerTest {
 

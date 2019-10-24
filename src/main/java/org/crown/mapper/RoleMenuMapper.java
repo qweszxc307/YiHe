@@ -29,7 +29,7 @@ import org.crown.model.entity.RoleMenu;
  * 角色菜单关系表 Mapper 接口
  * </p>
  *
- * @author WenHao
+ * @author whZhang
  */
 @Mapper
 public interface RoleMenuMapper extends BaseMapper<RoleMenu> {

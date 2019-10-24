@@ -32,7 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * 请求日志工具类
  *
- * @author WenHao
+ * @author whZhang
  */
 @Slf4j
 public abstract class LogUtils {
