@@ -62,7 +62,7 @@ import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
  * 基础Service实现 继承于Mybatis-plus
  * </p>
  *
- * @author Caratacus
+ * @author WenHao
  */
 @Transactional(readOnly = true)
 public class BaseServiceImpl<M extends BaseMapper<T>, T> implements BaseService<T> {

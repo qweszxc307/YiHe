@@ -32,7 +32,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
  * 权限类型枚举
  * </p>
  *
- * @author Caratacus
+ * @author WenHao
  */
 public enum AuthTypeEnum implements IEnum {
 

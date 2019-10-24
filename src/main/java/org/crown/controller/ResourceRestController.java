@@ -52,7 +52,7 @@ import io.swagger.annotations.ApiOperation;
  * 资源表 前端控制器
  * </p>
  *
- * @author Caratacus
+ * @author WenHao
  */
 @Api(tags = {"Resource"}, description = "资源操作相关接口")
 @RestController

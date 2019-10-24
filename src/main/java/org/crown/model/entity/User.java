@@ -40,7 +40,7 @@ import lombok.NoArgsConstructor;
  * 系统用户表
  * </p>
  *
- * @author Caratacus
+ * @author WenHao
  */
 @Data
 @NoArgsConstructor

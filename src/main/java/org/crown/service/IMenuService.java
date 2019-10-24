@@ -34,7 +34,7 @@ import org.crown.model.entity.Menu;
  * 菜单表 服务类
  * </p>
  *
- * @author Caratacus
+ * @author WenHao
  */
 public interface IMenuService extends BaseService<Menu> {
 

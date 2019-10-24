@@ -33,7 +33,7 @@ import org.crown.model.entity.User;
  * 系统用户表 服务类
  * </p>
  *
- * @author Caratacus
+ * @author WenHao
  */
 public interface IUserService extends BaseService<User> {
 

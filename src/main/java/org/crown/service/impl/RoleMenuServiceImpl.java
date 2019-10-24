@@ -35,7 +35,7 @@ import org.springframework.transaction.annotation.Transactional;
  * 角色菜单关系表 服务实现类
  * </p>
  *
- * @author Caratacus
+ * @author WenHao
  */
 @Service
 public class RoleMenuServiceImpl extends BaseServiceImpl<RoleMenuMapper, RoleMenu> implements IRoleMenuService {

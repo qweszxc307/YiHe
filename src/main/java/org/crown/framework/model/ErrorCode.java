@@ -29,7 +29,7 @@ import lombok.ToString;
 /**
  * 业务异常类
  *
- * @author Caratacus
+ * @author WenHao
  */
 @Getter
 @ToString

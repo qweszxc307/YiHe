@@ -36,7 +36,7 @@ import springfox.documentation.annotations.ApiIgnore;
  * 通用错误处理器
  * </p>
  *
- * @author Caratacus
+ * @author WenHao
  */
 @SuppressWarnings({"Annotator", "SyntaxError"})
 @ApiIgnore

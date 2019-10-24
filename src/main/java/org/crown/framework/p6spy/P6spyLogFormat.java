@@ -27,7 +27,7 @@ import com.p6spy.engine.spy.appender.MessageFormattingStrategy;
 /**
  * P6spy SQL 日志格式化
  *
- * @author Caratacus
+ * @author WenHao
  */
 public class P6spyLogFormat implements MessageFormattingStrategy {
 

@@ -28,7 +28,7 @@ import org.crown.framework.model.ErrorCode;
 /**
  * 业务异常枚举
  *
- * @author Caratacus
+ * @author WenHao
  */
 public enum ErrorCodeEnum {
 

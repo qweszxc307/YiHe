@@ -61,7 +61,7 @@ import io.swagger.annotations.ApiOperation;
  * 系统用户表 前端控制器
  * </p>
  *
- * @author Caratacus
+ * @author WenHao
  */
 @Api(tags = {"User"}, description = "用户操作相关接口")
 @RestController

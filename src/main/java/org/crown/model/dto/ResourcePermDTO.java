@@ -32,7 +32,7 @@ import lombok.NoArgsConstructor;
  * 权限 资源DTO
  * </p>
  *
- * @author Caratacus
+ * @author WenHao
  */
 @Data
 @NoArgsConstructor

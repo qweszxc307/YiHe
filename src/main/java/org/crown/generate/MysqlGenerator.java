@@ -27,7 +27,7 @@ import com.baomidou.mybatisplus.generator.AutoGenerator;
  * Mysql代码生成器
  * </p>
  *
- * @author Caratacus
+ * @author WenHao
  */
 public class MysqlGenerator extends SuperGenerator {
 

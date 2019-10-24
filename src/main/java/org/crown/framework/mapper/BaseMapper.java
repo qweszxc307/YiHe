@@ -34,7 +34,7 @@ import com.baomidou.mybatisplus.core.toolkit.Constants;
 /**
  * BaseMapper 基于 MP 删减
  *
- * @author Caratacus
+ * @author WenHao
  * @see com.baomidou.mybatisplus.core.mapper.BaseMapper
  */
 public interface BaseMapper<T> {

@@ -40,7 +40,7 @@ import lombok.NoArgsConstructor;
  * API 断言
  * </p>
  *
- * @author Caratacus
+ * @author WenHao
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ApiAssert {

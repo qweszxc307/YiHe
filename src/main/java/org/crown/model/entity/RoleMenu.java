@@ -33,7 +33,7 @@ import lombok.NoArgsConstructor;
  * 角色菜单关系表
  * </p>
  *
- * @author Caratacus
+ * @author WenHao
  */
 @Data
 @NoArgsConstructor
