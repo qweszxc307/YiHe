@@ -60,7 +60,6 @@ import io.swagger.annotations.ApiOperation;
  * </p>
  *
  * @author whZhang
- *
  */
 @Api(tags = {"Account"}, description = "账号操作相关接口")
 @RestController
