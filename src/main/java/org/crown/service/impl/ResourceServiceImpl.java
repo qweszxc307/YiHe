@@ -49,7 +49,7 @@ import com.baomidou.mybatisplus.core.toolkit.Constants;
  * 资源表 服务实现类
  * </p>
  *
- * @author Caratacus
+ * @author WenHao
  */
 @Service
 public class ResourceServiceImpl extends BaseServiceImpl<ResourceMapper, Resource> implements IResourceService {

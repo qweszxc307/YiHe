@@ -35,7 +35,7 @@ import lombok.NoArgsConstructor;
  * 登陆参数
  * </p>
  *
- * @author Caratacus
+ * @author WenHao
  */
 @ApiModel
 @Data

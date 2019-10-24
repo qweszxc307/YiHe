@@ -32,7 +32,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
  * 菜单类型枚举
  * </p>
  *
- * @author Caratacus
+ * @author WenHao
  */
 public enum MenuTypeEnum implements IEnum {
 

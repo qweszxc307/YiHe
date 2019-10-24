@@ -36,7 +36,7 @@ import lombok.NoArgsConstructor;
  * 菜单表
  * </p>
  *
- * @author Caratacus
+ * @author WenHao
  */
 @Data
 @NoArgsConstructor

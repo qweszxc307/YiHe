@@ -41,7 +41,7 @@ import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
  * 基础Service 继承于Mybatis-plus
  * </p>
  *
- * @author Caratacus
+ * @author WenHao
  */
 public interface BaseService<T> {
 

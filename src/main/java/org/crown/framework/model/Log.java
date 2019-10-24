@@ -30,7 +30,7 @@ import lombok.ToString;
 /**
  * app请求日志详情
  *
- * @author Caratacus
+ * @author WenHao
  */
 @Getter
 @ToString

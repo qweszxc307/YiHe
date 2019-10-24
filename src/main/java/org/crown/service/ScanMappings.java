@@ -50,7 +50,7 @@ import liquibase.util.MD5Util;
  * 服务mapping扫描
  * </p>
  *
- * @author Caratacus
+ * @author WenHao
  */
 @Service
 public class ScanMappings {

@@ -40,7 +40,7 @@ import lombok.extern.slf4j.Slf4j;
  * JWT token 生成工具类
  * </p>
  *
- * @author Caratacus
+ * @author WenHao
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Slf4j

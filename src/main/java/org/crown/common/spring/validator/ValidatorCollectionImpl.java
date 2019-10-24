@@ -53,7 +53,7 @@ import org.springframework.util.Assert;
  * 拓展SpringValidatorAdapter以便于校验List<T>类型数据
  * {@link org.springframework.validation.beanvalidation.SpringValidatorAdapter
  *
- * @author Caratacus
+ * @author WenHao
  */
 public class ValidatorCollectionImpl implements javax.validation.Validator {
 

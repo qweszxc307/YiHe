@@ -31,7 +31,7 @@ import org.springframework.stereotype.Service;
  * 系统用户角色关系表 服务实现类
  * </p>
  *
- * @author Caratacus
+ * @author WenHao
  */
 @Service
 public class UserRoleServiceImpl extends BaseServiceImpl<UserRoleMapper, UserRole> implements IUserRoleService {

@@ -25,7 +25,7 @@ package org.crown.framework.exception;
  * Crown异常类
  * </p>
  *
- * @author Caratacus
+ * @author WenHao
  */
 public class CrownException extends RuntimeException {
 

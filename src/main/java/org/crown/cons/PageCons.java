@@ -23,7 +23,7 @@ package org.crown.cons;
 /**
  * PAGE 常量
  *
- * @author Caratacus
+ * @author WenHao
  */
 public interface PageCons {
 

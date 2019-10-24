@@ -31,7 +31,7 @@ import org.crown.enums.AuthTypeEnum;
 /**
  * 权限认证注解
  *
- * @author Caratacus
+ * @author WenHao
  */
 @Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)

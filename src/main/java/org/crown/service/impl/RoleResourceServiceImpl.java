@@ -31,7 +31,7 @@ import org.springframework.stereotype.Service;
  * 角色资源关系表 服务实现类
  * </p>
  *
- * @author Caratacus
+ * @author WenHao
  */
 @Service
 public class RoleResourceServiceImpl extends BaseServiceImpl<RoleResourceMapper, RoleResource> implements IRoleResourceService {

@@ -37,7 +37,7 @@ import org.springframework.stereotype.Component;
 /**
  * Crown 过滤器
  *
- * @author Caratacus
+ * @author WenHao
  */
 @Component
 @WebFilter(filterName = "crownFilter", urlPatterns = "/*")

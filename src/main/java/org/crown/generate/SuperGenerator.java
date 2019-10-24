@@ -30,7 +30,7 @@ import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
  * 代码生成器父类
  * </p>
  *
- * @author Caratacus
+ * @author WenHao
  */
 public class SuperGenerator {
 

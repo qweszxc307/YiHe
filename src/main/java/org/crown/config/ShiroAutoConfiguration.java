@@ -25,7 +25,7 @@ import org.springframework.web.util.UrlPathHelper;
 /**
  * Shiro 配置
  *
- * @author Caratacus
+ * @author WenHao
  */
 @Configuration
 public class ShiroAutoConfiguration {

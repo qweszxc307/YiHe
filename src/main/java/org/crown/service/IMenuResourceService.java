@@ -30,7 +30,7 @@ import org.crown.model.entity.MenuResource;
  * 菜单资源关系表 服务类
  * </p>
  *
- * @author Caratacus
+ * @author WenHao
  */
 public interface IMenuResourceService extends BaseService<MenuResource> {
 

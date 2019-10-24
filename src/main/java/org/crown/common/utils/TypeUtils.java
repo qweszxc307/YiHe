@@ -38,7 +38,7 @@ import lombok.NoArgsConstructor;
 /**
  * 修改fastjson类型转换
  *
- * @author Caratacus
+ * @author WenHao
  * https://github.com/alibaba/fastjson/blob/master/src/main/java/com/alibaba/fastjson/util/TypeUtils.java
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

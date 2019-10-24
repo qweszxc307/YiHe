@@ -33,7 +33,7 @@ import org.crown.model.entity.Resource;
  * 资源表 Mapper 接口
  * </p>
  *
- * @author Caratacus
+ * @author WenHao
  */
 @Mapper
 public interface ResourceMapper extends BaseMapper<Resource> {

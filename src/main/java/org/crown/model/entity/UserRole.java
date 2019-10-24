@@ -33,7 +33,7 @@ import lombok.NoArgsConstructor;
  * 系统用户角色关系表
  * </p>
  *
- * @author Caratacus
+ * @author WenHao
  */
 @Data
 @NoArgsConstructor

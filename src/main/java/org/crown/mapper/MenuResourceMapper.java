@@ -29,7 +29,7 @@ import org.crown.model.entity.MenuResource;
  * 菜单资源关系表 Mapper 接口
  * </p>
  *
- * @author Caratacus
+ * @author WenHao
  */
 @Mapper
 public interface MenuResourceMapper extends BaseMapper<MenuResource> {

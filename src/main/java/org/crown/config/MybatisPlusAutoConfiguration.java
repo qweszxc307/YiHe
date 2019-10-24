@@ -31,7 +31,7 @@ import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
 /**
  * MybatisPlus 配置
  *
- * @author Caratacus
+ * @author WenHao
  */
 @Configuration
 public class MybatisPlusAutoConfiguration {

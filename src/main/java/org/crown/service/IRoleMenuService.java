@@ -30,7 +30,7 @@ import org.crown.model.entity.RoleMenu;
  * 角色菜单关系表 服务类
  * </p>
  *
- * @author Caratacus
+ * @author WenHao
  */
 public interface IRoleMenuService extends BaseService<RoleMenu> {
 

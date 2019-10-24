@@ -52,7 +52,7 @@ import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
  * 菜单表 服务实现类
  * </p>
  *
- * @author Caratacus
+ * @author WenHao
  */
 @Service
 public class MenuServiceImpl extends BaseServiceImpl<MenuMapper, Menu> implements IMenuService {

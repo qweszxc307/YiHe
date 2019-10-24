@@ -32,7 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * JWT过滤器 适用于shiro
  *
- * @author Caratacus
+ * @author WenHao
  */
 @Slf4j
 public class JWTFilter extends BasicHttpAuthenticationFilter {

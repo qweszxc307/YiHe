@@ -45,7 +45,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  * RESTful 服务 API 管理框架 Swagger 配置初始化
  * </p>
  *
- * @author Caratacus
+ * @author WenHao
  */
 @Configuration
 @EnableSwagger2

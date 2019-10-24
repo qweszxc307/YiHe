@@ -34,7 +34,7 @@ import org.crown.model.entity.Resource;
  * 资源表 服务类
  * </p>
  *
- * @author Caratacus
+ * @author WenHao
  */
 public interface IResourceService extends BaseService<Resource> {
 

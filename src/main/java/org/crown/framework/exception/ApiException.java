@@ -28,7 +28,7 @@ import org.crown.framework.model.ErrorCode;
  * API 业务异常类
  * </p>
  *
- * @author Caratacus
+ * @author WenHao
  */
 public class ApiException extends RuntimeException {
 
