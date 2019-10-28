@@ -25,7 +25,7 @@ package org.crown.common.exception;
  * 未知枚举 异常
  * </p>
  *
- * @author WenHao
+ * @author whZhang
  */
 public class UnknownEnumException extends RuntimeException {
 

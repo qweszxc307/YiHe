@@ -31,7 +31,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 /**
  * Spring Application 工具类
  *
- * @author WenHao
+ * @author whZhang
  */
 public class ApplicationUtils {
 

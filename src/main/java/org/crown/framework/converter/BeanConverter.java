@@ -41,7 +41,7 @@ import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 /**
  * 转换工具类
  *
- * @author WenHao
+ * @author whZhang
  */
 public class BeanConverter {
 

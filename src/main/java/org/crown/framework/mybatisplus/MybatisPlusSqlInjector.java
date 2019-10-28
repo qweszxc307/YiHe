@@ -43,7 +43,7 @@ import com.baomidou.mybatisplus.extension.injector.methods.additional.InsertBatc
  * MybatisPlusSql注入器
  * </p>
  *
- * @author WenHao
+ * @author whZhang
  */
 public class MybatisPlusSqlInjector extends AbstractSqlInjector {
 

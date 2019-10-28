@@ -63,7 +63,7 @@ import lombok.extern.slf4j.Slf4j;
  * {@link org.springframework.web.servlet.HandlerExceptionResolver
  * {@link org.springframework.web.servlet.DispatcherServlet}.
  *
- * @author WenHao
+ * @author whZhang
  * @see org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler
  * @see #handleNoSuchRequestHandlingMethod
  * @see #handleHttpRequestMethodNotSupported

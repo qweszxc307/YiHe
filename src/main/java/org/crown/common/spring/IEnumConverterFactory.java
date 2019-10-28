@@ -37,7 +37,7 @@ import org.springframework.core.convert.converter.ConverterFactory;
  * https://blog.csdn.net/u014527058/article/details/62883573
  * https://www.cnblogs.com/xingele0917/p/3921492.html
  *
- * @author WenHao
+ * @author whZhang
  */
 public class IEnumConverterFactory implements ConverterFactory<String, IEnum> {
 

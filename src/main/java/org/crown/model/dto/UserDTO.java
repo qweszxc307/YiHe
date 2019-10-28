@@ -37,7 +37,7 @@ import lombok.NoArgsConstructor;
  * 用户DTO
  * </p>
  *
- * @author WenHao
+ * @author whZhang
  */
 @ApiModel
 @Data

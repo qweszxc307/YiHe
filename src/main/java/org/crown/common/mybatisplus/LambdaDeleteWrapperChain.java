@@ -34,7 +34,7 @@ import com.baomidou.mybatisplus.extension.service.additional.AbstractChainWrappe
 /**
  * Lambda删除Wrapper
  *
- * @author WenHao
+ * @author whZhang
  */
 public class LambdaDeleteWrapperChain<T> extends AbstractChainWrapper<T, SFunction<T, ?>, LambdaDeleteWrapperChain<T>, LambdaQueryWrapper<T>>
         implements Query<LambdaDeleteWrapperChain<T>, T, SFunction<T, ?>> {

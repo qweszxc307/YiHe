@@ -35,7 +35,7 @@ import org.crown.model.entity.Menu;
  * 菜单表 Mapper 接口
  * </p>
  *
- * @author WenHao
+ * @author whZhang
  */
 @Mapper
 public interface MenuMapper extends BaseMapper<Menu> {

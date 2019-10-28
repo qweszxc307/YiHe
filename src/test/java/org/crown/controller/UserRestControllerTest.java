@@ -44,7 +44,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
  * UserRestController 测试类
  * </p>
  *
- * @author WenHao
+ * @author whZhang
  */
 public class UserRestControllerTest extends SuperRestControllerTest implements ControllerTest {
 

@@ -48,7 +48,7 @@ import org.springframework.transaction.annotation.Transactional;
  * 系统用户表 服务实现类
  * </p>
  *
- * @author WenHao
+ * @author whZhang
  */
 @Service
 public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implements IUserService {

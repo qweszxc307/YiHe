@@ -27,7 +27,7 @@ import org.junit.Test;
  * MysqlGeneratorTest
  * </p>
  *
- * @author WenHao
+ * @author whZhang
  */
 public class MysqlGeneratorTest {
 

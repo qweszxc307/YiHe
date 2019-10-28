@@ -42,7 +42,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
  * RoleRestControllerTest
  * </p>
  *
- * @author WenHao
+ * @author whZhang
  */
 public class RoleRestControllerTest extends SuperRestControllerTest implements ControllerTest {
 

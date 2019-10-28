@@ -39,7 +39,7 @@ import com.baomidou.mybatisplus.extension.service.additional.AbstractChainWrappe
 /**
  * Lambda查询Wrapper
  *
- * @author WenHao
+ * @author whZhang
  */
 public class LambdaQueryWrapperChain<T> extends AbstractChainWrapper<T, SFunction<T, ?>, LambdaQueryWrapperChain<T>, LambdaQueryWrapper<T>>
         implements Query<LambdaQueryWrapperChain<T>, T, SFunction<T, ?>> {

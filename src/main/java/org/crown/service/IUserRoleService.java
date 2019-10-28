@@ -28,7 +28,7 @@ import org.crown.model.entity.UserRole;
  * 系统用户角色关系表 服务类
  * </p>
  *
- * @author WenHao
+ * @author whZhang
  */
 public interface IUserRoleService extends BaseService<UserRole> {
 

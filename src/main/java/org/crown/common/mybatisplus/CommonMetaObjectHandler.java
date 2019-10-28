@@ -30,7 +30,7 @@ import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 /**
  * 通用填充类 适用于mybatis plus
  *
- * @author WenHao
+ * @author whZhang
  */
 public class CommonMetaObjectHandler implements MetaObjectHandler {
 

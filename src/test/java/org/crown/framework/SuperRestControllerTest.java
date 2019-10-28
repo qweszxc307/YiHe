@@ -54,7 +54,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
  * SuperRestController 测试类
  * </p>
  *
- * @author WenHao
+ * @author whZhang
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = CrownApplication.class)

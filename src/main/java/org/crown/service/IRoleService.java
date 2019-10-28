@@ -32,7 +32,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
  * 角色表 服务类
  * </p>
  *
- * @author WenHao
+ * @author whZhang
  */
 public interface IRoleService extends BaseService<Role> {
 

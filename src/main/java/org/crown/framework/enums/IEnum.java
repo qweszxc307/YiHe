@@ -25,7 +25,7 @@ package org.crown.framework.enums;
  * 通用枚举
  * </p>
  *
- * @author WenHao
+ * @author whZhang
  */
 public interface IEnum {
 

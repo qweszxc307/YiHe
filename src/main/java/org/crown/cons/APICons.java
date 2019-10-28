@@ -25,7 +25,7 @@ package org.crown.cons;
  * API常量
  * </p>
  *
- * @author WenHao
+ * @author whZhang
  */
 public interface APICons {
 

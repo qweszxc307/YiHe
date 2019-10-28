@@ -33,7 +33,7 @@ import lombok.NoArgsConstructor;
  * TokenDTO
  * </p>
  *
- * @author WenHao
+ * @author whZhang
  */
 @ApiModel
 @Data

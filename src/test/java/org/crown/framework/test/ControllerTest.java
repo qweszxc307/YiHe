@@ -25,7 +25,7 @@ package org.crown.framework.test;
  * Controller 测试类
  * </p>
  *
- * @author WenHao
+ * @author whZhang
  */
 public interface ControllerTest {
 

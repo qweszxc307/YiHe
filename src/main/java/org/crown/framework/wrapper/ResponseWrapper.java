@@ -40,7 +40,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * response包装类
  *
- * @author WenHao
+ * @author whZhang
  */
 @Slf4j
 public class ResponseWrapper extends HttpServletResponseWrapper {

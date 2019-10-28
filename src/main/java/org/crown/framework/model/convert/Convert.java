@@ -29,7 +29,7 @@ import org.crown.framework.converter.BeanConverter;
  * 普通实体父类
  * </p>
  *
- * @author WenHao
+ * @author whZhang
  */
 public class Convert implements Serializable {
 
