@@ -22,15 +22,16 @@ package org.crown.controller;
 
 import java.util.List;
 
+import org.crown.controller.system.MenuRestController;
 import org.crown.enums.MenuTypeEnum;
 import org.crown.enums.StatusEnum;
 import org.crown.framework.SuperRestControllerTest;
 import org.crown.framework.responses.SuccessResponses;
 import org.crown.framework.test.ControllerTest;
-import org.crown.model.dto.TokenDTO;
-import org.crown.model.entity.Menu;
-import org.crown.model.parm.MenuPARM;
-import org.crown.service.IUserService;
+import org.crown.model.system.dto.TokenDTO;
+import org.crown.model.system.entity.Menu;
+import org.crown.model.system.parm.MenuPARM;
+import org.crown.service.system.IUserService;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;

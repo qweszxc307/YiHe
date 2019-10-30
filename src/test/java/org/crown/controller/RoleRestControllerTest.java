@@ -23,13 +23,14 @@ package org.crown.controller;
 import java.util.Arrays;
 import java.util.List;
 
+import org.crown.controller.system.RoleRestController;
 import org.crown.framework.SuperRestControllerTest;
 import org.crown.framework.responses.SuccessResponses;
 import org.crown.framework.test.ControllerTest;
-import org.crown.model.dto.TokenDTO;
-import org.crown.model.entity.Role;
-import org.crown.model.parm.RolePARM;
-import org.crown.service.IUserService;
+import org.crown.model.system.dto.TokenDTO;
+import org.crown.model.system.entity.Role;
+import org.crown.model.system.parm.RolePARM;
+import org.crown.service.system.IUserService;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;

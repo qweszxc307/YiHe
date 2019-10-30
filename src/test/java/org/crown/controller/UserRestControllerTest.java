@@ -25,13 +25,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.crown.controller.system.UserRestController;
 import org.crown.enums.StatusEnum;
 import org.crown.framework.SuperRestControllerTest;
 import org.crown.framework.test.ControllerTest;
-import org.crown.model.dto.TokenDTO;
-import org.crown.model.entity.User;
-import org.crown.model.parm.UserPARM;
-import org.crown.service.IUserService;
+import org.crown.model.system.dto.TokenDTO;
+import org.crown.model.system.entity.User;
+import org.crown.model.system.parm.UserPARM;
+import org.crown.service.system.IUserService;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
