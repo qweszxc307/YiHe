@@ -21,8 +21,8 @@ import org.crown.common.utils.JWTUtils;
 import org.crown.cons.APICons;
 import org.crown.framework.enums.ErrorCodeEnum;
 import org.crown.framework.utils.ResponseUtils;
-import org.crown.model.dto.ResourcePermDTO;
-import org.crown.service.IResourceService;
+import org.crown.model.system.dto.ResourcePermDTO;
+import org.crown.service.system.IResourceService;
 import org.springframework.util.PathMatcher;
 import org.springframework.web.util.UrlPathHelper;
 

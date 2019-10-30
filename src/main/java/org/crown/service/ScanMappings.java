@@ -32,7 +32,8 @@ import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 
 import org.crown.common.annotations.Resources;
-import org.crown.model.entity.Resource;
+import org.crown.model.system.entity.Resource;
+import org.crown.service.system.IResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestMapping;

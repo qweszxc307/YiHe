@@ -20,11 +20,12 @@
  */
 package org.crown.controller;
 
+import org.crown.controller.system.ResourceRestController;
 import org.crown.framework.SuperRestControllerTest;
 import org.crown.framework.test.ControllerTest;
-import org.crown.model.dto.TokenDTO;
-import org.crown.service.IResourceService;
-import org.crown.service.IUserService;
+import org.crown.model.system.dto.TokenDTO;
+import org.crown.service.system.IResourceService;
+import org.crown.service.system.IUserService;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;

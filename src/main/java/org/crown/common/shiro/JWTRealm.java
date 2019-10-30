@@ -15,8 +15,8 @@ import org.crown.common.utils.JWTUtils;
 import org.crown.common.utils.TypeUtils;
 import org.crown.framework.enums.ErrorCodeEnum;
 import org.crown.framework.utils.ApiAssert;
-import org.crown.service.IResourceService;
-import org.crown.service.IUserService;
+import org.crown.service.system.IResourceService;
+import org.crown.service.system.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

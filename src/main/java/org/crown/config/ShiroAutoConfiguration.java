@@ -13,7 +13,7 @@ import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.crown.common.shiro.JWTFilter;
 import org.crown.common.shiro.JWTRealm;
-import org.crown.service.IResourceService;
+import org.crown.service.system.IResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

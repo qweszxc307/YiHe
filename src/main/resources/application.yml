@@ -1,7 +1,7 @@
 logging:
   config: classpath:log4j2.xml
 mybatis-plus:
-  mapper-locations: classpath:mapper/*Mapper.xml
+  mapper-locations: classpath:mapper/**/*Mapper.xml
   global-config:
     db-config:
       field-strategy: not_empty
@@ -10,7 +10,7 @@ mybatis-plus:
     banner: false
     super-mapper-class: org.crown.framework.mapper.BaseMapper
   type-enums-package: org.crown.enums
-  type-aliases-package: org.crown.model.entity,org.crown.model.dto
+  type-aliases-package: org.crown.model.**.entity,org.crown.model.**.dto
 server:
   port: 8088
   servlet:
