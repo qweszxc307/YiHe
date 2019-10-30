@@ -69,10 +69,10 @@ public class SwaggerAutoConfiguration {
     ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title("Crown API")
-                .description("Crown Swagger API 文档")
-                .termsOfServiceUrl("https://github.com/Caratacus/Crown")
+                .description("亿禾接口文档")
+                .termsOfServiceUrl("")
                 .version("1.0")
-                .contact(new Contact("Crown", "https://github.com/Caratacus", "caratacus@qq.cn"))
+                .contact(new Contact("亿禾平台", "", ""))
                 .build();
     }
 
