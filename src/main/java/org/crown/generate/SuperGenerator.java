@@ -164,9 +164,9 @@ public class SuperGenerator {
                     }
                 })
                 .setDriverName("com.mysql.cj.jdbc.Driver")
-                .setUsername("root")
-                .setPassword("521")
-                .setUrl("jdbc:mysql://127.0.0.1:3306/crown1?characterEncoding=utf8");
+                .setUsername("boostech")
+                .setPassword("admin")
+                .setUrl("jdbc:mysql://127.0.0.1:3306/zwh?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8&useSSL=false");
     }
 
     /**
