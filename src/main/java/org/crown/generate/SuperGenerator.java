@@ -70,14 +70,14 @@ public class SuperGenerator {
      *
      * @return
      */
-    protected PackageConfig getPackageConfig() {
+    protected PackageConfig getPackageConfig(String pakageName) {
         return new PackageConfig()
                 .setParent("org.crown")
-                .setController("controller")
-                .setEntity("model.entity")
-                .setMapper("mapper")
-                .setService("service")
-                .setServiceImpl("service.impl");
+                .setController("controller."+pakageName)
+                .setEntity("model."+pakageName+".entity")
+                .setMapper("mapper."+pakageName)
+                .setService("service."+pakageName)
+                .setServiceImpl("service."+pakageName+".impl");
     }
 
     /**
@@ -184,7 +184,7 @@ public class SuperGenerator {
                 .setBaseColumnList(false)// XML columList
                 .setKotlin(false) //是否生成 kotlin 代码
                 .setOpen(false)
-                .setAuthor("Caratacus") //作者
+                .setAuthor("whZhang") //作者
                 //自定义文件命名，注意 %s 会自动填充表实体属性！
                 .setEntityName("%s")
                 .setMapperName("%sMapper")
@@ -233,7 +233,7 @@ public class SuperGenerator {
      * @param tableName
      * @return
      */
-    protected AutoGenerator getAutoGenerator(String tableName) {
+    protected AutoGenerator getAutoGenerator(String tableName,String pakageName) {
         return new AutoGenerator()
                 // 全局配置
                 .setGlobalConfig(getGlobalConfig())
@@ -242,7 +242,7 @@ public class SuperGenerator {
                 // 策略配置
                 .setStrategy(getStrategyConfig(tableName))
                 // 包配置
-                .setPackageInfo(getPackageConfig())
+                .setPackageInfo(getPackageConfig(pakageName))
                 // 注入自定义配置，可以在 VM 中使用 cfg.abc 设置的值
                 .setCfg(getInjectionConfig())
                 .setTemplate(getTemplateConfig());
