@@ -48,7 +48,7 @@ public class SuperGenerator {
      *
      * @return
      */
-    protected InjectionConfig getInjectionConfig() {
+    protected InjectionConfig getInjectionConfig(String pakageName) {
         return new InjectionConfig() {
             @Override
             public void initMap() {
@@ -60,7 +60,7 @@ public class SuperGenerator {
             // 自定义输出文件目录
             @Override
             public String outputFile(TableInfo tableInfo) {
-                return getResourcePath() + "/mapper/" + tableInfo.getEntityName() + "Mapper.xml";
+                return getResourcePath() + "/mapper/" +pakageName+"/"+ tableInfo.getEntityName() + "Mapper.xml";
             }
         }));
     }
@@ -244,7 +244,7 @@ public class SuperGenerator {
                 // 包配置
                 .setPackageInfo(getPackageConfig(pakageName))
                 // 注入自定义配置，可以在 VM 中使用 cfg.abc 设置的值
-                .setCfg(getInjectionConfig())
+                .setCfg(getInjectionConfig(pakageName))
                 .setTemplate(getTemplateConfig());
     }
 
