@@ -68,11 +68,11 @@ public class SwaggerAutoConfiguration {
      */
     ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("Crown API")
-                .description("亿禾接口文档")
+                .title("亿禾红酒管理销售品台")
+                .description("亿禾平台接口文档")
                 .termsOfServiceUrl("")
                 .version("1.0")
-                .contact(new Contact("亿禾平台", "", ""))
+                .contact(new Contact("帛腾信息技术有限公司", "", ""))
                 .build();
     }
 
