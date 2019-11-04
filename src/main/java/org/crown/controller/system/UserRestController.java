@@ -83,7 +83,6 @@ public class UserRestController extends SuperController {
     public ApiResponses<IPage<UserDTO>> page(@RequestParam(value = "loginName", required = false) String loginName,
                                              @RequestParam(value = "nickname", required = false) String nickname,
                                              @RequestParam(value = "status", required = false) StatusEnum status) {
-        ;
         return success(
                 userService.query().likeRight(StringUtils.isNotEmpty(loginName), User::getLoginName, loginName)
                         .likeRight(StringUtils.isNotEmpty(nickname), User::getNickname, nickname)
