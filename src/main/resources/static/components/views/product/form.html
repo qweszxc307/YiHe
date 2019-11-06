@@ -1,0 +1,139 @@
+<!-- product表单弹窗 -->
+<form id="product-form" lay-filter="product-form" class="layui-form model-form">
+    <input name="id" type="hidden"/>
+    <div class="layui-form-item">
+        <label class="layui-form-label">品牌名称</label>
+        <div class="layui-input-block">
+            <input id="name" name="name" placeholder="请输入账号" type="text" class="layui-input" maxlength="20" />
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">产品价格</label>
+        <div class="layui-input-block">
+            <input name="price" placeholder="请输入用户名" type="text" class="layui-input" maxlength="20"
+                   lay-verify="required"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">运费</label>
+        <div class="layui-input-block">
+            <input name="carriage" placeholder="请输入手机号" type="text" class="layui-input" />
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">品牌id</label>
+        <div class="layui-input-block">
+            <input name="brandId" placeholder="请输入邮箱" type="text" class="layui-input" />
+        </div>
+    </div>
+    <div style="padding: 10px; background-color: #F1F1F1;">
+        <div class="layui-row layui-col-space15">
+            <div class="layui-col-md6">
+                <div class="layui-card">
+                    <div class="layui-card-header">产品图片</div>
+                    <div class="layui-card-body">
+                        <div class="layui-upload">
+                            <button type="button" class="layui-btn" id="product_img" style="margin-left: 20px;">上传产品图片</button>
+                            <div class="layui-upload-list">
+                                <img class="layui-upload-img" id="product_img_preview" style="width: 200px">
+                                <p id="product_img_txt"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md6">
+                <div class="layui-card">
+                    <div class="layui-card-header">产品详情图片</div>
+                    <div class="layui-card-body">
+                        <div class="layui-upload">
+                            <button type="button" class="layui-btn" id="detail_img" style="margin-left: 20px;">上传详情图片</button>
+                            <div class="layui-upload-list">
+                                <img class="layui-upload-img" id="detail_img_preview" style="width: 200px">
+                                <p id="detail_img_txt"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-form-item model-form-footer" style="margin-top:10px">
+        <button class="layui-btn layui-btn-primary close" type="button">取消</button>
+        <button class="layui-btn" id="form-submit" lay-filter="product-form-submit" lay-submit>保存</button>
+    </div>
+</form>
+
+<script>
+    layui.use('upload', function () {
+        var layer = layui.layer;
+        var crown = layui.crown;
+        var config = layui.config;
+        var $ = layui.jquery
+            ,upload = layui.upload;
+        var product = crown.getTempData('t_product');
+        if(product){
+            crown.fromVal('product-form', product);
+            $("#form-submit").hide();
+        }else{
+
+        }
+
+        //产品图片上传
+        var uploadProductImg = upload.render({
+            elem: '#product_img'
+            ,url: 'product/upload'
+            ,headers: {Authorization: config.getToken()}
+            ,before: function(obj){
+                //预读本地文件示例，不支持ie8
+                obj.preview(function(index, file, result){
+                    $('#product_img_preview').attr('src', result); //图片链接（base64）
+                });
+            }
+            ,done: function(res){
+                //如果上传失败
+                if(res.status == 201){
+                    return layer.msg('上传成功');
+                }
+                //上传成功
+            }
+            ,error: function(){
+                //演示失败状态，并实现重传
+                var demoText = $('#product_img_txt');
+                demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+                demoText.find('.demo-reload').on('click', function(){
+                    uploadProductImg.upload();
+                });
+            }
+        });
+
+        //详情图片上传
+        var uploadDetailImg = upload.render({
+            elem: '#detail_img'
+            ,url: 'product/upload'
+            ,headers: {Authorization: config.getToken()}
+            ,before: function(obj){
+                //预读本地文件示例，不支持ie8
+                obj.preview(function(index, file, result){
+                    $('#detail_img_preview').attr('src', result); //图片链接（base64）
+                });
+            }
+            ,done: function(res){
+                //如果上传失败
+                if(res.status == 201){
+                    return layer.msg('上传成功');
+                }
+                //上传成功
+            }
+            ,error: function(){
+                //演示失败状态，并实现重传
+                var demoText = $('#detail_img_txt');
+                demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+                demoText.find('.demo-reload').on('click', function(){
+                    uploadDetailImg.upload();
+                });
+            }
+        });
+    })
+</script>

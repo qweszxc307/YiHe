@@ -1,14 +1,14 @@
 <div class="layui-card">
     <div class="layui-card-header">
-        <h2 class="header-title">轮播图</h2>
+        <h2 class="header-title">产品管理</h2>
         <span class="layui-breadcrumb pull-right">
-          <a href="#!console">轮播图</a>
-          <a><cite>轮播图</cite></a>
+          <a href="#!console">产品管理</a>
+          <a><cite>产品管理</cite></a>
         </span>
     </div>
     <div class="layui-card-body">
         <!-- 表格顶部操作列 -->
-        <script type="text/html" id="image-toolbar">
+        <script type="text/html" id="product-toolbar">
             <div class="layui-btn-container">
                 {{# if({{addShow}} == true){ }}
                 <button class="layui-btn layui-btn-normal layui-btn-sm" lay-event="add"><i
@@ -17,12 +17,15 @@
                 {{# } }}
             </div>
         </script>
-        <table class="layui-table" id="image-table" lay-filter="image-table"></table>
+        <table class="layui-table" id="product-table" lay-filter="product-table"></table>
     </div>
 </div>
 
 <!-- 表格操作列 -->
-<script type="text/html" id="image-table-bar">
+<script type="text/html" id="product-table-bar">
+    {{#  if({{detailShow}} == true){ }}
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">详情</a>
+    {{#  } }}
     {{#  if({{editShow}} == true){ }}
     <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>
     {{#  } }}
@@ -32,8 +35,8 @@
 </script>
 
 <!-- 表格状态列 -->
-<script type="text/html" id="image-tpl-status">
-    <input type="checkbox" lay-filter="image-tpl-status" value="{{d.id}}" lay-skin="switch"
+<script type="text/html" id="product-tpl-status">
+    <input type="checkbox" lay-filter="product-tpl-status" value="{{d.id}}" lay-skin="switch"
            lay-text="正常|禁用" {{d.status==0?'checked':''}}/>
 </script>
 
@@ -44,18 +47,19 @@
         var config = layui.config;
         var layer = layui.layer;
         var crown = layui.crown;
-        $('#image-toolbar').vm({
-            addShow: crown.hasPerm("image:add")
+        $('#product-toolbar').vm({
+            addShow: crown.hasPerm("product:add")
         });
-        $('#image-table-bar').vm({
-            editShow: crown.hasPerm("image:edit"),
-            deleteShow: crown.hasPerm("image:delete")
+        $('#product-table-bar').vm({
+            detailShow: crown.hasPerm("product:detail"),
+            editShow: crown.hasPerm("product:edit"),
+            deleteShow: crown.hasPerm("product:delete")
         });
         // 渲染表格
-        var userTable = table.render({
-            elem: '#image-table',
-            toolbar: '#image-toolbar',
-            url: config.serverUrl + '/image',
+        var productTable = table.render({
+            elem: '#product-table',
+            toolbar: '#product-toolbar',
+            url: config.serverUrl + '/product',
             request: config.request,
             parseData: config.parseData,
             response: config.response,
@@ -63,23 +67,31 @@
             page: true,
             cols: [[
                 {field: 'id', width: 60, title: 'ID'},
-                {field: 'imgUrl', align: 'center', sort: true, title: '图片路径'},
-                {field: 'createTime', align: 'center', sort: true, title: '创建时间'},
-                {field: 'updateTime', align: 'center', sort: true, title: '修改时间'},
-                {align: 'center', toolbar: '#image-table-bar', title: '操作'}
+                {field: 'name', align: 'center', sort: true, title: '品牌名称'},
+                {field: 'price', align: 'center', sort: true, title: '产品价格'},
+                {field: 'carriage', align: 'center', sort: true, title: '运费'},
+                {field: 'brandId', align: 'center', sort: true, title: '品牌id'},
+                {field: 'productImgId', align: 'center', sort: true, title: '产品图片'},
+                {field: 'detailImgId', align: 'center', sort: true, title: '详情图片'},
+                {field: 'modelId', align: 'center', sort: true, title: '模板id'},
+                {field: 'status', align: 'center', sort: true, title: '状态'},
+                {align: 'center', toolbar: '#product-table-bar', title: '操作'}
             ]]
         });
         // 表格顶部操作列
-        table.on('toolbar(image-table)', function (obj) {
+        table.on('toolbar(product-table)', function (obj) {
             if (obj.event === 'add') {
                 showEditModel();
             }
         });
         // 表格操作列事件
-        table.on('tool(image-table)', function (obj) {
+        table.on('tool(product-table)', function (obj) {
             var data = obj.data;
             var layEvent = obj.event;
-
+            if (layEvent === 'detail') {
+                // 查看
+                showEditModel(data);
+            }
             if (layEvent === 'edit') {
                 // 修改
                 showEditModel(data);
@@ -94,7 +106,7 @@
             layer.confirm('确定要删除吗？', function (i) {
                 layer.close(i);
                 layer.load(2);
-                crown.delete('/image/' + obj.data.id, {}, function () {
+                crown.delete('/product/' + obj.data.id, {}, function () {
                     layer.closeAll('loading');
                     layer.msg('删除成功', {icon: 1});
                     obj.del();
@@ -105,29 +117,32 @@
         //显示表单弹窗
         var showEditModel = function (data) {
             if (data) {
-                crown.get('/image/' + data.id, {async:false}, function (data) {
-                    crown.putTempData('t_image', data.result);
+                crown.get('/product/' + data.id, {async:false}, function (data) {
+                    crown.putTempData('t_product', data.result);
                 });
             }
             crown.popupCenter({
-                title: data ? '修改图片' : '添加图片',
+                type:1,
+                resize:true,
+                title: data ? '修改产品' : '添加产品',
                 area:"1000px",
-                path: 'components/views/image/form.html',
+                offset:"50px",
+                path: 'components/views/product/form.html',
                 finish: function () {
-                    userTable.reload('image-table', {});
+                    productTable.reload('product-table', {});
                 }
             });
         };
 
         // 搜索按钮点击事件
-        $('#image-btn-search').click(function () {
-            userTable.reload({where: crown.getSearchForm()});
+        $('#product-btn-search').click(function () {
+            productTable.reload({where: crown.getSearchForm()});
         });
 
-        // 修改image状态
-        form.on('switch(image-tpl-status)', function (obj) {
+        // 修改product状态
+        form.on('switch(product-tpl-status)', function (obj) {
             layer.load(2);
-            crown.put('/image/' + obj.elem.value + '/status',
+            crown.put('/product/' + obj.elem.value + '/status',
                 {data: {status: obj.elem.checked ? 0 : 1}}, function () {
                     layer.closeAll('loading');
                     layer.msg('用户状态更新成功', {icon: 1});

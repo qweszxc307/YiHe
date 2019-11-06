@@ -77,13 +77,13 @@ layui.define(['config', 'layer', 'element', 'form'], function (exports) {
         popupCenter: function (param) {
             popupCenterParam = param;
             popupCenterIndex = layer.open({
-                type: 1,
+                type: param.type ? param.type:1,
                 id: 'crownPopupC',
                 title: param.title ? param.title : false,
                 shade: .2,
-                offset: '120px',
+                offset: param.offset ? param.offset : '120px',
                 area: param.area ? param.area : '450px',
-                resize: false,
+                resize: param.resize ? param.resize : false,
                 skin: 'layui-layer-crownCenter',
                 success: function () {
                     $('#crownPopupC').load(param.path, function () {

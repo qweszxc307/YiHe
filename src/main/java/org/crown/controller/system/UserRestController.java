@@ -160,6 +160,5 @@ public class UserRestController extends SuperController {
         userService.saveUserRoles(id, userPARM.getRoleIds());
         return success();
     }
-
 }
 
