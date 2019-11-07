@@ -1,0 +1,182 @@
+<div class="layui-card">
+    <div class="layui-card-header">
+        <h2 class="header-title">产品标签管理</h2>
+        <span class="layui-breadcrumb pull-right">
+          <a href="#!console">首页</a>
+          <a><cite>产品标签</cite></a>
+        </span>
+    </div>
+    <div class="layui-card-body">
+        <!-- 搜索条件 -->
+        <div class="layui-form toolbar">
+            <form id="searchForm" onsubmit="return false;">
+                标签名：<input name="name" class="layui-input search-input" type="text" placeholder="标签名"/>&emsp;
+                <button id="product-btn-search" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索</button>
+            </form>
+        </div>
+        <!-- 表格顶部操作列 -->
+        <script type="text/html" id="product-toolbar">
+            <div class="layui-btn-container">
+                {{# if({{addShow}} == true){ }}
+                <button class="layui-btn layui-btn-normal layui-btn-sm" lay-event="add"><i
+                        class="layui-icon"></i>添加
+                </button>
+                {{# } }}
+            </div>
+        </script>
+        <!-- 数据表格 -->
+        <table class="layui-table" id="product-table" lay-filter="product-table"></table>
+    </div>
+</div>
+
+<!-- 表单弹窗 -->
+<script type="text/html" id="product-model">
+    <form id="product-form" lay-filter="product-form" class="layui-form model-form">
+        <input name="id" type="hidden"/>
+        <div class="layui-form-item">
+            <label class="layui-form-label">标签名</label>
+            <div class="layui-input-block">
+                <input type="text" name="name" lay-verify="required"  placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">是否禁用</label>
+            <div class="layui-input-block">
+                <input type="radio" name="status" value="0" title="禁用" checked>
+                <input type="radio" name="status" value="1" title="开启">
+            </div>
+        </div>
+        <div class="layui-form-item model-form-footer">
+            <button class="layui-btn layui-btn-primary close" type="button">取消</button>
+            <button class="layui-btn" lay-filter="product-form-submit" lay-submit>保存</button>
+        </div>
+    </form>
+</script>
+
+
+<!-- 表格操作列 -->
+<script type="text/html" id="product-table-bar">
+    {{#  if({{editShow}} == true){ }}
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>
+    {{#  } }}
+    {{#  if({{deleteShow}} == true){ }}
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    {{#  } }}
+</script>
+
+<script>
+    layui.use(['form', 'table', 'config', 'crown'], function () {
+        var form = layui.form;
+        var table = layui.table;
+        var config = layui.config;
+        var layer = layui.layer;
+        var crown = layui.crown;
+        var $ = layui.jquery;
+
+        $('#product-toolbar').vm({
+            addShow: crown.hasPerm("labelProduct:add")
+        });
+        $('#product-table-bar').vm({
+            editShow: crown.hasPerm("labelProduct:edit"),
+            permShow: crown.hasPerm("labelProduct:perm"),
+            deleteShow: crown.hasPerm("labelProduct:delete")
+        });
+        //渲染表格
+        var productTable = table.render({
+            elem: '#product-table',
+            toolbar: '#product-toolbar',
+            url: config.serverUrl + '/labelProduct',
+            request: config.request,
+            parseData: config.parseData,
+            response: config.response,
+            headers: {Authorization: config.getToken()},
+            page: true,
+            cols: [[
+                {field: 'id', width: 60, title: 'ID'},
+                {field: 'name', align: 'center', sort: true, title: '标签'},
+                {field: 'status', align: 'center', sort: true, title: '状态'},
+                {field: 'createTime', align: 'center', sort: true, title: '创建时间'},
+                {align: 'center', toolbar: '#product-table-bar', title: '操作'}
+            ]]
+        });
+
+        // 添加
+        table.on('toolbar(product-table)', function (obj) {
+            if (obj.event === 'add') {
+                showEditModel();
+            }
+        });
+
+
+
+
+        // 工具条点击事件
+        table.on('tool(product-table)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'edit') { //修改
+                showEditModel(data);
+            } else if(obj.event === 'del') { //删除
+                doDelete(obj);
+            }
+        });
+
+        // 显示编辑弹窗
+        var showEditModel = function (data) {
+            layer.open({
+                type: 1,
+                title: data ? '修改标签' : '添加标签',
+                area: '450px',
+                offset: '120px',
+                content: $('#product-model').html(),
+                success: function () {
+                    $('#product-form')[0].reset();
+                    if (data) {
+                        form.val('product-form', data);
+                    }
+                    $('#product-form .close').click(function () {
+                        layer.closeAll('page');
+                    });
+                }
+            });
+        };
+        // 删除
+        var doDelete = function (obj) {
+            layer.confirm('确定要删除吗？', function (i) {
+                layer.close(i);
+                layer.load(2);
+                crown.delete('/labelProduct/' + obj.data.id, {}, function () {
+                    layer.closeAll('loading');
+                    layer.msg('删除成功', {icon: 1});
+                    obj.del();
+                });
+            });
+        };
+
+        // 表单提交事件
+        form.on('submit(product-form-submit)', function (data) {
+            layer.load(2);
+            if (data.field.id) {
+                crown.put('/labelProduct/' + data.field.id, {data: data.field}, function () {
+                    layer.closeAll('loading');
+                    layer.msg('修改成功', {icon: 1});
+                    productTable.reload('product-table');
+                    layer.closeAll('page');
+                });
+            } else {
+                crown.post('/labelProduct', {data:data.field}, function () {
+                    layer.closeAll('loading');
+                    layer.msg('添加成功', {icon: 1});
+                    productTable.reload('product-table');
+                    layer.closeAll('page');
+                });
+            }
+            return false;
+        });
+
+        // 搜索按钮点击事件
+        $('#product-btn-search').click(function () {
+            productTable.reload({where: crown.getSearchForm()});
+        });
+    });
+
+</script>
