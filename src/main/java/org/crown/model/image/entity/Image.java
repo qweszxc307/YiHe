@@ -52,7 +52,7 @@ private Integer type;
 @ApiModelProperty(notes = "创建时间")
 private LocalDateTime createTime;
 @ApiModelProperty(notes = "创建人")
-private String createUid;
+private Integer createUid;
 @ApiModelProperty(notes = "修改时间")
 private LocalDateTime updateTime;
 @ApiModelProperty(notes = "修改人")

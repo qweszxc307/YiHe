@@ -1,6 +1,7 @@
 <!-- brand表单弹窗 -->
 <form id="brand-form" lay-filter="brand-form" class="layui-form model-form">
     <input name="id" type="hidden"/>
+    <input name="imageId" type="hidden"/>
     <div class="layui-form-item">
         <label class="layui-form-label">序号</label>
         <div class="layui-input-block">
@@ -39,12 +40,14 @@
 </form>
 
 <script>
-    layui.use('upload', function () {
+    layui.use(['layer', 'crown','form','upload'], function () {
         var $ = layui.jquery
             ,upload = layui.upload;
         var crown = layui.crown;
         var config = layui.config;
         var layer = layui.layer;
+        var form = layui.form;
+        var imgId;
         var brand = crown.getTempData('t_brand');
         if(brand){
             crown.fromVal('brand-form', brand);
@@ -65,7 +68,9 @@
             }
             ,done: function(res){
                 ////上传成功
-                if(res.status == 201){
+                var data = res.result;
+                if(data.imgId){
+                    imgId = data.imgId;
                     return layer.msg('上传成功');
                 }
                 //如果上传失败
@@ -78,6 +83,26 @@
                     uploadProductImg.upload();
                 });
             }
+        });
+
+        // 表单提交事件
+        form.on('submit(brand-form-submit)', function (data) {
+            layer.load(2);
+            if (data.field.id) {
+                crown.put('/brand/' + data.field.id, {data: data.field}, function () {
+                    layer.closeAll('loading');
+                    layer.msg('修改成功', {icon: 1});
+                    crown.finishPopupCenter();
+                });
+            } else {
+                data.field.imageId = imgId.toString();
+                crown.post('/brand', {data:data.field}, function () {
+                    layer.closeAll('loading');
+                    layer.msg('添加成功', {icon: 1});
+                    crown.finishPopupCenter();
+                });
+            }
+            return false;
         });
     })
 </script>

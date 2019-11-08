@@ -1,3 +1,9 @@
+<style>
+    .layui-table-cell {
+        height: auto;
+        line-height: 28px;
+    }
+</style>
 <div class="layui-card">
     <div class="layui-card-header">
         <h2 class="header-title">品牌管理</h2>
@@ -17,9 +23,10 @@
                 {{# } }}
             </div>
         </script>
-        <table class="layui-table" id="brand-table" lay-filter="brand-table"></table>
+        <table class="layui-table" id="brand-table" lay-filter="brand-table" ></table>
     </div>
 </div>
+
 
 <!-- 表格操作列 -->
 <script type="text/html" id="brand-table-bar">
@@ -69,8 +76,12 @@
                 {field: 'id', width: 60, title: 'ID',hide: true},
                 {field: 'orderNum', align: 'center', width: 100, sort: true, title: '序号'},
                 {field: 'name', align: 'center', sort: true, title: '品牌名称'},
-                {field: 'imageId', align: 'center', sort: true, title: '图片id'},
-                {field: 'status', align: 'center', sort: true, title: '状态'},
+                {field: 'imageUrl', align: 'center',
+                    templet: function (d) {
+                        return "<img  width='100px' onclick='window.open(\"http://"+d.imgUrl+"\")' title='点击预览产品图片' style='cursor: pointer;' src='"+"http://"+d.imgUrl+"\'\>"
+                    }, title: '产品图片'
+                },
+                {field: 'status', align: 'center', sort: true, templet: '#brand-tpl-status', title: '状态'},
                 {align: 'center', toolbar: '#brand-table-bar', title: '操作'}
             ]]
         });
@@ -141,7 +152,7 @@
             crown.put('/brand/' + obj.elem.value + '/status',
                 {data: {status: obj.elem.checked ? 0 : 1}}, function () {
                     layer.closeAll('loading');
-                    layer.msg('用户状态更新成功', {icon: 1});
+                    layer.msg('状态更新成功', {icon: 1});
                 });
         });
     });

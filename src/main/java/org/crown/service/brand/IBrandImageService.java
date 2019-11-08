@@ -20,32 +20,16 @@
  */
 package org.crown.service.brand;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import org.crown.enums.StatusEnum;
+import org.crown.model.brand.entity.BrandImage;
 import org.crown.framework.service.BaseService;
-import org.crown.model.brand.dto.BrandDTO;
-import org.crown.model.brand.entity.Brand;
 
 /**
  * <p>
- * 品牌表 服务类
+ * 品牌_图片关系表 服务类
  * </p>
  *
  * @author whZhang
  */
-public interface IBrandService extends BaseService<Brand> {
-        /**
-         * 品牌列表
-         *
-         * @param page
-         */
-        IPage<BrandDTO> selectBrandPage(IPage<BrandDTO> page);
+public interface IBrandImageService extends BaseService<BrandImage> {
 
-        /**
-         * 修改菜单状态
-         *
-         * @param brandId
-         * @param status
-         */
-        void updateStatus(Integer brandId, StatusEnum status);
 }
