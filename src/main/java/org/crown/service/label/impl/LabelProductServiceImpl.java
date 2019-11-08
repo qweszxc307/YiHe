@@ -20,11 +20,14 @@
  */
 package org.crown.service.label.impl;
 
+import org.crown.framework.enums.ErrorCodeEnum;
 import org.crown.framework.service.impl.BaseServiceImpl;
+import org.crown.framework.utils.ApiAssert;
 import org.crown.mapper.label.LabelProductMapper;
 import org.crown.model.label.entity.LabelProduct;
 import org.crown.service.label.ILabelProductService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * <p>
@@ -36,4 +39,12 @@ import org.springframework.stereotype.Service;
 @Service
         public class LabelProductServiceImpl extends BaseServiceImpl<LabelProductMapper, LabelProduct> implements ILabelProductService {
 
+        @Override
+        @Transactional(readOnly = false)
+        public void updateStatus(Integer id, Integer status) {
+                LabelProduct labelProduct = getById(id);
+                ApiAssert.notNull(ErrorCodeEnum.SERVICE_UNAVAILABLE, labelProduct);
+                labelProduct.setStatus(status);
+                updateById(labelProduct);
         }
+}

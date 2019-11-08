@@ -20,11 +20,14 @@
  */
 package org.crown.service.label.impl;
 
+import org.crown.framework.enums.ErrorCodeEnum;
 import org.crown.framework.service.impl.BaseServiceImpl;
+import org.crown.framework.utils.ApiAssert;
 import org.crown.mapper.label.LabelBrandMapper;
 import org.crown.model.label.entity.LabelBrand;
 import org.crown.service.label.ILabelBrandService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * <p>
@@ -36,5 +39,18 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class LabelBrandServiceImpl extends BaseServiceImpl<LabelBrandMapper, LabelBrand> implements ILabelBrandService {
-
+        /**
+         * 修改标签状态
+         *
+         * @param id
+         * @param status
+         */
+        @Override
+        @Transactional(readOnly = false)
+        public void updateStatus(Integer id, Integer status) {
+                LabelBrand labelBrand = getById(id);
+                ApiAssert.notNull(ErrorCodeEnum.SERVICE_UNAVAILABLE, labelBrand);
+                labelBrand.setStatus(status);
+                updateById(labelBrand);
         }
+}

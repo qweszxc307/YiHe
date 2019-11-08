@@ -88,7 +88,7 @@ public class LabelBrandRestController extends SuperController {
     @Resources(auth = AuthTypeEnum.AUTH)
     @ApiOperation("修改品牌标签")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "用户ID", required = true, paramType = "path")
+            @ApiImplicitParam(name = "id", value = "用户ID", required = true, paramType = "path"),
     })
     @PutMapping("/{id}")
     public ApiResponses<Void> update(@PathVariable("id") Integer id, @RequestBody @Validated(LabelBrandPARM.Update.class) LabelBrandPARM labelBrandPARM) {
@@ -98,7 +98,17 @@ public class LabelBrandRestController extends SuperController {
         return success();
     }
 
+    @Resources(auth = AuthTypeEnum.AUTH)
+    @ApiOperation("设置标签状态")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "用户ID", required = true, paramType = "path")
+    })
+    @PutMapping("/{id}/status")
+    public ApiResponses<Void> updateStatus(@PathVariable("id") Integer id, @RequestBody @Validated(LabelBrandPARM.Status.class) LabelBrandPARM labelBrandPARM) {
 
+        labelBrandService.updateStatus(id, labelBrandPARM.getStatus());
+        return success();
+    }
 
     @Resources(auth = AuthTypeEnum.AUTH)
     @ApiOperation("添加品牌标签")

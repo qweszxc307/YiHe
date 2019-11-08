@@ -14,6 +14,7 @@
                 <button id="product-btn-search" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索</button>
             </form>
         </div>
+
         <!-- 表格顶部操作列 -->
         <script type="text/html" id="product-toolbar">
             <div class="layui-btn-container">
@@ -36,14 +37,15 @@
         <div class="layui-form-item">
             <label class="layui-form-label">标签名</label>
             <div class="layui-input-block">
-                <input type="text" name="name" lay-verify="required"  placeholder="请输入" autocomplete="off" class="layui-input">
+                <input type="text" name="name" lay-verify="required" placeholder="请输入" autocomplete="off"
+                       class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">是否禁用</label>
             <div class="layui-input-block">
-                <input type="radio" name="status" value="0" title="禁用" checked>
-                <input type="radio" name="status" value="1" title="开启">
+                <input type="radio" name="status" value="0" title="开启" checked>
+                <input type="radio" name="status" value="1" title="禁用">
             </div>
         </div>
         <div class="layui-form-item model-form-footer">
@@ -53,6 +55,10 @@
     </form>
 </script>
 
+<script type="text/html" id="menu-tpl-status">
+    <input type="checkbox" lay-filter="menu-tpl-status" value="{{d.id}}" lay-skin="switch"
+           lay-text="正常|禁用" {{d.status==0?'checked':''}}/>
+</script>
 
 <!-- 表格操作列 -->
 <script type="text/html" id="product-table-bar">
@@ -94,7 +100,7 @@
             cols: [[
                 {field: 'id', width: 60, title: 'ID'},
                 {field: 'name', align: 'center', sort: true, title: '标签'},
-                {field: 'status', align: 'center', sort: true, title: '状态'},
+                {field: 'status', align: 'center', templet: '#menu-tpl-status', title: '状态', width: 100},
                 {field: 'createTime', align: 'center', sort: true, title: '创建时间'},
                 {align: 'center', toolbar: '#product-table-bar', title: '操作'}
             ]]
@@ -108,14 +114,12 @@
         });
 
 
-
-
         // 工具条点击事件
         table.on('tool(product-table)', function (obj) {
             var data = obj.data;
             if (obj.event === 'edit') { //修改
                 showEditModel(data);
-            } else if(obj.event === 'del') { //删除
+            } else if (obj.event === 'del') { //删除
                 doDelete(obj);
             }
         });
@@ -163,7 +167,7 @@
                     layer.closeAll('page');
                 });
             } else {
-                crown.post('/labelProduct', {data:data.field}, function () {
+                crown.post('/labelProduct', {data: data.field}, function () {
                     layer.closeAll('loading');
                     layer.msg('添加成功', {icon: 1});
                     productTable.reload('product-table');
@@ -176,6 +180,16 @@
         // 搜索按钮点击事件
         $('#product-btn-search').click(function () {
             productTable.reload({where: crown.getSearchForm()});
+        });
+        // 修改状态
+        form.on('switch(menu-tpl-status)', function (obj) {
+            layer.load(2);
+            debugger;
+            crown.put('/labelProduct/' + obj.elem.value + '/status',
+                {data: {status: obj.elem.checked ? 0 : 1}}, function () {
+                    layer.closeAll('loading');
+                    layer.msg('更新成功', {icon: 1});
+                });
         });
     });
 

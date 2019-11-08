@@ -21,6 +21,7 @@
 package org.crown.controller.label;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -57,14 +58,30 @@ public class LabelProductRestController extends SuperController {
 
     @Resources(auth = AuthTypeEnum.AUTH)
     @ApiOperation("查询所有产品标签")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "name", value = "标签名称", paramType = "query")
+    })
     @GetMapping
-    public ApiResponses<IPage<LabelProductDTO>> page() {
+    public ApiResponses<IPage<LabelProductDTO>> page(@RequestParam(value = "name", required = false) String name) {
         return success(labelProductService.query()
+                .likeRight(StringUtils.isNotEmpty(name), LabelProduct::getName, name)
                 .page(this.<LabelProduct>getPage())
                 .convert(e -> e.convert(LabelProductDTO.class))
         );
     }
 
+
+    @Resources(auth = AuthTypeEnum.AUTH)
+    @ApiOperation("设置标签状态")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "用户ID", required = true, paramType = "path")
+    })
+    @PutMapping("/{id}/status")
+    public ApiResponses<Void> updateStatus(@PathVariable("id") Integer id, @RequestBody @Validated(LabelProductPARM.Status.class) LabelProductPARM labelProductPARM) {
+
+        labelProductService.updateStatus(id, labelProductPARM.getStatus());
+        return success();
+    }
 
     @Resources(auth = AuthTypeEnum.AUTH)
     @ApiOperation(value = "删除产品标签")

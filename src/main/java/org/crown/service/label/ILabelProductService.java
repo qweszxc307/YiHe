@@ -32,4 +32,10 @@ import org.crown.model.label.entity.LabelProduct;
  */
 public interface ILabelProductService extends BaseService<LabelProduct> {
 
-        }
+    /**
+     * 修改标签状态
+     * @param id
+     * @param status
+     */
+    void updateStatus(Integer id, Integer status);
+}

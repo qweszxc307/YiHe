@@ -32,5 +32,10 @@ import org.crown.model.label.entity.LabelBrand;
  * @author ykMa
  */
 public interface ILabelBrandService extends BaseService<LabelBrand> {
-
-        }
+    /**
+     * 修改标签状态
+     * @param id
+     * @param status
+     */
+    void updateStatus(Integer id, Integer status);
+}
