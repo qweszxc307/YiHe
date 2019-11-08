@@ -21,12 +21,21 @@
 package org.crown.controller.ordle;
 
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
+import org.crown.common.annotations.Resources;
+import org.crown.enums.AuthTypeEnum;
 import org.crown.framework.controller.SuperController;
+import org.crown.framework.responses.ApiResponses;
+import org.crown.model.order.dto.OrderDTO;
+import org.crown.model.order.entity.Order;
 import org.crown.service.order.IOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -46,8 +55,14 @@ public class OrderRestController extends SuperController {
     private IOrderService orderService;
 
 
-/*    @Resources(auth = AuthTypeEnum.AUTH)
-    @ApiOperation("查询所有客户")
+    @Resources(auth = AuthTypeEnum.AUTH)
+    @ApiOperation("查询所有订单")
+    @GetMapping
+    public ApiResponses<IPage<OrderDTO>> page() {
+        return orderService.findAllOrder();
+    }
+}
+   /* @ApiOperation("查询所有客户")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "name", value = "真实姓名", paramType = "query"),
             @ApiImplicitParam(name = "nickname", value = "微信名称", paramType = "query"),
@@ -76,4 +91,4 @@ public class OrderRestController extends SuperController {
 
 
 
-}
+

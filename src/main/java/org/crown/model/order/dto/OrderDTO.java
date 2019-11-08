@@ -46,36 +46,26 @@ public class OrderDTO extends BaseModel {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(notes = "订单id")
-    private Long orderId;
-    @ApiModelProperty(notes = "总金额")
-    private Double totalFee;
-    @ApiModelProperty(notes = "实付金额")
-    private Double actualFee;
-    @ApiModelProperty(notes = "活动id")
-    private String promotionIds;
-    @ApiModelProperty(notes = "支付类型：1在线支付，2货到付款")
-    private Boolean paymentType;
-    @ApiModelProperty(notes = "邮费")
+    private Long Id;
+    @ApiModelProperty(notes = "订单号")
+    private String orderNum;
+    @ApiModelProperty(notes = "订单状态")
+    private int status;
+    @ApiModelProperty(notes = "收货人")
+    private String name;
+    @ApiModelProperty(notes = "收货电话")
+    private String phone;
+    @ApiModelProperty(notes = "地址")
+    private String address;
+    @ApiModelProperty(notes = "快递单号")
+    private String logisticsNum;
+    @ApiModelProperty(notes = "运费")
     private Double postFee;
-    @ApiModelProperty(notes = " 客户id")
-    private Long userId;
-    @ApiModelProperty(notes = "发票类型：（0无发票，1普通发票，2电子发票，3增值税发票）")
-    private Integer invoiceType;
-    @ApiModelProperty(notes = "订单状态：（1未付款，2已付款，未发货，3已发货，确认收货）")
-    private Boolean status;
-    @ApiModelProperty(notes = "创建时间")
+    @ApiModelProperty(notes = "商品总价")
+    private Double totalFee;
+    @ApiModelProperty(notes = "下单时间")
     private LocalDateTime createTime;
     @ApiModelProperty(notes = "支付时间")
     private LocalDateTime payTime;
-    @ApiModelProperty(notes = "发货时间")
-    private LocalDateTime consignTime;
-    @ApiModelProperty(notes = "交易完成时间")
-    private LocalDateTime endTime;
-    @ApiModelProperty(notes = "交易关闭时间")
-    private LocalDateTime closeTime;
-    @ApiModelProperty(notes = "评价时间")
-    private LocalDateTime commentTime;
-    @ApiModelProperty(notes = "更新时间")
-    private LocalDateTime updateTime;
 
 }

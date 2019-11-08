@@ -31,6 +31,7 @@ import org.crown.framework.model.BaseModel;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import java.time.LocalDateTime;
 
 
 /**
@@ -48,22 +49,22 @@ public class OrderPARM extends BaseModel {
 
     private static final long serialVersionUID = 1L;
 
-
-    @ApiModelProperty(notes = "真实姓名")
-    @NotBlank(groups = {Create.class, Update.class}, message = "真实姓名不能为空")
+    @ApiModelProperty(notes = "收货人")
+    @NotNull(groups = {Update.class},message = "收货人不能为空")
     private String name;
-    @ApiModelProperty(notes = "微信名 ")
-    private String nickname;
-    @ApiModelProperty(notes = "性别 ")
-    private String sex;
+    @ApiModelProperty(notes = "收货电话")
     @Pattern(groups = {Create.class, Update.class}, regexp = Regex.PHONE, message = "手机号码格式不正确")
-    @ApiModelProperty(notes = "手机")
     private String phone;
     @ApiModelProperty(notes = "地址")
+    @NotNull(groups = {Update.class},message = "地址人不能为空")
     private String address;
-    @NotNull(groups = Status.class, message = "用户状态不能为空")
-    @ApiModelProperty(notes = "权限等级：1-X ")
-    private Integer role;
+    @ApiModelProperty(notes = "运费")
+    @NotNull(groups = {Update.class},message = "运费不能为空")
+    private Double postFee;
+    @ApiModelProperty(notes = "商品总价")
+    @NotNull(groups = {Update.class},message = "商品总价不能为空")
+    private Double totalFee;
+
 
     public interface Create {
 
