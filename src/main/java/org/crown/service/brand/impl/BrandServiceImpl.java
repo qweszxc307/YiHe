@@ -20,11 +20,17 @@
  */
 package org.crown.service.brand.impl;
 
-import org.crown.model.brand.entity.Brand;
-import org.crown.mapper.brand.BrandMapper;
-import org.crown.service.brand.IBrandService;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import org.crown.enums.StatusEnum;
 import org.crown.framework.service.impl.BaseServiceImpl;
+import org.crown.mapper.brand.BrandMapper;
+import org.crown.model.brand.dto.BrandDTO;
+import org.crown.model.brand.entity.Brand;
+import org.crown.service.brand.IBrandService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * <p>
@@ -36,4 +42,17 @@ import org.springframework.stereotype.Service;
 @Service
 public class BrandServiceImpl extends BaseServiceImpl<BrandMapper, Brand>implements IBrandService {
 
+
+    @Override
+    public IPage<BrandDTO> selectBrandPage(IPage<BrandDTO> page) {
+        return page.setRecords(baseMapper.getBrandPage(page));
+    }
+
+    @Override
+    @Transactional
+    public void updateStatus(Integer brandId, StatusEnum status) {
+        Brand brand = baseMapper.selectById(brandId);
+        brand.setStatus(status);
+        updateById(brand);
+    }
 }

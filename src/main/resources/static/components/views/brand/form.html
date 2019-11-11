@@ -1,0 +1,108 @@
+<!-- brand表单弹窗 -->
+<form id="brand-form" lay-filter="brand-form" class="layui-form model-form">
+    <input name="id" type="hidden"/>
+    <input name="imageId" type="hidden"/>
+    <div class="layui-form-item">
+        <label class="layui-form-label">序号</label>
+        <div class="layui-input-block">
+            <input name="orderNum" placeholder="请输入序号" type="text" class="layui-input" />
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">品牌名称</label>
+        <div class="layui-input-block">
+            <input id="name" name="name" placeholder="请输入品牌名称" type="text" class="layui-input" maxlength="20" />
+        </div>
+    </div>
+    <div style="padding: 10px; background-color: #F1F1F1;">
+        <div class="layui-row layui-col-space15">
+            <div class="layui-col-md12">
+                <div class="layui-card">
+                    <div class="layui-card-header">品牌图片</div>
+                    <div class="layui-card-body">
+                        <div class="layui-upload">
+                            <button type="button" class="layui-btn" id="brand_img" style="margin-left: 20px;">上传品牌图片</button>
+                            <div class="layui-upload-list">
+                                <img class="layui-upload-img" id="brand_img_preview" style="width: 200px">
+                                <p id="brand_img_txt"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-form-item model-form-footer" style="margin-top:10px">
+        <button class="layui-btn layui-btn-primary close" type="button">取消</button>
+        <button class="layui-btn" lay-filter="brand-form-submit" lay-submit>保存</button>
+    </div>
+</form>
+
+<script>
+    layui.use(['layer', 'crown','form','upload'], function () {
+        var $ = layui.jquery
+            ,upload = layui.upload;
+        var crown = layui.crown;
+        var config = layui.config;
+        var layer = layui.layer;
+        var form = layui.form;
+        var imgId;
+        var brand = crown.getTempData('t_brand');
+        if(brand){
+            crown.fromVal('brand-form', brand);
+            $("#form-submit").hide();
+        }else{
+
+        }
+        //品牌图片上传
+        var uploadProductImg = upload.render({
+            elem: '#brand_img'
+            ,url: 'brand/upload'
+            ,headers: {Authorization: config.getToken()}
+            ,before: function(obj){
+                //预读本地文件示例，不支持ie8
+                obj.preview(function(index, file, result){
+                    $('#brand_img_preview').attr('src', result); //图片链接（base64）
+                });
+            }
+            ,done: function(res){
+                ////上传成功
+                var data = res.result;
+                if(data.imgId){
+                    imgId = data.imgId;
+                    return layer.msg('上传成功');
+                }
+                //如果上传失败
+            }
+            ,error: function(){
+                //演示失败状态，并实现重传
+                var demoText = $('#brand_img_txt');
+                demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+                demoText.find('.demo-reload').on('click', function(){
+                    uploadProductImg.upload();
+                });
+            }
+        });
+
+        // 表单提交事件
+        form.on('submit(brand-form-submit)', function (data) {
+            layer.load(2);
+            if (data.field.id) {
+                crown.put('/brand/' + data.field.id, {data: data.field}, function () {
+                    layer.closeAll('loading');
+                    layer.msg('修改成功', {icon: 1});
+                    crown.finishPopupCenter();
+                });
+            } else {
+                data.field.imageId = imgId.toString();
+                crown.post('/brand', {data:data.field}, function () {
+                    layer.closeAll('loading');
+                    layer.msg('添加成功', {icon: 1});
+                    crown.finishPopupCenter();
+                });
+            }
+            return false;
+        });
+    })
+</script>

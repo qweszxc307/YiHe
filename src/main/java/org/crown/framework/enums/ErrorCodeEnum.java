@@ -109,7 +109,10 @@ public enum ErrorCodeEnum {
      * 未找到该菜单
      */
     MENU_NOT_FOUND(HttpServletResponse.SC_NOT_FOUND, true, "未找到该菜单"),
-
+    /**
+     * 品牌名称已存在
+     */
+    BRAND_ALREADY_EXISTS(HttpServletResponse.SC_BAD_REQUEST, true, "品牌名称已存在"),
     ;
 
     private final int httpCode;

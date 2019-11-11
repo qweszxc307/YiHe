@@ -21,27 +21,42 @@
 package org.crown.controller.brand;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.additional.query.impl.QueryChainWrapper;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import javafx.scene.control.Pagination;
 import org.crown.common.annotations.Resources;
+import org.crown.common.mybatisplus.LambdaDeleteWrapperChain;
+import org.crown.common.mybatisplus.LambdaQueryWrapperChain;
+import org.crown.common.utils.QiNiuUtils;
 import org.crown.enums.AuthTypeEnum;
+import org.crown.enums.StatusEnum;
+import org.crown.framework.controller.SuperController;
+import org.crown.framework.enums.ErrorCodeEnum;
 import org.crown.framework.responses.ApiResponses;
+import org.crown.framework.utils.ApiAssert;
 import org.crown.model.brand.dto.BrandDTO;
+import org.crown.model.brand.dto.BrandImgDTO;
 import org.crown.model.brand.entity.Brand;
-import org.crown.model.product.dto.ProductDTO;
-import org.crown.model.product.entity.Product;
+import org.crown.model.brand.entity.BrandImage;
+import org.crown.model.brand.parm.BrandPARM;
+import org.crown.model.image.entity.Image;
+import org.crown.model.system.parm.UserPARM;
+import org.crown.service.brand.IBrandImageService;
 import org.crown.service.brand.IBrandService;
-import org.crown.service.product.IProductService;
+import org.crown.service.image.IImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
-
-import io.swagger.annotations.Api;
-import org.crown.framework.controller.SuperController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.sql.Wrapper;
+import java.util.UUID;
 
 /**
  * <p>
@@ -58,12 +73,21 @@ public class BrandRestController extends SuperController {
         @Autowired
         private IBrandService brandService;
 
+        @Autowired
+        private QiNiuUtils qiniuService;
+
+        @Autowired
+        private IImageService imageService;
+
+        @Autowired
+        private IBrandImageService brandImageService;
+
         @Resources(auth = AuthTypeEnum.AUTH)
         @ApiOperation("查询所有品牌")
         @GetMapping
         public ApiResponses<IPage<BrandDTO>> page() {
                 return success(
-                        brandService.page(this.<Brand>getPage())
+                        brandService.selectBrandPage(this.<BrandDTO>getPage())
                                 .convert(e -> e.convert(BrandDTO.class))
                 );
         }
@@ -83,8 +107,20 @@ public class BrandRestController extends SuperController {
         @Resources(auth = AuthTypeEnum.AUTH)
         @ApiOperation("添加品牌")
         @PostMapping
-        public ApiResponses<Void> create() {
-                return success(HttpStatus.CREATED);
+        public ApiResponses<Void> create(@RequestBody @Validated(BrandPARM.Create.class) BrandPARM brandPARM) {
+            int count = brandService.query()
+                                    .eq(Brand::getName, brandPARM.getName())
+                                    .count();
+            ApiAssert.isTrue(ErrorCodeEnum.BRAND_ALREADY_EXISTS, count == 0);
+            Brand brand = brandPARM.convert(Brand.class);
+            //默认启用
+            brand.setCreateUid(currentUid());
+            brandService.save(brand);
+            BrandImage brandImage = new BrandImage();
+            brandImage.setBId(brand.getId());
+            brandImage.setImgId(Integer.parseInt(brandPARM.getImageId()));
+            brandImageService.save(brandImage);
+            return success(HttpStatus.CREATED);
         }
 
         @Resources(auth = AuthTypeEnum.AUTH)
@@ -95,6 +131,10 @@ public class BrandRestController extends SuperController {
 
         @DeleteMapping("/{id}")
         public ApiResponses<Void> delete(@PathVariable("id") Integer id) {
+                brandService.removeById(id);
+                BrandImage brandImage = brandImageService.query().eq(BrandImage::getBId, id).getOne();
+                imageService.delete().eq(Image::getId, brandImage.getImgId()).execute();
+                brandImageService.delete().eq(BrandImage::getBId, id).execute();
                 return success(HttpStatus.NO_CONTENT);
         }
 
@@ -112,7 +152,39 @@ public class BrandRestController extends SuperController {
         @Resources(auth = AuthTypeEnum.AUTH)
         @ApiOperation("添加品牌图片")
         @PostMapping(value = "/upload")
-        public ApiResponses<Void> create(MultipartFile file) {
-                return success(HttpStatus.CREATED);
+        public ApiResponses<BrandImgDTO> create(MultipartFile file) {
+               BrandImgDTO imageDTO = new BrandImgDTO();
+                try {
+                        String originalFilename = file.getOriginalFilename();
+                        String fileExtend = originalFilename.substring(originalFilename.lastIndexOf("."));
+                        //默认不指定key的情况下，以文件内容的hash值作为文件名
+                        String fileKey = UUID.randomUUID().toString().replace("-", "") + fileExtend;
+                        String imgUrl = qiniuService.upload(file.getInputStream(),fileKey);
+                        if(imgUrl.equals(null)){
+                                return success(HttpStatus.BAD_REQUEST,null);
+                        }else{
+                                Image baseImg = new Image();
+                                baseImg.setImgUrl(imgUrl);
+                                baseImg.setCreateUid(currentUid());
+                                imageService.save(baseImg);
+                                imageDTO.setImgId(baseImg.getId());
+                                imageDTO.setImgUrl(imgUrl);
+                                return success(HttpStatus.OK,imageDTO);
+                        }
+                } catch (Exception e) {
+                        e.printStackTrace();
+                        return success(HttpStatus.BAD_REQUEST,null);
+                }
+        }
+
+        @Resources(auth = AuthTypeEnum.AUTH)
+        @ApiOperation("设置品牌状态")
+        @ApiImplicitParams({
+                @ApiImplicitParam(name = "id", value = "品牌ID", required = true, paramType = "path")
+        })
+        @PutMapping("/{id}/status")
+        public ApiResponses<Void> updateStatus(@PathVariable("id") Integer id, @RequestBody @Validated(BrandPARM.Status.class) BrandPARM brandPARM) {
+                brandService.updateStatus(id, brandPARM.getStatus());
+                return success();
         }
 }

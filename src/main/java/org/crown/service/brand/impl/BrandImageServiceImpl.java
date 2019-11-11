@@ -18,34 +18,22 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package org.crown.service.brand;
+package org.crown.service.brand.impl;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import org.crown.enums.StatusEnum;
-import org.crown.framework.service.BaseService;
-import org.crown.model.brand.dto.BrandDTO;
-import org.crown.model.brand.entity.Brand;
+import org.crown.framework.service.impl.BaseServiceImpl;
+import org.crown.mapper.brand.BrandImageMapper;
+import org.crown.model.brand.entity.BrandImage;
+import org.crown.service.brand.IBrandImageService;
+import org.springframework.stereotype.Service;
 
 /**
  * <p>
- * 品牌表 服务类
+ * 品牌_图片关系表 服务实现类
  * </p>
  *
  * @author whZhang
  */
-public interface IBrandService extends BaseService<Brand> {
-        /**
-         * 品牌列表
-         *
-         * @param page
-         */
-        IPage<BrandDTO> selectBrandPage(IPage<BrandDTO> page);
+@Service
+public class BrandImageServiceImpl extends BaseServiceImpl<BrandImageMapper, BrandImage>implements IBrandImageService {
 
-        /**
-         * 修改菜单状态
-         *
-         * @param brandId
-         * @param status
-         */
-        void updateStatus(Integer brandId, StatusEnum status);
 }

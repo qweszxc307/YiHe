@@ -25,7 +25,9 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.crown.enums.StatusEnum;
 import org.crown.framework.model.convert.Convert;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;
 
@@ -44,13 +46,18 @@ public class BrandPARM extends Convert {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(notes = "图片url")
-    @NotBlank(groups = {BrandPARM.Create.class, BrandPARM.Update.class}, message = "图片不能为空")
-    private String imgUrl;
+    @ApiModelProperty(notes = "序号")
+    @NotBlank(groups = {BrandPARM.Create.class, BrandPARM.Update.class}, message = "序号不能为空")
+    private String orderNum;
+    @ApiModelProperty(notes = "品牌名")
+    @NotBlank(groups = {BrandPARM.Create.class, BrandPARM.Update.class}, message = "品牌名称不能为空")
+    private String name;
+    @ApiModelProperty(notes = "图片ID")
+    @NotBlank(groups = {BrandPARM.Create.class, BrandPARM.Update.class}, message = "品牌图片不能为空")
+    private String imageId;
+    @ApiModelProperty(notes = "状态")
+    private StatusEnum status;
 
-
- /*   @ApiModelProperty(notes = "状态:0：禁用 1：正常")
-    private StatusEnum status;*/
 
     public interface Create {
 
@@ -59,7 +66,6 @@ public class BrandPARM extends Convert {
     public interface Update {
 
     }
-
     public interface Status {
 
     }
