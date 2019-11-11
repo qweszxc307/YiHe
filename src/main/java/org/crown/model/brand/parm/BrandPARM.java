@@ -27,7 +27,6 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.crown.enums.StatusEnum;
 import org.crown.framework.model.convert.Convert;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;
 
