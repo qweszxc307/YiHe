@@ -52,7 +52,7 @@ public class OrderDTO extends BaseModel {
     @ApiModelProperty(notes = "订单状态")
     private int status;
     @ApiModelProperty(notes = "收货人")
-    private String name;
+    private String addressee;
     @ApiModelProperty(notes = "收货电话")
     private String phone;
     @ApiModelProperty(notes = "地址")
@@ -63,6 +63,8 @@ public class OrderDTO extends BaseModel {
     private Double postFee;
     @ApiModelProperty(notes = "商品总价")
     private Double totalFee;
+    @ApiModelProperty(notes = "实付金额")
+    private Double actualFee;
     @ApiModelProperty(notes = "下单时间")
     private LocalDateTime createTime;
     @ApiModelProperty(notes = "支付时间")

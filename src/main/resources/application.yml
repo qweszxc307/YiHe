@@ -31,7 +31,7 @@ spring:
   liquibase:
     enabled: false
   datasource:
-    url: jdbc:p6spy:mysql://127.0.0.1:3306/zwh?characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
+    url: jdbc:p6spy:mysql://192.168.1.112:3306/yihe?characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
     username: boostech
     password: admin
     type: com.zaxxer.hikari.HikariDataSource
@@ -60,3 +60,8 @@ spring:
   aop:
     auto: true
     proxy-target-class: true
+qiniu:
+  accessKey: 4Xgx3ORBO0oMGaOTe4qNZLE3R9yK_X1irnadwNEL
+  secretKey: SGEQW42gGP09ecTgWEa65n1_H81XsXQ-EadDRh6z
+  bucket: boostech
+  prefix: q0lhgg606.bkt.clouddn.com

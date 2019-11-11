@@ -20,10 +20,13 @@
  */
 package org.crown.service.order.impl;
 
+import org.crown.common.mybatisplus.LambdaQueryWrapperChain;
 import org.crown.framework.service.impl.BaseServiceImpl;
 import org.crown.mapper.order.OrderMapper;
 import org.crown.model.order.entity.Order;
+import org.crown.model.order.parm.OrderPARM;
 import org.crown.service.order.IOrderService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -35,5 +38,18 @@ import org.springframework.stereotype.Service;
  */
 @Service
         public class OrderServiceImpl extends BaseServiceImpl<OrderMapper, Order> implements IOrderService {
+        @Autowired
+        private OrderMapper orderMapper;
 
+        /**
+         * 修改订单
+         * @param id  订单id
+         * @param orderPARM  修改内容
+         */
+        @Override
+        public void updateOrder(Integer id, OrderPARM orderPARM) {
+                Order order = orderPARM.convert(Order.class);
+                order.setId(id);
+                updateById(order);
+        }
 }

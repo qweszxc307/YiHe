@@ -26,6 +26,7 @@ import org.crown.framework.service.BaseService;
 import org.crown.model.customer.entity.Customer;
 import org.crown.model.order.dto.OrderDTO;
 import org.crown.model.order.entity.Order;
+import org.crown.model.order.parm.OrderPARM;
 import org.springframework.http.HttpStatus;
 
 /**
@@ -37,5 +38,10 @@ import org.springframework.http.HttpStatus;
  */
 public interface IOrderService extends BaseService<Order> {
 
-
+    /**
+     * 修改订单
+     * @param id
+     * @param orderPARM
+     */
+    void updateOrder(Integer id, OrderPARM orderPARM);
 }
