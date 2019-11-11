@@ -46,7 +46,7 @@ public class OrderLogistics extends BaseModel {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(notes = "订单id")
-    private Long orderId;
+    private Integer orderId;
     @ApiModelProperty(notes = "物流单号")
     private String logisticsNumber;
     @ApiModelProperty(notes = "物流公司名称")

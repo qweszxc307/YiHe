@@ -25,6 +25,7 @@ import org.crown.framework.responses.ApiResponses;
 import org.crown.framework.service.BaseService;
 import org.crown.model.customer.entity.Customer;
 import org.crown.model.order.dto.OrderDTO;
+import org.crown.model.order.entity.Order;
 import org.springframework.http.HttpStatus;
 
 /**
@@ -34,8 +35,7 @@ import org.springframework.http.HttpStatus;
  *
  * @author ykMa
  */
-public interface IOrderService extends BaseService<Customer> {
+public interface IOrderService extends BaseService<Order> {
 
 
-    ApiResponses<IPage<OrderDTO>> findAllOrder();
 }

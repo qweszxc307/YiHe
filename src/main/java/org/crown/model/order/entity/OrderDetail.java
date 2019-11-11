@@ -46,9 +46,9 @@ public class OrderDetail extends BaseModel {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(notes = "订单id")
-    private Long orderId;
+    private Integer orderId;
     @ApiModelProperty(notes = "sku商品id")
-    private Long skuId;
+    private Integer skuId;
     @ApiModelProperty(notes = "购买数量")
     private Integer num;
     @ApiModelProperty(notes = "商品标题")

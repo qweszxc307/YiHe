@@ -48,18 +48,18 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Api(tags = {"Order"}, description = "订单相关接口")
 @RestController
-@RequestMapping(value = "/customer", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+@RequestMapping(value = "/order", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 @Validated
 public class OrderRestController extends SuperController {
     @Autowired
     private IOrderService orderService;
 
 
-    @Resources(auth = AuthTypeEnum.AUTH)
+    @Resources(auth = AuthTypeEnum.OPEN)
     @ApiOperation("查询所有订单")
     @GetMapping
     public ApiResponses<IPage<OrderDTO>> page() {
-        return orderService.findAllOrder();
+        return null;
     }
 }
    /* @ApiOperation("查询所有客户")

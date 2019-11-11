@@ -46,7 +46,7 @@ public class OrderDTO extends BaseModel {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(notes = "订单id")
-    private Long Id;
+    private Integer Id;
     @ApiModelProperty(notes = "订单号")
     private String orderNum;
     @ApiModelProperty(notes = "订单状态")

@@ -20,14 +20,10 @@
  */
 package org.crown.service.order.impl;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import org.crown.framework.responses.ApiResponses;
 import org.crown.framework.service.impl.BaseServiceImpl;
-import org.crown.mapper.customer.CustomerMapper;
-import org.crown.model.customer.entity.Customer;
-import org.crown.model.order.dto.OrderDTO;
+import org.crown.mapper.order.OrderMapper;
+import org.crown.model.order.entity.Order;
 import org.crown.service.order.IOrderService;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 /**
@@ -38,9 +34,6 @@ import org.springframework.stereotype.Service;
  * @author ykMa
  */
 @Service
-        public class OrderServiceImpl extends BaseServiceImpl<CustomerMapper, Customer> implements IOrderService {
-        @Override
-        public ApiResponses<IPage<OrderDTO>> findAllOrder() {
-                return null;
-        }
+        public class OrderServiceImpl extends BaseServiceImpl<OrderMapper, Order> implements IOrderService {
+
 }

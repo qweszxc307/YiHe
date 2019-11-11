@@ -37,7 +37,7 @@ import java.time.LocalDateTime;
  *
  * @author ykMa
  */
-@TableName("order")
+@TableName("orders")
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
@@ -46,7 +46,7 @@ public class Order extends BaseModel {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(notes = "订单id")
-    private Long orderId;
+    private Integer orderId;
     @ApiModelProperty(notes = "总金额")
     private Double totalFee;
     @ApiModelProperty(notes = "实付金额")

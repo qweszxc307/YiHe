@@ -3,6 +3,7 @@ package org.crown.mapper.order;
 import org.apache.ibatis.annotations.Mapper;
 import org.crown.framework.mapper.BaseMapper;
 import org.crown.model.customer.entity.Customer;
+import org.crown.model.order.entity.Order;
 
 /**
  * <p>
@@ -12,6 +13,6 @@ import org.crown.model.customer.entity.Customer;
  * @author ykMa
  */
 @Mapper
-public interface OrderMapper extends BaseMapper<Customer> {
+public interface OrderMapper extends BaseMapper<Order> {
 
         }
