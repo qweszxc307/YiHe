@@ -18,12 +18,10 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package org.crown.model.image.entity;
+package org.crown.model.product.entity;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
+import java.math.BigDecimal;
 import com.baomidou.mybatisplus.annotation.TableName;
-import org.crown.enums.ImagesEnum;
 import org.crown.framework.model.BaseModel;
 import java.time.LocalDateTime;
 
@@ -35,34 +33,30 @@ import lombok.NoArgsConstructor;
 
 /**
  * <p>
- * 存储所有图片信息
+ * 产品运费策略信息表
  * </p>
  *
  * @author whZhang
  */
-@TableName("image")
+@TableName("carriage")
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class Image extends BaseModel {
+public class Carriage extends BaseModel {
 
-    private static final long serialVersionUID=1L;
+private static final long serialVersionUID=1L;
 
-    @ApiModelProperty(notes = "图片url")
-    private String imgUrl;
-    @ApiModelProperty(notes = "图片类型(0:轮播图;1:品牌图片;2:产品图片;3:产品详情图片")
-    private ImagesEnum type;
+    @ApiModelProperty(notes = "策略名称")
+private String name;
+    @ApiModelProperty(notes = "满免价格")
+private BigDecimal freePrice;
     @ApiModelProperty(notes = "创建时间")
-    @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
-    @ApiModelProperty(notes = "创建人")
-    @TableField(fill = FieldFill.INSERT)
+    @ApiModelProperty(notes = "创建人ID")
     private Integer createUid;
     @ApiModelProperty(notes = "修改时间")
-    @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updateTime;
-    @ApiModelProperty(notes = "修改人")
-    @TableField(fill = FieldFill.INSERT_UPDATE)
+    @ApiModelProperty(notes = "修改人id")
     private Integer updateUid;
 
 }

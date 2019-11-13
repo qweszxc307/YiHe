@@ -9,6 +9,7 @@ import org.crown.framework.model.convert.Convert;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * @version V1.0
@@ -27,20 +28,16 @@ public class ProductDTO extends Convert {
 
     @ApiModelProperty(notes = "id")
     private Integer id;
-    @ApiModelProperty(notes = "品牌名称")
+    @ApiModelProperty(notes = "产品名称")
     private String name;
-    @ApiModelProperty(notes = "产品价格")
-    private BigDecimal price;
-    @ApiModelProperty(notes = "运费")
-    private BigDecimal carriage;
     @ApiModelProperty(notes = "品牌id")
-    private String brandId;
-    @ApiModelProperty(notes = "产品图片")
-    private String productImgId;
-    @ApiModelProperty(notes = "详情图片")
-    private String detailImgId;
+    private BigDecimal brandId;
     @ApiModelProperty(notes = "模板id")
-    private String modelId;
+    private BigDecimal modelId;
+    @ApiModelProperty(notes = "产品相关图片")
+    private List<ProductImgDTO> productImgList;
     @ApiModelProperty(notes = "状态")
     private Integer status;
+    @ApiModelProperty(notes = "序号")
+    private Integer orderNum;
 }

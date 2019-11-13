@@ -20,8 +20,13 @@
  */
 package org.crown.service.product;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import org.crown.model.product.dto.ProductDTO;
 import org.crown.model.product.entity.Product;
 import org.crown.framework.service.BaseService;
+import org.crown.model.product.parm.ProductPARM;
+
+import java.util.List;
 
 /**
  * <p>
@@ -31,5 +36,18 @@ import org.crown.framework.service.BaseService;
  * @author whZhang
  */
 public interface IProductService extends BaseService<Product> {
+    /**
+     * 产品列表
+     *
+     * @param page
+     */
+    IPage<ProductDTO> selectProductPage(IPage<ProductDTO> page);
+
+    /**
+     * 添加产品
+     *
+     * @param productPARM
+     */
+    void createProduct(ProductPARM productPARM);
 
 }

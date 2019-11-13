@@ -18,31 +18,18 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package org.crown.service.image;
+package org.crown.service.product;
 
-import org.crown.enums.ImagesEnum;
-import org.crown.framework.responses.ApiResponses;
-import org.crown.model.image.dto.ImageDTO;
-import org.crown.model.image.entity.Image;
+import org.crown.model.product.entity.Carriage;
 import org.crown.framework.service.BaseService;
-import org.crown.model.product.dto.ProductImgDTO;
-import org.springframework.web.multipart.MultipartFile;
-
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * <p>
- * 存储所有图片信息 服务类
+ * 产品运费策略信息表 服务类
  * </p>
  *
  * @author whZhang
  */
-public interface IImageService extends BaseService<Image> {
-    /**
-     * 上传图片
-     *
-     *@param httpServletResponse
-     * @param file
-     */
-    ApiResponses<ImageDTO> uploadImg(HttpServletResponse httpServletResponse, MultipartFile file, ImagesEnum type);
-}
+public interface ICarriageService extends BaseService<Carriage> {
+
+        }

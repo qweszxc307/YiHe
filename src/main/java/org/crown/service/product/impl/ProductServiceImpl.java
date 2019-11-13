@@ -20,12 +20,24 @@
  */
 package org.crown.service.product.impl;
 
-import org.crown.model.product.entity.Product;
-import org.crown.mapper.product.ProductMapper;
-import org.crown.service.product.IProductService;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import org.crown.enums.StatusEnum;
+import org.crown.framework.enums.ErrorCodeEnum;
 import org.crown.framework.service.impl.BaseServiceImpl;
+import org.crown.framework.utils.ApiAssert;
+import org.crown.mapper.product.ProductMapper;
+import org.crown.model.product.dto.ProductDTO;
+import org.crown.model.product.entity.Product;
+import org.crown.model.product.entity.ProductImage;
+import org.crown.model.product.parm.ProductPARM;
+import org.crown.service.product.IProductImageService;
+import org.crown.service.product.IProductService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <p>
@@ -37,4 +49,39 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ProductServiceImpl extends BaseServiceImpl<ProductMapper, Product>implements IProductService {
 
+    @Autowired
+    private IProductService productService;
+    @Autowired
+    private IProductImageService productImageService;
+
+    @Override
+    public IPage<ProductDTO> selectProductPage(IPage<ProductDTO> page) {
+        return  page.setRecords(baseMapper.getProductPage(page));
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void createProduct(ProductPARM productPARM) {
+        int count = productService.query()
+                .eq(Product::getName, productPARM.getName())
+                .count();
+        ApiAssert.isTrue(ErrorCodeEnum.PRODUCT_ALREADY_EXISTS, count == 0);
+        Product product = productPARM.convert(Product.class);
+        //默认启用
+        product.setStatus(StatusEnum.NORMAL);
+        productService.save(product);
+        List<Integer> productImgs = productPARM.getProductImgs();
+        List<ProductImage> piList = new ArrayList<>();
+        for(int i=0;i< productImgs.size();i++){
+            ProductImage pi = new ProductImage();
+            pi.setImgId(productImgs.get(i));
+            pi.setPId(product.getId());
+            piList.add(pi);
+        }
+        productImageService.saveBatch(piList);
+        ProductImage productImage = new ProductImage();
+        productImage.setPId(product.getId());
+        productImage.setImgId(Integer.parseInt(productPARM.getDetailImgId()));
+        productImageService.save(productImage);
+    }
 }

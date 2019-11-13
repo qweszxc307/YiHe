@@ -2,28 +2,35 @@
 <form id="product-form" lay-filter="product-form" class="layui-form model-form">
     <input name="id" type="hidden"/>
     <div class="layui-form-item">
-        <label class="layui-form-label">品牌名称</label>
+        <label class="layui-form-label">序号</label>
         <div class="layui-input-block">
-            <input id="name" name="name" placeholder="请输入账号" type="text" class="layui-input" maxlength="20" />
+            <input name="orderNum" placeholder="请输入序号" type="text" class="layui-input" lay-verify="required|number"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">产品名称</label>
+        <div class="layui-input-block">
+            <input id="name" name="name" placeholder="请输入产品名称" type="text" class="layui-input" maxlength="20" />
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">品牌</label>
+        <div class="layui-input-block">
+            <select name="brandId" xm-select-radio="" xm-select-search="" xm-select="brandId"  lay-verify="required">
+            </select>
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">产品价格</label>
         <div class="layui-input-block">
-            <input name="price" placeholder="请输入用户名" type="text" class="layui-input" maxlength="20"
-                   lay-verify="required"/>
+            <button type="button" class="layui-btn layui-btn-radius">设置价格区间</button>
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">运费</label>
+        <label class="layui-form-label">运费策略</label>
         <div class="layui-input-block">
-            <input name="carriage" placeholder="请输入手机号" type="text" class="layui-input" />
-        </div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">品牌id</label>
-        <div class="layui-input-block">
-            <input name="brandId" placeholder="请输入邮箱" type="text" class="layui-input" />
+            <select name="carriageId" xm-select-radio="" xm-select-search="" xm-select="carriageId"  lay-verify="required">
+            </select>
         </div>
     </div>
     <div style="padding: 10px; background-color: #F1F1F1;">
@@ -33,11 +40,20 @@
                     <div class="layui-card-header">产品图片</div>
                     <div class="layui-card-body">
                         <div class="layui-upload">
-                            <button type="button" class="layui-btn" id="product_img" style="margin-left: 20px;">上传产品图片</button>
+                            <button type="button" class="layui-btn" id="productImgList">选择产品图片</button>
+                            <button type="button" class="layui-btn" id="upload">开始上传</button>
                             <div class="layui-upload-list">
-                                <img class="layui-upload-img" id="product_img_preview" style="width: 200px">
-                                <p id="product_img_txt"></p>
+                                <table class="layui-table">
+                                    <thead>
+                                    <tr><th>文件名</th>
+                                        <th>大小</th>
+                                        <th>状态</th>
+                                        <th>操作</th>
+                                    </tr></thead>
+                                    <tbody id="productList"></tbody>
+                                </table>
                             </div>
+                            <p style="padding-left:10px">最多支持上传6张图片</p>
                         </div>
                     </div>
                 </div>
@@ -48,8 +64,8 @@
                     <div class="layui-card-body">
                         <div class="layui-upload">
                             <button type="button" class="layui-btn" id="detail_img" style="margin-left: 20px;">上传详情图片</button>
-                            <div class="layui-upload-list">
-                                <img class="layui-upload-img" id="detail_img_preview" style="width: 200px">
+                            <div class="layui-upload-list" style="text-align: center">
+                                <img class="layui-upload-img" id="detail_img_preview" style="max-width: 100%;max-height: 350px;vertical-align: middle;">
                                 <p id="detail_img_txt"></p>
                             </div>
                         </div>
@@ -61,51 +77,67 @@
 
     <div class="layui-form-item model-form-footer" style="margin-top:10px">
         <button class="layui-btn layui-btn-primary close" type="button">取消</button>
-        <button class="layui-btn" id="form-submit" lay-filter="product-form-submit" lay-submit>保存</button>
+        <button class="layui-btn" lay-filter="product-form-submit" lay-submit>保存</button>
     </div>
 </form>
 
 <script>
-    layui.use('upload', function () {
+    layui.use(['layer', 'crown', 'form','upload','formSelects'], function () {
         var layer = layui.layer;
         var crown = layui.crown;
         var config = layui.config;
+        var form = layui.form;
+        var formSelects = layui.formSelects;
+        var productImgs = [];
+        var detailImgId;
         var $ = layui.jquery
             ,upload = layui.upload;
         var product = crown.getTempData('t_product');
         if(product){
             crown.fromVal('product-form', product);
             $("#form-submit").hide();
-        }else{
-
         }
-
-        //产品图片上传
-        var uploadProductImg = upload.render({
-            elem: '#product_img'
-            ,url: 'product/upload'
-            ,headers: {Authorization: config.getToken()}
-            ,before: function(obj){
-                //预读本地文件示例，不支持ie8
-                obj.preview(function(index, file, result){
-                    $('#product_img_preview').attr('src', result); //图片链接（base64）
-                });
+        // 获取所有品牌
+        layer.load(2);
+        crown.get('/brand/brands', {}, function (data) {
+            // 渲染多选下拉框
+            var brandSelectData = new Array();
+            for (var i = 0; i < data.result.length; i++) {
+                brandSelectData.push({name: data.result[i].name, value: data.result[i].id});
             }
-            ,done: function(res){
-                //如果上传失败
-                if(res.status == 201){
-                    return layer.msg('上传成功');
+            formSelects.data('brandId', 'local', {arr: brandSelectData});
+            formSelects.btns('brandId', []);
+            // 回显产品数据
+            if (product) {
+                form.val('product-form', product);
+                var rds = new Array();
+                for (var i = 0; i < product.brandId.length; i++) {
+                    rds.push(product.roleIds[i]);
                 }
-                //上传成功
+                formSelects.value('brandIds', rds);
             }
-            ,error: function(){
-                //演示失败状态，并实现重传
-                var demoText = $('#product_img_txt');
-                demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
-                demoText.find('.demo-reload').on('click', function(){
-                    uploadProductImg.upload();
-                });
+            layer.closeAll('loading');
+        });
+
+        // 获取所有运费策略
+        crown.get('/carriage/carriages', {}, function (data) {
+            // 渲染多选下拉框
+            var brandSelectData = new Array();
+            for (var i = 0; i < data.result.length; i++) {
+                brandSelectData.push({name: data.result[i].name, value: data.result[i].id});
             }
+            formSelects.data('carriageId', 'local', {arr: brandSelectData});
+            formSelects.btns('carriageId', []);
+            // 回显产品数据
+            if (product) {
+                form.val('product-form', product);
+                var rds = new Array();
+                for (var i = 0; i < product.carriageId.length; i++) {
+                    rds.push(product.roleIds[i]);
+                }
+                formSelects.value('carriageId', rds);
+            }
+            layer.closeAll('loading');
         });
 
         //详情图片上传
@@ -120,11 +152,12 @@
                 });
             }
             ,done: function(res){
-                //如果上传失败
-                if(res.status == 201){
-                    return layer.msg('上传成功');
-                }
+                var data = res.result;
                 //上传成功
+                if(data.id){
+                    detailImgId = data.id;
+                    return layer.msg('上传详情图片成功');
+                }
             }
             ,error: function(){
                 //演示失败状态，并实现重传
@@ -135,5 +168,88 @@
                 });
             }
         });
+
+        //多文件列表示例
+        var productListView = $('#productList')
+            ,uploadListIns = upload.render({
+            elem: '#productImgList'
+            ,url: 'product/uploads'
+            ,accept: 'images'
+            ,number:6
+            ,multiple: true
+            ,auto: false
+            ,bindAction: "#upload"
+            ,headers: {Authorization: config.getToken()}
+            ,choose: function(obj){
+                var files = this.files = obj.pushFile(); //将每次选择的文件追加到文件队列
+                //读取本地文件
+                obj.preview(function(index, file, result){
+                    var tr = $(['<tr id="upload-'+ index +'">'
+                        ,'<td>'+ file.name +'</td>'
+                        ,'<td>'+ (file.size/1014).toFixed(1) +'kb</td>'
+                        ,'<td>等待上传</td>'
+                        ,'<td>'
+                        ,'<button class="layui-btn layui-btn-xs demo-reload layui-hide">重传</button>'
+                        ,'<button class="layui-btn layui-btn-xs layui-btn-danger demo-delete">删除</button>'
+                        ,'</td>'
+                        ,'</tr>'].join(''));
+
+                    //单个重传
+                    tr.find('.demo-reload').on('click', function(){
+                        obj.upload(index, file);
+                    });
+
+                    //删除
+                    tr.find('.demo-delete').on('click', function(){
+                        delete files[index]; //删除对应的文件
+                        tr.remove();
+                        uploadListIns.config.elem.next()[0].value = ''; //清空 input file 值，以免删除后出现同名文件不可选
+                    });
+
+                    productListView.append(tr);
+                });
+            }
+            ,done: function(res, index, upload){
+                var data = res.result;
+                //上传成功
+                if(data.id){
+                    productImgs.push(data.id);
+                    var tr = productListView.find('tr#upload-'+ index)
+                        ,tds = tr.children();
+                    tds.eq(2).html('<span style="color: #5FB878;">上传成功</span>');
+                    tds.eq(3).html(''); //清空操作
+                    return delete this.files[index]; //删除文件队列已经上传成功的文件
+                }
+                this.error(index, upload);
+            }
+            ,error: function(index, upload){
+                var tr = productListView.find('tr#upload-'+ index)
+                    ,tds = tr.children();
+                tds.eq(2).html('<span style="color: #FF5722;">上传失败</span>');
+                tds.eq(3).find('.demo-reload').removeClass('layui-hide'); //显示重传
+            }
+        });
+
+        // 表单提交事件
+        form.on('submit(product-form-submit)', function (data) {
+            layer.load(2);
+            if (data.field.id) {
+                crown.put('/product/' + data.field.id, {data: data.field}, function () {
+                    layer.closeAll('loading');
+                    layer.msg('修改成功', {icon: 1});
+                    crown.finishPopupCenter();
+                });
+            } else {
+                data.field.productImgs = productImgs;
+                data.field.detailImgId = detailImgId;
+                crown.post('/product', {data:data.field}, function () {
+                    layer.closeAll('loading');
+                    layer.msg('添加成功', {icon: 1});
+                    crown.finishPopupCenter();
+                });
+            }
+            return false;
+        });
+
     })
 </script>

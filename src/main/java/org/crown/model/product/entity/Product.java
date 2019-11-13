@@ -20,8 +20,10 @@
  */
 package org.crown.model.product.entity;
 
-import java.math.BigDecimal;
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import org.crown.enums.StatusEnum;
 import org.crown.framework.model.BaseModel;
 import java.time.LocalDateTime;
 
@@ -46,25 +48,27 @@ public class Product extends BaseModel {
 
 private static final long serialVersionUID=1L;
 
-    @ApiModelProperty(notes = "品牌名称")
-    private String name;
-    @ApiModelProperty(notes = "产品价格")
-    private BigDecimal price;
-    @ApiModelProperty(notes = "运费")
-    private BigDecimal carriage;
+    @ApiModelProperty(notes = "产品名称")
+private String name;
     @ApiModelProperty(notes = "品牌id")
-    private String brandId;
-    @ApiModelProperty(notes = "产品图片")
-    private String productImgId;
-    @ApiModelProperty(notes = "详情图片")
-    private String detailImgId;
+private String brandId;
     @ApiModelProperty(notes = "模板id")
-    private String modelId;
+private String modelId;
     @ApiModelProperty(notes = "状态")
-    private Integer status;
+private StatusEnum status;
+    @ApiModelProperty(notes = "序号")
+    private Integer orderNum;
     @ApiModelProperty(notes = "创建时间")
+    @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
-    @ApiModelProperty(notes = "创建人ID")
-    private String createUid;
+    @ApiModelProperty(notes = "创建人")
+    @TableField(fill = FieldFill.INSERT)
+    private Integer createUid;
+    @ApiModelProperty(notes = "修改时间")
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    private LocalDateTime updateTime;
+    @ApiModelProperty(notes = "修改人")
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    private Integer updateUid;
 
 }

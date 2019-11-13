@@ -18,31 +18,48 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package org.crown.service.image;
+package org.crown.enums;
 
-import org.crown.enums.ImagesEnum;
-import org.crown.framework.responses.ApiResponses;
-import org.crown.model.image.dto.ImageDTO;
-import org.crown.model.image.entity.Image;
-import org.crown.framework.service.BaseService;
-import org.crown.model.product.dto.ProductImgDTO;
-import org.springframework.web.multipart.MultipartFile;
-
-import javax.servlet.http.HttpServletResponse;
+import com.baomidou.mybatisplus.annotation.EnumValue;
+import com.fasterxml.jackson.annotation.JsonValue;
+import org.crown.framework.enums.IEnum;
 
 /**
  * <p>
- * 存储所有图片信息 服务类
+ * 状态枚举
  * </p>
  *
  * @author whZhang
  */
-public interface IImageService extends BaseService<Image> {
+public enum ImagesEnum implements IEnum {
+
     /**
-     * 上传图片
-     *
-     *@param httpServletResponse
-     * @param file
+     * 轮播图
      */
-    ApiResponses<ImageDTO> uploadImg(HttpServletResponse httpServletResponse, MultipartFile file, ImagesEnum type);
+    CAROUSEL_IMAGE(0),
+    /**
+     * 品牌图片
+     */
+    BRAND_IMAGE(1),
+    /**
+     * 产品图片
+     */
+    PRODUCT_IMAGE(2),
+    /**
+     * 产品详情图片
+     */
+    PRODUCT_DETAIL_IMAGE(3) ;
+
+    @EnumValue
+    private final int value;
+
+    ImagesEnum(final int value) {
+        this.value = value;
+    }
+
+    @Override
+    @JsonValue
+    public int getValue() {
+        return this.value;
+    }
 }

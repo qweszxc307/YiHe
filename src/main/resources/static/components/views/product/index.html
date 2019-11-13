@@ -1,3 +1,9 @@
+<style>
+    .layui-table-cell {
+        height: auto;
+        line-height: 28px;
+    }
+</style>
 <div class="layui-card">
     <div class="layui-card-header">
         <h2 class="header-title">产品管理</h2>
@@ -66,15 +72,23 @@
             headers: {Authorization: config.getToken()},
             page: true,
             cols: [[
-                {field: 'id', width: 60, title: 'ID'},
+                {field: 'id', width: 60, title: 'ID',hide: true},
+                {field: 'orderNum', align: 'center', width: 100, sort: true, title: '序号'},
                 {field: 'name', align: 'center', sort: true, title: '品牌名称'},
-                {field: 'price', align: 'center', sort: true, title: '产品价格'},
-                {field: 'carriage', align: 'center', sort: true, title: '运费'},
                 {field: 'brandId', align: 'center', sort: true, title: '品牌id'},
-                {field: 'productImgId', align: 'center', sort: true, title: '产品图片'},
-                {field: 'detailImgId', align: 'center', sort: true, title: '详情图片'},
+                {field: 'productImgList', align: 'center',templet: function (d) {
+                        var data = d.productImgList;
+                        var html = "";
+                        for(var i = 0 ;i< data.length;i++){
+                            var obj = data[i];
+                            if(obj.type == 2){
+                                html += "<img  width='100px' onclick='window.open(\"http://"+obj.imgUrl+"\")' title='点击预览产品图片' style='cursor: pointer;' src='"+"http://"+obj.imgUrl+"\'\></br>"
+                            }
+                        }
+                        return html;
+                    }, title: '品牌id'},
                 {field: 'modelId', align: 'center', sort: true, title: '模板id'},
-                {field: 'status', align: 'center', sort: true, title: '状态'},
+                {field: 'status', align: 'center', sort: true,templet: '#product-tpl-status', title: '状态'},
                 {align: 'center', toolbar: '#product-table-bar', title: '操作'}
             ]]
         });

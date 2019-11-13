@@ -24,12 +24,10 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.crown.common.utils.QiNiuUtils;
 import org.crown.enums.StatusEnum;
 import org.crown.framework.enums.ErrorCodeEnum;
-import org.crown.framework.responses.ApiResponses;
 import org.crown.framework.service.impl.BaseServiceImpl;
 import org.crown.framework.utils.ApiAssert;
 import org.crown.mapper.brand.BrandMapper;
 import org.crown.model.brand.dto.BrandDTO;
-import org.crown.model.brand.dto.BrandImgDTO;
 import org.crown.model.brand.entity.Brand;
 import org.crown.model.brand.entity.BrandImage;
 import org.crown.model.brand.parm.BrandPARM;
@@ -38,17 +36,10 @@ import org.crown.service.brand.IBrandImageService;
 import org.crown.service.brand.IBrandService;
 import org.crown.service.image.IImageService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
-
-import javax.servlet.http.HttpServletResponse;
-import java.util.List;
-import java.util.UUID;
 
 import static org.crown.common.utils.ApiUtils.currentUid;
-import static org.crown.framework.responses.ApiResponses.success;
 
 /**
  * <p>
@@ -65,8 +56,6 @@ public class BrandServiceImpl extends BaseServiceImpl<BrandMapper, Brand>impleme
     IBrandImageService brandImageService;
     @Autowired
     IImageService imageService;
-    @Autowired
-    private QiNiuUtils qiniuService;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -77,7 +66,6 @@ public class BrandServiceImpl extends BaseServiceImpl<BrandMapper, Brand>impleme
         ApiAssert.isTrue(ErrorCodeEnum.BRAND_ALREADY_EXISTS, count == 0);
         Brand brand = brandPARM.convert(Brand.class);
         //默认启用
-        brand.setCreateUid(currentUid());
         brand.setStatus(StatusEnum.NORMAL);
         brandService.save(brand);
         BrandImage brandImage = new BrandImage();
@@ -109,39 +97,13 @@ public class BrandServiceImpl extends BaseServiceImpl<BrandMapper, Brand>impleme
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
-    public ApiResponses<BrandImgDTO> uploadBrandImg(HttpServletResponse response,MultipartFile file) {
-        BrandImgDTO imageDTO = new BrandImgDTO();
-        try {
-            String originalFilename = file.getOriginalFilename();
-            String fileExtend = originalFilename.substring(originalFilename.lastIndexOf("."));
-            //默认不指定key的情况下，以文件内容的hash值作为文件名
-            String fileKey = UUID.randomUUID().toString().replace("-", "") + fileExtend;
-            String imgUrl = qiniuService.upload(file.getInputStream(),fileKey);
-            if(imgUrl.equals(null)){
-                return success(response,HttpStatus.BAD_REQUEST,null);
-            }else{
-                Image baseImg = new Image();
-                baseImg.setImgUrl(imgUrl);
-                baseImg.setCreateUid(currentUid());
-                imageService.save(baseImg);
-                imageDTO.setImgId(baseImg.getId());
-                imageDTO.setImgUrl(imgUrl);
-                return success(response,HttpStatus.OK,imageDTO);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return success(response,HttpStatus.BAD_REQUEST,null);
-        }
-    }
-
-    @Override
     public BrandDTO getBrandById(Integer brandId) {
         Brand brand = brandService.getById(brandId);
         BrandDTO brandDTO = brand.convert(BrandDTO.class);
         BrandImage brandImage = brandImageService.query().eq(BrandImage::getBId,brandDTO.getId()).getOne();
         Image image = imageService.query().eq(Image::getId,brandImage.getImgId()).getOne();
         brandDTO.setImgUrl(image.getImgUrl());
+        brandDTO.setImageId(image.getId());
         return brandDTO;
     }
 

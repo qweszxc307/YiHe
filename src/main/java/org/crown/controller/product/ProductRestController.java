@@ -26,11 +26,17 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.crown.common.annotations.Resources;
 import org.crown.enums.AuthTypeEnum;
+import org.crown.enums.ImagesEnum;
 import org.crown.framework.responses.ApiResponses;
+import org.crown.model.brand.dto.BrandDTO;
+import org.crown.model.brand.dto.BrandImgDTO;
+import org.crown.model.brand.parm.BrandPARM;
 import org.crown.model.image.dto.ImageDTO;
 import org.crown.model.image.entity.Image;
 import org.crown.model.product.dto.ProductDTO;
+import org.crown.model.product.dto.ProductImgDTO;
 import org.crown.model.product.entity.Product;
+import org.crown.model.product.parm.ProductPARM;
 import org.crown.service.image.IImageService;
 import org.crown.service.product.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +48,8 @@ import org.springframework.validation.annotation.Validated;
 import io.swagger.annotations.Api;
 import org.crown.framework.controller.SuperController;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * <p>
@@ -57,15 +65,17 @@ import org.springframework.web.multipart.MultipartFile;
 public class ProductRestController extends SuperController {
     @Autowired
     private IProductService productService;
+    @Autowired
+    private IImageService imageService;
 
     @Resources(auth = AuthTypeEnum.AUTH)
     @ApiOperation("查询所有产品")
     @GetMapping
     public ApiResponses<IPage<ProductDTO>> page() {
-            return success(
-                    productService.page(this.<Product>getPage())
-                            .convert(e -> e.convert(ProductDTO.class))
-            );
+        return success(
+                productService.selectProductPage(this.<ProductDTO>getPage())
+                        .convert(e -> e.convert(ProductDTO.class))
+        );
     }
 
     @Resources(auth = AuthTypeEnum.AUTH)
@@ -83,7 +93,8 @@ public class ProductRestController extends SuperController {
     @Resources(auth = AuthTypeEnum.AUTH)
     @ApiOperation("添加产品")
     @PostMapping
-    public ApiResponses<Void> create() {
+    public ApiResponses<Void> create(@RequestBody @Validated(ProductPARM.Create.class) ProductPARM productPARM) {
+            productService.createProduct(productPARM);
             return success(HttpStatus.CREATED);
     }
 
@@ -110,10 +121,16 @@ public class ProductRestController extends SuperController {
     }
 
     @Resources(auth = AuthTypeEnum.AUTH)
-    @ApiOperation("添加产品图片")
+    @ApiOperation("添加产品详情图片")
     @PostMapping(value = "/upload")
-    public ApiResponses<Void> create(MultipartFile file) {
-        return success(HttpStatus.CREATED);
+    public ApiResponses<ImageDTO> upload(HttpServletResponse httpServletResponse, MultipartFile file) {
+        return imageService.uploadImg(httpServletResponse,file,ImagesEnum.PRODUCT_DETAIL_IMAGE);
     }
 
+    @Resources(auth = AuthTypeEnum.AUTH)
+    @ApiOperation("添加产品图片")
+    @PostMapping(value = "/uploads")
+    public ApiResponses<ImageDTO> uploads(HttpServletResponse httpServletResponse, MultipartFile file) {
+        return imageService.uploadImg(httpServletResponse,file, ImagesEnum.PRODUCT_IMAGE);
+    }
 }

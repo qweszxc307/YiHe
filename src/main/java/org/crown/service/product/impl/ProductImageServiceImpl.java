@@ -18,31 +18,23 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package org.crown.service.image;
+package org.crown.service.product.impl;
 
-import org.crown.enums.ImagesEnum;
-import org.crown.framework.responses.ApiResponses;
-import org.crown.model.image.dto.ImageDTO;
-import org.crown.model.image.entity.Image;
-import org.crown.framework.service.BaseService;
-import org.crown.model.product.dto.ProductImgDTO;
-import org.springframework.web.multipart.MultipartFile;
-
-import javax.servlet.http.HttpServletResponse;
+import org.crown.model.product.entity.ProductImage;
+import org.crown.mapper.product.ProductImageMapper;
+import org.crown.service.product.IProductImageService;
+import org.crown.framework.service.impl.BaseServiceImpl;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * <p>
- * 存储所有图片信息 服务类
+ * 产品_图片关系表 服务实现类
  * </p>
  *
  * @author whZhang
  */
-public interface IImageService extends BaseService<Image> {
-    /**
-     * 上传图片
-     *
-     *@param httpServletResponse
-     * @param file
-     */
-    ApiResponses<ImageDTO> uploadImg(HttpServletResponse httpServletResponse, MultipartFile file, ImagesEnum type);
-}
+@Service
+        public class ProductImageServiceImpl extends BaseServiceImpl<ProductImageMapper, ProductImage>implements IProductImageService {
+
+        }

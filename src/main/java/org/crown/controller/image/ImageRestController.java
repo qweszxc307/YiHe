@@ -29,6 +29,7 @@ import io.swagger.annotations.ApiOperation;
 import org.apache.commons.codec.digest.Md5Crypt;
 import org.crown.common.annotations.Resources;
 import org.crown.enums.AuthTypeEnum;
+import org.crown.enums.ImagesEnum;
 import org.crown.enums.StatusEnum;
 import org.crown.framework.controller.SuperController;
 import org.crown.framework.enums.ErrorCodeEnum;
@@ -48,6 +49,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Objects;
 
@@ -89,10 +91,10 @@ public class ImageRestController extends SuperController {
     }
 
     @Resources(auth = AuthTypeEnum.AUTH)
-    @ApiOperation("添加图片")
+    @ApiOperation("上传单个图片")
     @PostMapping(value = "/upload")
-    public ApiResponses<Void> create(MultipartFile file) {
-        return success(HttpStatus.CREATED);
+    public ApiResponses<ImageDTO> create(HttpServletResponse httpServletResponse, MultipartFile file) {
+        return imageService.uploadImg(httpServletResponse,file, ImagesEnum.CAROUSEL_IMAGE);
     }
 
     @Resources(auth = AuthTypeEnum.AUTH)

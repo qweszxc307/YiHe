@@ -68,13 +68,6 @@ public interface IBrandService extends BaseService<Brand> {
          */
         void deleteBrandById(Integer brandId);
         /**
-         * 上传品牌图片
-         *
-         *@param httpServletResponse
-         * @param file
-         */
-        ApiResponses<BrandImgDTO> uploadBrandImg(HttpServletResponse httpServletResponse,MultipartFile file);
-        /**
          * 获取品牌详情
          *
          * @param brandId

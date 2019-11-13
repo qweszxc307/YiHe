@@ -18,14 +18,10 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package org.crown.model.image.entity;
+package org.crown.model.product.entity;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import org.crown.enums.ImagesEnum;
 import org.crown.framework.model.BaseModel;
-import java.time.LocalDateTime;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -35,34 +31,22 @@ import lombok.NoArgsConstructor;
 
 /**
  * <p>
- * 存储所有图片信息
+ * 产品_图片关系表
  * </p>
  *
  * @author whZhang
  */
-@TableName("image")
+@TableName("product_image")
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class Image extends BaseModel {
+public class ProductImage extends BaseModel {
 
-    private static final long serialVersionUID=1L;
+private static final long serialVersionUID=1L;
 
-    @ApiModelProperty(notes = "图片url")
-    private String imgUrl;
-    @ApiModelProperty(notes = "图片类型(0:轮播图;1:品牌图片;2:产品图片;3:产品详情图片")
-    private ImagesEnum type;
-    @ApiModelProperty(notes = "创建时间")
-    @TableField(fill = FieldFill.INSERT)
-    private LocalDateTime createTime;
-    @ApiModelProperty(notes = "创建人")
-    @TableField(fill = FieldFill.INSERT)
-    private Integer createUid;
-    @ApiModelProperty(notes = "修改时间")
-    @TableField(fill = FieldFill.INSERT_UPDATE)
-    private LocalDateTime updateTime;
-    @ApiModelProperty(notes = "修改人")
-    @TableField(fill = FieldFill.INSERT_UPDATE)
-    private Integer updateUid;
+    @ApiModelProperty(notes = "产品id")
+private Integer pId;
+    @ApiModelProperty(notes = "图片id")
+private Integer imgId;
 
 }

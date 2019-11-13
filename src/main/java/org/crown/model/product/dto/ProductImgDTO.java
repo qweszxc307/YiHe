@@ -1,33 +1,32 @@
-package org.crown.model.image.dto;
+package org.crown.model.product.dto;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.crown.enums.StatusEnum;
+import org.crown.enums.ImagesEnum;
 import org.crown.framework.model.convert.Convert;
-
-import java.time.LocalDateTime;
-import java.util.List;
 
 /**
  * @version V1.0
- * @package org.crown.model.image.dto
+ * @package org.crown.model.brand.dto
  * @title:
  * @description:
  * @author: whZhang
- * @date: 2019/10/31 15:59
+ * @date: 2019/11/7 15:39
  */
 @ApiModel
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class ImageDTO extends Convert {
+public class ProductImgDTO extends Convert {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(notes = "id")
-    private Integer id;
-    @ApiModelProperty(notes = "图片url")
+    private Integer imgId;
+    @ApiModelProperty(notes = "url")
     private String imgUrl;
+    @ApiModelProperty(notes = "type")
+    private ImagesEnum type;
 }
