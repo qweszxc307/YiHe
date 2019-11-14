@@ -120,9 +120,9 @@ public class ProductRestController extends SuperController {
     }
 
     @Resources(auth = AuthTypeEnum.AUTH)
-    @ApiOperation("设置品牌状态")
+    @ApiOperation("设置产品状态")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "品牌ID", required = true, paramType = "path")
+            @ApiImplicitParam(name = "id", value = "产品ID", required = true, paramType = "path")
     })
     @PutMapping("/{id}/status")
     public ApiResponses<Void> updateStatus(@PathVariable("id") Integer id, @RequestBody @Validated(ProductPARM.Status.class) ProductPARM productPARM) {

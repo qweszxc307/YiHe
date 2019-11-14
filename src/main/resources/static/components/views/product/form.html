@@ -1,6 +1,6 @@
 <!-- product表单弹窗 -->
 <form id="product-form" lay-filter="product-form" class="layui-form model-form" style="padding-right:0px">
-    <div style=" height:750px;overflow: auto;">
+    <div style=" height:750px;overflow: auto;padding-right:10px;padding-left:10px">
         <input name="id" type="hidden"/>
         <div class="layui-form-item">
             <label class="layui-form-label">序号</label>
@@ -114,12 +114,8 @@
         var detailImgId;
         var $ = layui.jquery
             ,upload = layui.upload;
-        var product = crown.getTempData('t_product');
-        if(product){
-            crown.fromVal('product-form', product);
-            $("#form-submit").hide();
-        }
         // 获取所有品牌
+        // 获取所有角色
         layer.load(2);
         crown.get('/brand/brands', {}, function (data) {
             // 渲染多选下拉框
@@ -128,15 +124,14 @@
                 brandSelectData.push({name: data.result[i].name, value: data.result[i].id});
             }
             formSelects.data('brandId', 'local', {arr: brandSelectData});
-            formSelects.btns('brandId', []);
+            var product = crown.getTempData('t_product');
+            debugger;
             // 回显产品数据
             if (product) {
                 form.val('product-form', product);
                 var rds = new Array();
-                for (var i = 0; i < product.brandId.length; i++) {
-                    rds.push(product.roleIds[i]);
-                }
-                formSelects.value('brandIds', rds);
+                rds.push(product.brandId);
+                formSelects.value('brandId', rds);
             }
             layer.closeAll('loading');
         });
