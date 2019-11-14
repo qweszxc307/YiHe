@@ -1,86 +1,108 @@
 <!-- product表单弹窗 -->
-<form id="product-form" lay-filter="product-form" class="layui-form model-form">
-    <input name="id" type="hidden"/>
-    <div class="layui-form-item">
-        <label class="layui-form-label">序号</label>
-        <div class="layui-input-block">
-            <input name="orderNum" placeholder="请输入序号" type="text" class="layui-input" lay-verify="required|number"/>
+<form id="product-form" lay-filter="product-form" class="layui-form model-form" style="padding-right:0px">
+    <div style=" height:750px;overflow: auto;">
+        <input name="id" type="hidden"/>
+        <div class="layui-form-item">
+            <label class="layui-form-label">序号</label>
+            <div class="layui-input-block">
+                <input name="orderNum" placeholder="请输入序号" type="text" class="layui-input" lay-verify="required|number"/>
+            </div>
         </div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">产品名称</label>
-        <div class="layui-input-block">
-            <input id="name" name="name" placeholder="请输入产品名称" type="text" class="layui-input" maxlength="20" />
+        <div class="layui-form-item">
+            <label class="layui-form-label">产品名称</label>
+            <div class="layui-input-block">
+                <input id="name" name="name" placeholder="请输入产品名称" type="text" class="layui-input" maxlength="20" />
+            </div>
         </div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">品牌</label>
-        <div class="layui-input-block">
-            <select name="brandId" xm-select-radio="" xm-select-search="" xm-select="brandId"  lay-verify="required">
-            </select>
+        <div class="layui-form-item">
+            <label class="layui-form-label">品牌</label>
+            <div class="layui-input-block">
+                <select name="brandId" xm-select-radio="" xm-select-search="" xm-select="brandId"  lay-verify="required">
+                </select>
+            </div>
         </div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">产品价格</label>
-        <div class="layui-input-block">
-            <button type="button" class="layui-btn layui-btn-radius">设置价格区间</button>
+        <div class="layui-form-item">
+            <label class="layui-form-label">运费策略</label>
+            <div class="layui-input-block">
+                <select name="carriageId" xm-select-radio="" xm-select-search="" xm-select="carriageId"  lay-verify="required">
+                </select>
+            </div>
         </div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">运费策略</label>
-        <div class="layui-input-block">
-            <select name="carriageId" xm-select-radio="" xm-select-search="" xm-select="carriageId"  lay-verify="required">
-            </select>
+        <div style="padding: 10px; background-color: #F1F1F1;">
+            <div class="layui-card">
+                <div class="layui-card-header">价格区间</div>
+                <div class="layui-card-body">
+                    <table class="layui-table" id="price_degree_model" lay-filter="price_degree_model">
+                        <thead>
+                        <tr>
+                            <td>起始数量</td>
+                            <td>最大数量</td>
+                            <td>价格</td>
+                            <td>操作</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td><input type="text"  class="layui-input" name="b_number" lay-verify="required|number"></td>
+                            <td><input type="text"  class="layui-input" name="e_number" lay-verify="required|number"></td>
+                            <td><input type="text"  class="layui-input" name="price" lay-verify="required|number"></td>
+                            <td>
+                                <a class="layui-btn layui-btn-xs addPriceDegree">添加</a>
+                                <a class="layui-btn layui-btn-danger layui-btn-xs delPriceDegree">删除</a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
-    </div>
-    <div style="padding: 10px; background-color: #F1F1F1;">
-        <div class="layui-row layui-col-space15">
-            <div class="layui-col-md6">
-                <div class="layui-card">
-                    <div class="layui-card-header">产品图片</div>
-                    <div class="layui-card-body">
-                        <div class="layui-upload">
-                            <button type="button" class="layui-btn" id="productImgList">选择产品图片</button>
-                            <button type="button" class="layui-btn" id="upload">开始上传</button>
-                            <div class="layui-upload-list">
-                                <table class="layui-table">
-                                    <thead>
-                                    <tr><th>文件名</th>
-                                        <th>大小</th>
-                                        <th>状态</th>
-                                        <th>操作</th>
-                                    </tr></thead>
-                                    <tbody id="productList"></tbody>
-                                </table>
+        <div style="padding: 10px; background-color: #F1F1F1;">
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-md6">
+                    <div class="layui-card">
+                        <div class="layui-card-header">产品图片</div>
+                        <div class="layui-card-body">
+                            <div class="layui-upload">
+                                <button type="button" class="layui-btn" id="productImgList">选择产品图片</button>
+                                <button type="button" class="layui-btn" id="upload">开始上传</button>
+                                <div class="layui-upload-list">
+                                    <table class="layui-table">
+                                        <thead>
+                                        <tr><th>文件名</th>
+                                            <th>大小</th>
+                                            <th>状态</th>
+                                            <th>操作</th>
+                                        </tr></thead>
+                                        <tbody id="productList"></tbody>
+                                    </table>
+                                </div>
+                                <p style="padding-left:10px">最多支持上传6张图片</p>
                             </div>
-                            <p style="padding-left:10px">最多支持上传6张图片</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-md6">
+                    <div class="layui-card">
+                        <div class="layui-card-header">产品详情图片</div>
+                        <div class="layui-card-body">
+                            <div class="layui-upload">
+                                <button type="button" class="layui-btn" id="detail_img" style="margin-left: 20px;">上传详情图片</button>
+                                <div class="layui-upload-list" style="text-align: center">
+                                    <img class="layui-upload-img" id="detail_img_preview" style="max-width: 100%;max-height: 350px;vertical-align: middle;">
+                                    <p id="detail_img_txt"></p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="layui-col-md6">
-                <div class="layui-card">
-                    <div class="layui-card-header">产品详情图片</div>
-                    <div class="layui-card-body">
-                        <div class="layui-upload">
-                            <button type="button" class="layui-btn" id="detail_img" style="margin-left: 20px;">上传详情图片</button>
-                            <div class="layui-upload-list" style="text-align: center">
-                                <img class="layui-upload-img" id="detail_img_preview" style="max-width: 100%;max-height: 350px;vertical-align: middle;">
-                                <p id="detail_img_txt"></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
-
-    <div class="layui-form-item model-form-footer" style="margin-top:10px">
+    <div class="layui-form-item model-form-footer" style="margin-top:10px;margin-right: 10px">
         <button class="layui-btn layui-btn-primary close" type="button">取消</button>
         <button class="layui-btn" lay-filter="product-form-submit" lay-submit>保存</button>
     </div>
 </form>
-
 <script>
     layui.use(['layer', 'crown', 'form','upload','formSelects'], function () {
         var layer = layui.layer;
@@ -229,7 +251,6 @@
                 tds.eq(3).find('.demo-reload').removeClass('layui-hide'); //显示重传
             }
         });
-
         // 表单提交事件
         form.on('submit(product-form-submit)', function (data) {
             layer.load(2);
@@ -240,8 +261,27 @@
                     crown.finishPopupCenter();
                 });
             } else {
+                debugger;
                 data.field.productImgs = productImgs;
                 data.field.detailImgId = detailImgId;
+                var bnums = [];
+                var onums = [];
+                var price = [];
+                $("input[name='b_number']").each(function(b,item){
+                    // 你要实现的业务逻辑
+                    bnums.push(item.value)
+                });
+                $("input[name='e_number']").each(function(o,item){
+                    // 你要实现的业务逻辑
+                    onums.push(item.value)
+                });
+                $("input[name='price']").each(function(p,item){
+                    // 你要实现的业务逻辑
+                    price.push(item.value)
+                });
+                data.field.bnums = bnums;
+                data.field.onums = onums;
+                data.field.price = price;
                 crown.post('/product', {data:data.field}, function () {
                     layer.closeAll('loading');
                     layer.msg('添加成功', {icon: 1});
@@ -251,5 +291,34 @@
             return false;
         });
 
+        //因为动态添加的元素class属性是无效的，所以不能用$('.add').click(function(){});
+        $('#price_degree_model').on('click', '.addPriceDegree', function() {
+            //你要添加的html
+            var html = '<tr>'+
+                '<td><input type="text"  class="layui-input" name="b_number" lay-verify="required|number"></td>'+
+                '<td><input type="text"  class="layui-input" name="e_number" lay-verify="required|number"></td>'+
+                '<td><input type="text"  class="layui-input" name="price" lay-verify="required|number"></td>'+
+                '<td>'+
+                '<a class="layui-btn layui-btn-xs addPriceDegree">添加</a>'+
+                '<a class="layui-btn layui-btn-danger layui-btn-xs delPriceDegree">删除</a>'+
+                '</td>'+
+                '</tr>';
+            //添加到表格最后
+            $(html).appendTo($('#price_degree_model tbody:last'));
+            form.render();
+        });
+        $('#price_degree_model').on('click', '.delPriceDegree', function() {
+            if ($('#price_degree_model tbody tr').length === 1) {
+                layer.msg('只有一条不允许删除。', {
+                    time : 2000
+                });
+            } else {
+                //删除当前按钮所在的tr
+                $(this).closest('tr').remove();
+            }
+        });
+
     })
+
+
 </script>

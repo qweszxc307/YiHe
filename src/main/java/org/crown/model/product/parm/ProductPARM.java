@@ -30,6 +30,7 @@ import org.crown.framework.model.convert.Convert;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.lang.reflect.Array;
 import java.util.List;
 
@@ -71,6 +72,18 @@ public class ProductPARM extends Convert {
     @ApiModelProperty(notes = "产品详情图片")
     @NotBlank(groups = {ProductPARM.Create.class, ProductPARM.Update.class}, message = "请先上传产品详情图片")
     private String detailImgId;
+
+    @ApiModelProperty(notes = "起始数量")
+    @NotEmpty(groups = {ProductPARM.Create.class, ProductPARM.Update.class}, message = "请填写起始数量")
+    private List<String> bnums;
+
+    @ApiModelProperty(notes = "最大数量")
+    @NotEmpty(groups = {ProductPARM.Create.class, ProductPARM.Update.class}, message = "请填写最大数量")
+    private List<String> onums;
+
+    @ApiModelProperty(notes = "区间价格")
+    @NotEmpty(groups = {ProductPARM.Create.class, ProductPARM.Update.class}, message = "请填写区间价格")
+    private List<String> price;
 
     @ApiModelProperty(notes = "状态:0：禁用 1：正常")
     private StatusEnum status;

@@ -20,43 +20,16 @@
  */
 package org.crown.service.product;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import org.crown.enums.StatusEnum;
-import org.crown.model.product.dto.ProductDTO;
-import org.crown.model.product.entity.Product;
+import org.crown.model.product.entity.ProductPrice;
 import org.crown.framework.service.BaseService;
-import org.crown.model.product.parm.ProductPARM;
-
-import java.util.List;
 
 /**
  * <p>
- * 产品表 服务类
+ * 产品价格配置表 服务类
  * </p>
  *
  * @author whZhang
  */
-public interface IProductService extends BaseService<Product> {
-    /**
-     * 产品列表
-     *
-     * @param page
-     */
-    IPage<ProductDTO> selectProductPage(IPage<ProductDTO> page);
+public interface IProductPriceService extends BaseService<ProductPrice> {
 
-    /**
-     * 添加产品
-     *
-     * @param productPARM
-     */
-    void createProduct(ProductPARM productPARM);
-
-    /**
-     * 修改菜单状态
-     *
-     * @param productId
-     * @param status
-     */
-    void updateStatus(Integer productId, StatusEnum status);
-
-}
+        }

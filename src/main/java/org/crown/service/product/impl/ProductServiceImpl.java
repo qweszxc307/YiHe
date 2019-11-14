@@ -26,16 +26,22 @@ import org.crown.framework.enums.ErrorCodeEnum;
 import org.crown.framework.service.impl.BaseServiceImpl;
 import org.crown.framework.utils.ApiAssert;
 import org.crown.mapper.product.ProductMapper;
+import org.crown.model.brand.entity.Brand;
 import org.crown.model.product.dto.ProductDTO;
 import org.crown.model.product.entity.Product;
 import org.crown.model.product.entity.ProductImage;
+import org.crown.model.product.entity.ProductPrice;
 import org.crown.model.product.parm.ProductPARM;
+import org.crown.service.product.ICarriageService;
 import org.crown.service.product.IProductImageService;
+import org.crown.service.product.IProductPriceService;
 import org.crown.service.product.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,6 +59,8 @@ public class ProductServiceImpl extends BaseServiceImpl<ProductMapper, Product>i
     private IProductService productService;
     @Autowired
     private IProductImageService productImageService;
+    @Autowired
+    private IProductPriceService productPriceService;
 
     @Override
     public IPage<ProductDTO> selectProductPage(IPage<ProductDTO> page) {
@@ -83,5 +91,25 @@ public class ProductServiceImpl extends BaseServiceImpl<ProductMapper, Product>i
         productImage.setPId(product.getId());
         productImage.setImgId(Integer.parseInt(productPARM.getDetailImgId()));
         productImageService.save(productImage);
+        List<ProductPrice> productPriceList = new ArrayList<>();
+        List<String> bNums = productPARM.getBnums();
+        for(int i = 0;i<bNums.size();i++){
+            ProductPrice productPrice = new ProductPrice();
+            productPrice.setSNum(Integer.parseInt(bNums.get(i)));
+            productPrice.setENum(Integer.parseInt(productPARM.getOnums().get(i)));
+            BigDecimal bd = new BigDecimal(productPARM.getPrice().get(i));
+            productPrice.setPrice(bd);
+            productPrice.setPid(product.getId());
+            productPriceList.add(productPrice);
+        }
+        productPriceService.saveBatch(productPriceList);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void updateStatus(Integer productId, StatusEnum status) {
+        Product product = baseMapper.selectById(productId);
+        product.setStatus(status);
+        updateById(product);
     }
 }
