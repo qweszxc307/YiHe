@@ -132,8 +132,8 @@
                 type:1,
                 resize:true,
                 title: data ? '修改图片' : '添加图片',
-                area:"1000px",
-                offset:"50px",
+                area:['80%','80%'],
+                offset: 'auto',
                 path: '/components/views/brand/form.html',
                 finish: function () {
                     brandTable.reload('brand-table', {});

@@ -29,13 +29,11 @@ import org.crown.mapper.product.ProductMapper;
 import org.crown.model.brand.entity.Brand;
 import org.crown.model.product.dto.ProductDTO;
 import org.crown.model.product.entity.Product;
+import org.crown.model.product.entity.ProductCarriage;
 import org.crown.model.product.entity.ProductImage;
 import org.crown.model.product.entity.ProductPrice;
 import org.crown.model.product.parm.ProductPARM;
-import org.crown.service.product.ICarriageService;
-import org.crown.service.product.IProductImageService;
-import org.crown.service.product.IProductPriceService;
-import org.crown.service.product.IProductService;
+import org.crown.service.product.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -61,6 +59,8 @@ public class ProductServiceImpl extends BaseServiceImpl<ProductMapper, Product>i
     private IProductImageService productImageService;
     @Autowired
     private IProductPriceService productPriceService;
+    @Autowired
+    private IProductCarriageService productCarriageService;
 
     @Override
     public IPage<ProductDTO> selectProductPage(IPage<ProductDTO> page) {
@@ -74,10 +74,12 @@ public class ProductServiceImpl extends BaseServiceImpl<ProductMapper, Product>i
                 .eq(Product::getName, productPARM.getName())
                 .count();
         ApiAssert.isTrue(ErrorCodeEnum.PRODUCT_ALREADY_EXISTS, count == 0);
+        /*保存产品*/
         Product product = productPARM.convert(Product.class);
         //默认启用
         product.setStatus(StatusEnum.NORMAL);
         productService.save(product);
+        /*保存产品图片*/
         List<Integer> productImgs = productPARM.getProductImgs();
         List<ProductImage> piList = new ArrayList<>();
         for(int i=0;i< productImgs.size();i++){
@@ -91,6 +93,7 @@ public class ProductServiceImpl extends BaseServiceImpl<ProductMapper, Product>i
         productImage.setPId(product.getId());
         productImage.setImgId(Integer.parseInt(productPARM.getDetailImgId()));
         productImageService.save(productImage);
+        /*保存产品价格区间*/
         List<ProductPrice> productPriceList = new ArrayList<>();
         List<String> bNums = productPARM.getBnums();
         for(int i = 0;i<bNums.size();i++){
@@ -102,6 +105,11 @@ public class ProductServiceImpl extends BaseServiceImpl<ProductMapper, Product>i
             productPrice.setPid(product.getId());
             productPriceList.add(productPrice);
         }
+        /*保存产品运费策略*/
+        ProductCarriage productCarriage = new ProductCarriage();
+        productCarriage.setCid(Integer.parseInt(productPARM.getCarriageId()));
+        productCarriage.setPid(product.getId());
+        productCarriageService.save(productCarriage);
         productPriceService.saveBatch(productPriceList);
     }
 

@@ -1,6 +1,6 @@
 <!-- product表单弹窗 -->
-<form id="product-form" lay-filter="product-form" class="layui-form model-form" style="padding-right:0px">
-    <div style=" height:750px;overflow: auto;padding-right:10px;padding-left:10px">
+<form id="product-form" lay-filter="product-form" class="layui-form model-form" style="padding-right:0px;height:100%">
+    <div style=" height:80%;overflow: auto;padding-right:10px;padding-left:10px">
         <input name="id" type="hidden"/>
         <div class="layui-form-item">
             <label class="layui-form-label">序号</label>
@@ -35,9 +35,9 @@
                     <table class="layui-table" id="price_degree_model" lay-filter="price_degree_model">
                         <thead>
                         <tr>
-                            <td>起始数量</td>
-                            <td>最大数量</td>
-                            <td>价格</td>
+                            <td>起始数量(个)</td>
+                            <td>最大数量(个)</td>
+                            <td>价格(元/个)</td>
                             <td>操作</td>
                         </tr>
                         </thead>
@@ -98,7 +98,7 @@
             </div>
         </div>
     </div>
-    <div class="layui-form-item model-form-footer" style="margin-top:10px;margin-right: 10px">
+    <div class="layui-form-item model-form-footer" style="margin-top:10px;width:97%">
         <button class="layui-btn layui-btn-primary close" type="button">取消</button>
         <button class="layui-btn" lay-filter="product-form-submit" lay-submit>保存</button>
     </div>
@@ -124,6 +124,7 @@
                 brandSelectData.push({name: data.result[i].name, value: data.result[i].id});
             }
             formSelects.data('brandId', 'local', {arr: brandSelectData});
+            formSelects.btns('brandId', []);
             var product = crown.getTempData('t_product');
             debugger;
             // 回显产品数据
