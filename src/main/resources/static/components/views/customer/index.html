@@ -10,18 +10,12 @@
         <!-- 搜索条件 -->
         <div class="layui-form toolbar">
             <form id="searchForm" onsubmit="return false;">
-                真实姓名：<input name="name" class="layui-input search-input" type="text" placeholder="真实姓名"/>&emsp;
-                微信名：<input name="nickname" class="layui-input search-input" type="text" placeholder="微信名"/>&emsp;
-                手机号：<input name="phone" class="layui-input search-input" type="text" placeholder="手机号"/>&emsp;
-                会员等级：<input name="role" class="layui-input search-input" type="text" placeholder="等级"/>&emsp;
-                总消费：
-                <div class="layui-input-inline" style="width: 100px;">
-                    <input type="text" name="price_min" placeholder="￥" autocomplete="off" class="layui-input">
-                </div>
-                ~
-                <div class="layui-input-inline" style="width: 100px;">
-                    <input type="text" name="price_max" placeholder="￥" autocomplete="off" class="layui-input">
-                </div>
+
+                    <div class="layui-input-block">
+                        <select name="level" xm-select="level" lay-verify="required">
+                        </select>
+                    </div>
+                会员号查询：<input name="memberNum" class="layui-input search-input" type="text" placeholder="会员号"/>&emsp;
                 <button id="customer-btn-search" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索</button>
             </form>
         </div>
@@ -94,12 +88,13 @@
 </script>
 
 <script>
-    layui.use(['form', 'table', 'config', 'crown'], function () {
+    layui.use(['form', 'table', 'config', 'crown',"formSelects"], function () {
         var form = layui.form;
         var table = layui.table;
         var config = layui.config;
         var layer = layui.layer;
         var crown = layui.crown;
+        var formSelects = layer.formSelects;
         var $ = layui.jquery;
 
         $('#customer-toolbar').vm({
@@ -121,15 +116,13 @@
             headers: {Authorization: config.getToken()},
             page: true,
             cols: [[
-                {field: 'id', width: 60, title: 'ID'},
-                {field: 'name', align: 'center', sort: true, title: '真实姓名'},
-                {field: 'nickname', align: 'center', sort: true, title: '微信名'},
-                {field: 'sex', align: 'center', sort: true, title: '性别'},
-                {field: 'phone', align: 'center', sort: true, title: '手机号'},
-                {field: 'address', align: 'center', sort: true, title: '地址'},
-                {field: 'role', align: 'center', sort: true, title: '会员等级'},
-                {field: 'cost', align: 'center', sort: true, title: '总消费'},
-                {field: 'createTime', align: 'center', sort: true, title: '创建时间'},
+                {field: 'id', width: 80,sort: true, title: '序号'},
+                {field: 'nickName', align: 'center',  title: '微信名称'},
+                {field: 'memberNum', align: 'center',  title: '会员号'},
+                {field: 'memberName', align: 'center', sort: true, title: '会员等级'},
+                {field: 'bonus', align: 'center', sort: true, title: '佣金余额'},
+                {field: 'orderNum', align: 'center', sort: true, title: '成交订单数'},
+                {field: 'sum', align: 'center', sort: true, title: '成交金额'},
                 {align: 'center', toolbar: '#customer-table-bar', title: '操作'}
             ]]
         });
@@ -147,7 +140,7 @@
         // 工具条点击事件
         table.on('tool(customer-table)', function (obj) {
             var data = obj.data;
-            if (obj.event === 'edit') { //修改
+            if (obj.event === 'edit') { //修改   查看详情
                 showEditModel(data);
             } else if(obj.event === 'del') { //删除
                 doDelete(obj);

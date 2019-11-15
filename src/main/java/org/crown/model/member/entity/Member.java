@@ -18,50 +18,57 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package org.crown.model.customer.parm;
+package org.crown.model.member.entity;
 
-import io.swagger.annotations.ApiModel;
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
+import org.crown.framework.model.BaseModel;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.crown.common.cons.Regex;
-import org.crown.framework.model.BaseModel;
-
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 
 
 /**
  * <p>
- *
+ * 会员等级表
  * </p>
  *
  * @author ykMa
  */
-@ApiModel
+@TableName("member")
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class CustomerPARM extends BaseModel {
+public class Member extends BaseModel {
 
     private static final long serialVersionUID = 1L;
-
-    @NotNull(groups = Status.class, message = "用户等级不能为空")
-    @ApiModelProperty("用户等级名称")
-    private String memberName;
-
-    public interface Create {
-
-    }
-
-    public interface Update {
-
-    }
-
-    public interface Status {
-
-    }
+    @ApiModelProperty(notes = "id")
+    private Integer id;
+    @ApiModelProperty(notes = "会员等级")
+    private Integer level;
+    @ApiModelProperty(notes = "等级名称")
+    private String name;
+    @ApiModelProperty(notes = "会员卡背景图")
+    private String backImage;
+    @ApiModelProperty(notes = "升级条件")
+    private BigDecimal upgrade;
+    @ApiModelProperty(notes = "会员特权")
+    private String special;
+    /*
+     * 创建时间
+     */
+    @TableField(fill = FieldFill.INSERT)
+    private LocalDateTime createTime;
+    /**
+     * 修改时间
+     */
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    private LocalDateTime updateTime;
 
 }

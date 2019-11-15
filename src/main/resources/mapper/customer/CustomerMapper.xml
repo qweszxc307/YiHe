@@ -2,4 +2,54 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.crown.mapper.customer.CustomerMapper">
 
+
+    <select id="getMemberIdByLevel" resultType="Integer">
+select id from member where `level` = #{level};
+    </select>
+
+    <update id="updateCustomerMember" parameterType="Integer">
+        update customer_member set c_id = #{id},m_id = #{mId} where c_id = #{id};
+    </update>
+
+    <update id="updateCustomerLevelById" parameterType="Integer">
+        update customer set `level` = #{level} where id = #{cId};
+    </update>
+
+    <select id="queryIdsByUpgrade" parameterType="java.lang.Double" resultType="Integer">
+        select id from customer
+        <where>
+            <if test="upgrade !=null and upgrade !=''">
+                and sum >= #{upgrade}
+            </if>
+            <if test="nextUpgrade !=null and nextUpgrade !=''">
+                and sum &lt; #{nextUpgrade}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryCIdsByMId" resultType="Double" parameterType="Integer">
+        select c_id from customer_member
+        <where>
+            <if test="mId !=null and mId != ''">
+                m_id = #{mId}
+            </if>
+        </where>
+    </select>
+    <select id="querySumByCid">
+        select `sum` from customer
+        <where>
+            <if test="cId !=null and cId != ''">
+                id = #{cId}
+        </if>
+        </where>
+    </select>
+
+
+
+    <select id="queryLevelBycId" resultType="String" >
+        select  m.`name` from member m,customer c
+     <where>
+             c.id = #{cId} and m.id = c.m_id
+    </where>
+    </select>
 </mapper>

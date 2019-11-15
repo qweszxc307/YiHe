@@ -24,10 +24,15 @@ import org.crown.framework.enums.ErrorCodeEnum;
 import org.crown.framework.service.impl.BaseServiceImpl;
 import org.crown.framework.utils.ApiAssert;
 import org.crown.mapper.label.LabelBrandMapper;
+import org.crown.model.label.dto.LabelBrandDTO;
 import org.crown.model.label.entity.LabelBrand;
 import org.crown.service.label.ILabelBrandService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <p>
@@ -39,6 +44,10 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 public class LabelBrandServiceImpl extends BaseServiceImpl<LabelBrandMapper, LabelBrand> implements ILabelBrandService {
+        @Autowired
+        private LabelBrandMapper labelBrandMapper;
+
+
         /**
          * 修改标签状态
          *
@@ -52,5 +61,20 @@ public class LabelBrandServiceImpl extends BaseServiceImpl<LabelBrandMapper, Lab
                 ApiAssert.notNull(ErrorCodeEnum.SERVICE_UNAVAILABLE, labelBrand);
                 labelBrand.setStatus(status);
                 updateById(labelBrand);
+        }
+
+        /**
+         * 根据用户id查询标签
+         * @param id
+         * @return
+         */
+        @Override
+        public List<LabelBrandDTO> queryLabelBrandDTOByCustomerId(Integer id) {
+                List<Integer> labels =labelBrandMapper.queryLabelIdsByCustomerId(id);
+                List<LabelBrandDTO> labelBrandDTOS = new ArrayList<>();
+                for (Integer label : labels) {
+                        labelBrandDTOS.add(labelBrandMapper.selectById(label).convert(LabelBrandDTO.class));
+                }
+                return labelBrandDTOS;
         }
 }

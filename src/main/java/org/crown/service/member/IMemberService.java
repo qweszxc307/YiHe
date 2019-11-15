@@ -18,50 +18,33 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package org.crown.model.customer.parm;
+package org.crown.service.member;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import org.crown.common.cons.Regex;
-import org.crown.framework.model.BaseModel;
-
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-
+import org.crown.model.member.entity.Member;
+import org.crown.framework.service.BaseService;
+import org.crown.model.member.parm.MemberPARM;
 
 /**
  * <p>
- *
+ * 会员等级表 服务类
  * </p>
  *
  * @author ykMa
  */
-@ApiModel
-@Data
-@NoArgsConstructor
-@EqualsAndHashCode(callSuper = false)
-public class CustomerPARM extends BaseModel {
+public interface IMemberService extends BaseService<Member> {
 
-    private static final long serialVersionUID = 1L;
+    /**
+     * 修改会员等级
+     * @param id
+     * @param memberPARM
+     */
+    void updateMember(Integer id, MemberPARM memberPARM);
 
-    @NotNull(groups = Status.class, message = "用户等级不能为空")
-    @ApiModelProperty("用户等级名称")
-    private String memberName;
+    /**
+     * 修改所有满足的客户修改其权限等级
+     * @param convert
+     */
+    void updateCustomerLevel(Member convert);
 
-    public interface Create {
-
-    }
-
-    public interface Update {
-
-    }
-
-    public interface Status {
-
-    }
-
+    void deleteMember(Integer id);
 }

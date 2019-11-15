@@ -21,7 +21,10 @@
 package org.crown.service.label;
 
 import org.crown.framework.service.BaseService;
+import org.crown.model.label.dto.LabelBrandDTO;
 import org.crown.model.label.entity.LabelBrand;
+
+import java.util.List;
 
 /**
  * <p>
@@ -38,4 +41,11 @@ public interface ILabelBrandService extends BaseService<LabelBrand> {
      * @param status
      */
     void updateStatus(Integer id, Integer status);
+
+    /**
+     * 根据客户id查询标签
+     * @param id
+     * @return
+     */
+    List<LabelBrandDTO> queryLabelBrandDTOByCustomerId(Integer id);
 }

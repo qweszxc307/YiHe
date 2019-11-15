@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
  * @package org.crown.model.image.dto
  * @title:
  * @description:
- * @author: whZhang
+ * @author: ykMa
  * @date: 2019/10/31 15:59
  */
 @ApiModel

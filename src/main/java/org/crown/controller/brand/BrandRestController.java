@@ -27,15 +27,12 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.crown.common.annotations.Resources;
 import org.crown.enums.AuthTypeEnum;
-import org.crown.enums.ImagesEnum;
 import org.crown.framework.controller.SuperController;
 import org.crown.framework.responses.ApiResponses;
 import org.crown.model.brand.dto.BrandDTO;
-import org.crown.model.brand.entity.Brand;
+import org.crown.model.brand.dto.BrandImgDTO;
 import org.crown.model.brand.parm.BrandPARM;
-import org.crown.model.image.dto.ImageDTO;
 import org.crown.service.brand.IBrandService;
-import org.crown.service.image.IImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -44,7 +41,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 
 /**
  * <p>
@@ -60,11 +56,9 @@ import java.util.List;
 public class BrandRestController extends SuperController {
         @Autowired
         private IBrandService brandService;
-        @Autowired
-        private IImageService imageService;
 
         @Resources(auth = AuthTypeEnum.AUTH)
-        @ApiOperation("查询所有品牌(分页)")
+        @ApiOperation("查询所有品牌")
         @GetMapping
         public ApiResponses<IPage<BrandDTO>> page() {
                 return success(
@@ -74,19 +68,12 @@ public class BrandRestController extends SuperController {
         }
 
         @Resources(auth = AuthTypeEnum.AUTH)
-        @ApiOperation("查询所有品牌")
-        @GetMapping(value = "/brands")
-        public ApiResponses<List<Brand>> list() {
-            return success(brandService.list());
-        }
-
-        @Resources(auth = AuthTypeEnum.AUTH)
         @ApiOperation("查询单个品牌")
         @ApiImplicitParams({
                 @ApiImplicitParam(name = "id", value = "品牌ID", required = true, paramType = "path")
         })
         @GetMapping("/{id}")
-        public ApiResponses<BrandDTO> query(@PathVariable("id") Integer id) {
+        public ApiResponses<BrandDTO> get(@PathVariable("id") Integer id) {
                 return success(brandService.getBrandById(id));
         }
 
@@ -115,13 +102,18 @@ public class BrandRestController extends SuperController {
         @ApiImplicitParams({
                 @ApiImplicitParam(name = "id", value = "产品ID", required = true, paramType = "path")
         })
-
         @PutMapping("/{id}")
         public ApiResponses<Void> update(@PathVariable("id") Integer id,@RequestBody @Validated(BrandPARM.Create.class) BrandPARM brandPARM) {
                 brandService.updateBrand(id,brandPARM);
                 return success();
         }
 
+        @Resources(auth = AuthTypeEnum.AUTH)
+        @ApiOperation("添加品牌图片")
+        @PostMapping(value = "/upload")
+        public ApiResponses<BrandImgDTO> create(HttpServletResponse httpServletResponse,MultipartFile file) {
+                return brandService.uploadBrandImg(httpServletResponse,file);
+        }
 
         @Resources(auth = AuthTypeEnum.AUTH)
         @ApiOperation("设置品牌状态")
@@ -133,11 +125,4 @@ public class BrandRestController extends SuperController {
                 brandService.updateStatus(id, brandPARM.getStatus());
                 return success();
         }
-
-    @Resources(auth = AuthTypeEnum.AUTH)
-    @ApiOperation("添加品牌图片")
-    @PostMapping(value = "/upload")
-    public ApiResponses<ImageDTO> create(HttpServletResponse httpServletResponse, MultipartFile file) {
-        return imageService.uploadImg(httpServletResponse,file, ImagesEnum.BRAND_IMAGE);
-    }
 }

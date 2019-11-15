@@ -44,26 +44,22 @@ import java.time.LocalDateTime;
 public class CustomerDTO extends BaseModel {
 
     private static final long serialVersionUID = 1L;
-
+    /**
+     * id
+     */
+    @ApiModelProperty(notes = "id")
     private Integer id;
-
-    @ApiModelProperty(notes = "真实姓名")
-    private String name;
-    @ApiModelProperty(notes = "微信名 ")
-    private String nickname;
-    @ApiModelProperty(notes = "性别 ")
-    private String sex;
-    @ApiModelProperty(notes = "手机")
-    private String phone;
-    @ApiModelProperty(notes = "地址")
-    private String address;
-    @ApiModelProperty(notes = "权限 ")
-    private Integer role;
-    @ApiModelProperty(notes = "总消费")
-    private Double cost;
-    @ApiModelProperty(notes = "创建时间")
-    private LocalDateTime createTime;
-    @ApiModelProperty(notes = "修改时间")
-    private LocalDateTime updateTime;
+    @ApiModelProperty(notes = "会员名称")
+    private String nickName;
+    @ApiModelProperty(notes = "会员号")
+    private String memberNum;
+    @ApiModelProperty(notes = "会员等级名称")
+    private String memberName;
+    @ApiModelProperty(notes = "佣金余额")
+    private Double bonus;
+    @ApiModelProperty(notes = "成交订单数")
+    private Integer orderNum;
+    @ApiModelProperty(notes = "成交金额")
+    private Double sum;
 
 }

@@ -18,50 +18,50 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package org.crown.model.customer.parm;
+package org.crown.model.customer.entity;
 
-import io.swagger.annotations.ApiModel;
+import com.baomidou.mybatisplus.annotation.TableName;
+import org.crown.framework.model.BaseModel;
+
+import java.time.LocalDateTime;
+
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.crown.common.cons.Regex;
-import org.crown.framework.model.BaseModel;
-
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 
 
 /**
  * <p>
- *
+ * 客户详情表
  * </p>
  *
- * @author ykMa
+ * @author whZhang
  */
-@ApiModel
+@TableName("customer_details")
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class CustomerPARM extends BaseModel {
+public class CustomerDetails extends BaseModel {
 
     private static final long serialVersionUID = 1L;
-
-    @NotNull(groups = Status.class, message = "用户等级不能为空")
-    @ApiModelProperty("用户等级名称")
-    private String memberName;
-
-    public interface Create {
-
-    }
-
-    public interface Update {
-
-    }
-
-    public interface Status {
-
-    }
+    @ApiModelProperty(notes = "id")
+    private Integer id;
+    @ApiModelProperty(notes = "微信名称")
+    private String nickName;
+    @ApiModelProperty(notes = "会员表id")
+    private Integer cId;
+    @ApiModelProperty(notes = "真实姓名")
+    private String name;
+    @ApiModelProperty(notes = "手机号")
+    private String phone;
+    @ApiModelProperty(notes = "性别")
+    private Integer sex;
+    @ApiModelProperty(notes = "地址")
+    private String address;
+    @ApiModelProperty(notes = "创建时间")
+    private LocalDateTime createTime;
+    @ApiModelProperty(notes = "修改时间")
+    private LocalDateTime updateTime;
 
 }

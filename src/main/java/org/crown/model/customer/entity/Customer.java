@@ -20,21 +20,25 @@
  */
 package org.crown.model.customer.entity;
 
-import com.baomidou.mybatisplus.annotation.*;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import java.math.BigDecimal;
+
+import com.baomidou.mybatisplus.annotation.TableName;
 import org.crown.framework.model.BaseModel;
 
 import java.time.LocalDateTime;
 
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
 
 /**
  * <p>
- *
+ * 客户表
  * </p>
  *
- * @author ykMa
+ * @author whZhang
  */
 @TableName("customer")
 @Data
@@ -44,49 +48,25 @@ public class Customer extends BaseModel {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId(value = "id", type = IdType.AUTO)
+    @ApiModelProperty(notes = "id")
     private Integer id;
-    /**
-     * 密码
-     */
-    private String password;
-    /**
-     * 真实姓名
-     */
-    private String name;
-    /**
-     * 微信名
-     */
-    private String nickname;
-    /**
-     * 性别
-     */
-    private String sex;
-    /**
-     * 手机号
-     */
-    private String phone;
-    /**
-     * 地址
-     */
-    private String address;
-    /**
-     * 权限
-     */
-    private Integer role;
-    /**
-     * 总消费
-     */
-    private Double cost;
-    /**
-     * 创建时间
-     */
-    @TableField(fill = FieldFill.INSERT)
+    @ApiModelProperty(notes = "微信名称")
+    private String nickName;
+    @ApiModelProperty(notes = "会员号")
+    private String memberNum;
+    @ApiModelProperty(notes = "等级表id")
+    private Integer mId;
+    @ApiModelProperty(notes = "佣金余额")
+    private Double bonus;
+    @ApiModelProperty(notes = "成交订单数")
+    private Integer orderNum;
+    @ApiModelProperty(notes = "成交总金额")
+    private BigDecimal sum;
+    @ApiModelProperty(notes = "创建时间")
     private LocalDateTime createTime;
-    /**
-     * 修改时间
-     */
-    @TableField(fill = FieldFill.INSERT_UPDATE)
+    @ApiModelProperty(notes = "修改时间")
     private LocalDateTime updateTime;
+    @ApiModelProperty(notes = "最后一次交易时间")
+    private LocalDateTime lastTime;
 
 }

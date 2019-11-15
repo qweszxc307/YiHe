@@ -50,10 +50,6 @@ public class LabelProductDTO extends BaseModel {
     private String name;
     @ApiModelProperty(notes = "创建时间")
     private LocalDateTime createTime;
-    @ApiModelProperty(notes = "客户id")
-    private Integer cId;
-    @ApiModelProperty(notes = "客户微信名")
-    private String customerName;
     @ApiModelProperty(notes = "（状态：0：开启，1：禁用）")
     private Integer status;
 

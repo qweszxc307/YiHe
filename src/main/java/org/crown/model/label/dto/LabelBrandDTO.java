@@ -49,10 +49,6 @@ public class LabelBrandDTO extends BaseModel {
     private Integer id;
     @ApiModelProperty(notes = "标签内容")
     private String name;
-    @ApiModelProperty(notes = "客户id")
-    private Long cId;
-    @ApiModelProperty(notes = "客户微信名")
-    private String customerName;
     @ApiModelProperty(notes = "创建时间")
     private LocalDateTime createTime;
     @ApiModelProperty(notes = "（状态：0：开启，1：禁用）")

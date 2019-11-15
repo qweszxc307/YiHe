@@ -31,11 +31,11 @@ import org.crown.enums.AuthTypeEnum;
 import org.crown.framework.controller.SuperController;
 import org.crown.framework.responses.ApiResponses;
 import org.crown.model.customer.dto.CustomerDTO;
+import org.crown.model.customer.dto.CustomerDetailsDTO;
 import org.crown.model.customer.entity.Customer;
 import org.crown.model.customer.parm.CustomerPARM;
 import org.crown.service.customer.ICustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -59,85 +59,63 @@ public class CustomerRestController extends SuperController {
     private ICustomerService customerService;
 
 
-
-    @Resources(auth = AuthTypeEnum.AUTH)
-    @ApiOperation("查询所有客户")
+    @Resources(auth = AuthTypeEnum.OPEN)
+    @ApiOperation("查询所有客户基本信息")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "name", value = "真实姓名", paramType = "query"),
-            @ApiImplicitParam(name = "nickname", value = "微信名称", paramType = "query"),
-            @ApiImplicitParam(name = "phone", value = "手机号", paramType = "query"),
-            @ApiImplicitParam(name = "role", value = "会员等级", paramType = "query"),
-            @ApiImplicitParam(name = "price_min", value = "消费筛选最小值", paramType = "query"),
-            @ApiImplicitParam(name = "price_max", value = "消费筛选最大值", paramType = "query")
+            @ApiImplicitParam(name = "memberNum", value = "会员号", paramType = "query")
     })
     @GetMapping
-    public ApiResponses<IPage<CustomerDTO>> page(@RequestParam(value = "name", required = false) String name,
-                                                 @RequestParam(value = "nickname", required = false) String nickname,
-                                                 @RequestParam(value = "phone", required = false) String phone,
-                                                 @RequestParam(value = "role", required = false) String role,
-                                                 @RequestParam(value = "price_min", required = false) Double price_min,
-                                                 @RequestParam(value = "price_max", required = false) Double price_max) {
-        return success(customerService.query().likeRight(StringUtils.isNotEmpty(name), Customer::getName, name)
-                .likeRight(StringUtils.isNotEmpty(nickname), Customer::getNickname, nickname)
-                .likeRight(StringUtils.isNotEmpty(phone), Customer::getPhone, phone)
-                .like(StringUtils.isNotEmpty(role), Customer::getRole, role)
-                .ge(Objects.nonNull(price_min), Customer::getCost, price_min)
-                .le(Objects.nonNull(price_max), Customer::getCost, price_max)
-                .page(this.<Customer>getPage())
-                .convert(e -> e.convert(CustomerDTO.class))
-        );
+    public ApiResponses<IPage<CustomerDTO>> page(@RequestParam(value = "memberNum", required = false) String memberNum) {
+            IPage<CustomerDTO> convert = customerService.query()
+                    .eq(StringUtils.isNotEmpty(memberNum), Customer::getMemberNum, memberNum)
+                    .page(this.<Customer>getPage())
+                    .convert(e -> e.convert(CustomerDTO.class));
+            convert.getRecords().forEach(e -> e.setMemberName(customerService.queryLevelBycId(e.getId())));
+            return success(convert);
+
+
     }
 
 
-
-
-
-    @Resources(auth = AuthTypeEnum.AUTH)
-    @ApiOperation("查询单个客户")
+    @Resources(auth = AuthTypeEnum.OPEN)
+    @ApiOperation("查询会员详情")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "客户ID", required = true, paramType = "path")
     })
     @GetMapping("/{id}")
-    public ApiResponses<CustomerDTO> get(@PathVariable("id") Integer id) {
-        Customer customer = customerService.getById(id);
-        CustomerDTO customerDTO = customer.convert(CustomerDTO.class);
-        return success(customerDTO);
+    public ApiResponses<CustomerDetailsDTO> get(@PathVariable("id") Integer id) {
+        CustomerDetailsDTO customerDetailsDTO = customerService.queryByMid(id);
+        System.out.println("customerDetailsDTO = " + customerDetailsDTO);
+        return success(customerDetailsDTO);
     }
 
 
-
-    @Resources(auth = AuthTypeEnum.AUTH)
-    @ApiOperation(value = "删除客户")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "客户ID", required = true, paramType = "path")
-    })
-    @DeleteMapping("/{id}")
-    public ApiResponses<Void> delete(@PathVariable("id") Integer id) {
-        customerService.removeById(id);
-        return success(HttpStatus.NO_CONTENT);
-    }
-
-
-    @Resources(auth = AuthTypeEnum.AUTH)
+    @Resources(auth = AuthTypeEnum.OPEN)
     @ApiOperation(value = "添加客户")
     @PostMapping
     public ApiResponses<Void> create(@RequestBody @Validated(CustomerPARM.Create.class) CustomerPARM customerPARM) {
-        customerService.save(customerPARM.convert(Customer.class));
-        return success(HttpStatus.CREATED);
+        /**
+         * 1.获取微信信息
+         * 传递到service 操作
+         * 1.创建微信用户实体类接受用户信息
+         * 2.创建会员号，获取微信名保存到用户表，再查询得到id
+         * 3.获取微信名，地址 手机号，性别，会员等级默认为0 保存到会员详情表
+         * 4.设置会员等级中间表， 查询用户id，获取用户等级id，赋值
+         *
+         */
+        return null;
     }
 
-
-
     @Resources(auth = AuthTypeEnum.AUTH)
-    @ApiOperation("修改客户")
+    @ApiOperation("修改客户等级")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "用户ID", required = true, paramType = "path")
+            @ApiImplicitParam(name = "id", value = "用户ID", required = true, paramType = "path"),
     })
     @PutMapping("/{id}")
     public ApiResponses<Void> update(@PathVariable("id") Integer id, @RequestBody @Validated(CustomerPARM.Update.class) CustomerPARM customerPARM) {
-        Customer customer = customerPARM.convert(Customer.class);
-        customer.setId(id);
-        customerService.updateById(customer);
+        //修改详情表的id
+      customerService.updateCustomerByMember(id,customerPARM);
         return success();
     }
+
 }

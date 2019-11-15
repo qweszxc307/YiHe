@@ -2,7 +2,10 @@ package org.crown.mapper.label;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.crown.framework.mapper.BaseMapper;
+import org.crown.model.label.dto.LabelBrandDTO;
 import org.crown.model.label.entity.LabelBrand;
+
+import java.util.List;
 
 /**
  * <p>
@@ -14,5 +17,5 @@ import org.crown.model.label.entity.LabelBrand;
  */
 @Mapper
 public interface LabelBrandMapper extends BaseMapper<LabelBrand> {
-
+    List<Integer> queryLabelIdsByCustomerId(Integer id);
 }

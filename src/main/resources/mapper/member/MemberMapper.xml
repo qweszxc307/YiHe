@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.crown.mapper.member.MemberMapper">
+
+
+
+<select id="queryCustomerIdByMemberId" parameterType="Integer">
+    select m_id from customer_member where c_id = #{id}
+</select>
+<select id="queryAllMember" parameterType="Member">
+    select id,level,name,back_image,upgrade,special,create_time,update_time from member;
+</select>
+
+    <select id="queryMemberIdByLevel" parameterType="Integer">
+        select id from member where `level` = #{level};
+    </select>
+    <select id="queryNextUpgradeByUpgrade" parameterType="java.lang.Double" resultType="java.lang.Double">
+        SELECT `upgrade` FROM member WHERE `upgrade` > #{upgrade} LIMIT 0,1;
+    </select>
+
+<select id="queryMemberByMemberName" parameterType="String" resultType="Member">
+    select id,`level`,`name`,back_image,upgrade,special,create_time,update_time from member
+    <where>
+        name = #{memberName};
+    </where>
+</select>
+</mapper>

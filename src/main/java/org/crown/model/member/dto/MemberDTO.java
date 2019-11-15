@@ -18,24 +18,22 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package org.crown.model.customer.parm;
+package org.crown.model.member.dto;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.crown.common.cons.Regex;
 import org.crown.framework.model.BaseModel;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
+import java.time.LocalDateTime;
 
 
 /**
  * <p>
- *
+ * 会员等级表
  * </p>
  *
  * @author ykMa
@@ -44,24 +42,19 @@ import javax.validation.constraints.Pattern;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class CustomerPARM extends BaseModel {
+public class MemberDTO extends BaseModel {
 
     private static final long serialVersionUID = 1L;
 
-    @NotNull(groups = Status.class, message = "用户等级不能为空")
-    @ApiModelProperty("用户等级名称")
-    private String memberName;
-
-    public interface Create {
-
-    }
-
-    public interface Update {
-
-    }
-
-    public interface Status {
-
-    }
+    @ApiModelProperty(notes = "会员等级")
+    private Integer level;
+    @ApiModelProperty(notes = "等级名称")
+    private String name;
+    @ApiModelProperty(notes = "会员卡背景图")
+    private String backImage;
+    @ApiModelProperty(notes = "升级条件")
+    private String upgrade;
+    @ApiModelProperty(notes = "会员特权")
+    private String special;
 
 }

@@ -81,6 +81,13 @@ public class OrderRestController extends SuperController {
                 .page(this.<Order>getPage())
                 .convert(e -> e.convert(OrderDTO.class)));
     }
+
+
+    /**
+     * 退款之后也需要删除订单   删除订单之后要查询用户消费把消费回退到之前的状态
+     * @param id
+     * @return
+     */
     @Resources(auth = AuthTypeEnum.OPEN)
     @ApiOperation(value = "删除订单")
     @ApiImplicitParams({
@@ -91,6 +98,8 @@ public class OrderRestController extends SuperController {
         orderService.getById(id).setStatus(delete);
         return success(HttpStatus.NO_CONTENT);
     }
+
+
     @Resources(auth = AuthTypeEnum.AUTH)
     @ApiOperation("修改订单")
     @ApiImplicitParams({
@@ -111,19 +120,17 @@ public class OrderRestController extends SuperController {
     public ApiResponses<Void> create() {
         //TODO
         /*
-addressId：收货人地址信息的id，需要去用户中心查询收货人地址
-carts：购物车中的商品数据，可以有多个对象
-num：购物车中指定商品的购买数量
-skuId：购物车中的某商品的id
-paymentType：付款方式：1 在线支付，2 货到付款
+    addressId：收货人地址信息的id，需要去用户中心查询收货人地址
+    carts：购物车中的商品数据，可以有多个对象
+    num：购物车中指定商品的购买数量
+    skuId：购物车中的某商品的id
+    paymentType：付款方式：1 在线支付，2 货到付款
         数据类型：{ addressId：xxx ，carts：[skuId：xx，num：xx]，paymentType：xx}
         * 先定义  orderDTO类 接受前端传输的数据，  包含字段   addressId，paymentType， List<cartDTO>
         再定义   CartDTO 保存 skuId，num，
         1.减库存
         2.生成订单号
         3.遍历集合查询商品，获取商品信息 ，存入订单详情表
-
-
         * */
         return null;
 

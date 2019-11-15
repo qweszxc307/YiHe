@@ -18,50 +18,60 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package org.crown.model.customer.parm;
+package org.crown.model.customer.dto;
 
+import com.baomidou.mybatisplus.annotation.*;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.crown.common.cons.Regex;
 import org.crown.framework.model.BaseModel;
+import org.crown.model.label.dto.LabelBrandDTO;
+import org.crown.model.label.entity.LabelBrand;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
+import java.time.LocalDateTime;
+import java.util.List;
 
 
 /**
  * <p>
- *
+ * 客户详情表
  * </p>
  *
- * @author ykMa
+ * @author whZhang
  */
 @ApiModel
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class CustomerPARM extends BaseModel {
+public class CustomerDetailsDTO extends BaseModel {
 
     private static final long serialVersionUID = 1L;
 
-    @NotNull(groups = Status.class, message = "用户等级不能为空")
-    @ApiModelProperty("用户等级名称")
+    @ApiModelProperty(notes = "微信名称")
+    private String nickName;
+    @ApiModelProperty(notes = "会员号")
+    private String memberNum;
+    @ApiModelProperty(notes = "会员等级")
     private String memberName;
-
-    public interface Create {
-
-    }
-
-    public interface Update {
-
-    }
-
-    public interface Status {
-
-    }
+    @ApiModelProperty(notes = "会员标签")
+    private List<LabelBrandDTO> brands;
+    @ApiModelProperty(notes = "真实姓名")
+    private String name;
+    @ApiModelProperty(notes = "手机号")
+    private String phone;
+    @ApiModelProperty(notes = "性别:{1：男，2：女，0：不确认}")
+    private Integer sex;
+    @ApiModelProperty(notes = "地址")
+    private String address;
+    @ApiModelProperty(notes = "注册时间")
+    private LocalDateTime createTime;
+    @ApiModelProperty(notes = "成交订单数")
+    private Integer orderNum;
+    @ApiModelProperty(notes = "成交金额")
+    private Double sum;
+    @ApiModelProperty(notes = "最后一次交易时间")
+    private LocalDateTime lastTime;
 
 }
