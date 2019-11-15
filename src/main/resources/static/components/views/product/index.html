@@ -70,12 +70,13 @@
             parseData: config.parseData,
             response: config.response,
             headers: {Authorization: config.getToken()},
+            page:true,
             cols: [[
                 {field: 'id',  title: 'ID',hide: true},
                 {field: 'orderNum', width: 100, align: 'center', sort: true, title: '序号'},
                 {field: 'name', width: 160, align: 'center', sort: true, title: '品牌名称'},
                 {field: 'brandId', hide: true, align: 'center', sort: true, title: '品牌id'},
-                {field: 'productImgList', width: 160, align: 'center',templet: function (d) {
+                {field: 'productImgList', width: 360, align: 'center',templet: function (d) {
                         var data = d.productImgList;
                         var html = "";
                         for(var i = 0 ;i< data.length;i++){
@@ -110,7 +111,7 @@
                     }, title: '产品详情图片'},
                 {field: 'modelId',width: 160, align: 'center', sort: true, title: '模板id'},
                 {field: 'status', width: 160,align: 'center', sort: true,templet: '#product-tpl-status', title: '状态'},
-                {align: 'center', width: 160,toolbar: '#product-table-bar', title: '操作'}
+                {align: 'center',toolbar: '#product-table-bar', title: '操作'}
             ]]
         });
         // 表格顶部操作列

@@ -18,59 +18,23 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package org.crown.enums;
+package org.crown.service.product.impl;
 
-import org.crown.common.exception.UnknownEnumException;
-import org.crown.framework.enums.IEnum;
-
-import com.baomidou.mybatisplus.annotation.EnumValue;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
+import org.crown.model.product.entity.CarriageConfig;
+import org.crown.mapper.product.CarriageConfigMapper;
+import org.crown.service.product.ICarriageConfigService;
+import org.crown.framework.service.impl.BaseServiceImpl;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * <p>
- * 菜单类型枚举
+ * 运费策略配置表 服务实现类
  * </p>
  *
  * @author whZhang
  */
-public enum MenuTypeEnum implements IEnum {
+@Service
+        public class CarriageConfigServiceImpl extends BaseServiceImpl<CarriageConfigMapper, CarriageConfig>implements ICarriageConfigService {
 
-    /**
-     * 目录
-     */
-    CATALOG(1),
-    /**
-     * 菜单
-     */
-    MENU(2),
-    /**
-     * 按钮
-     */
-    BUTTON(3);
-
-
-    @EnumValue
-    private final int value;
-
-    MenuTypeEnum(final int value) {
-        this.value = value;
-    }
-
-    @Override
-    @JsonValue
-    public int getValue() {
-        return this.value;
-    }
-
-
-    @JsonCreator
-    public static MenuTypeEnum getEnum(int value) {
-        for (MenuTypeEnum menuTypeEnum : MenuTypeEnum.values()) {
-            if (menuTypeEnum.getValue() == value) {
-                return menuTypeEnum;
-            }
         }
-        throw new UnknownEnumException("Error: Invalid MenuTypeEnum type value: " + value);
-    }
-}

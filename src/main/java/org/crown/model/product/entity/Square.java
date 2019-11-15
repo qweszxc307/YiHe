@@ -20,11 +20,8 @@
  */
 package org.crown.model.product.entity;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import org.crown.framework.model.BaseModel;
-import java.time.LocalDateTime;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -34,34 +31,20 @@ import lombok.NoArgsConstructor;
 
 /**
  * <p>
- * 产品运费策略信息表
+ * 区域表
  * </p>
  *
  * @author whZhang
  */
-@TableName("carriage")
+@TableName("square")
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class Carriage extends BaseModel {
+public class Square extends BaseModel {
 
 private static final long serialVersionUID=1L;
 
-    @ApiModelProperty(notes = "策略名称")
-    private String name;
-    @ApiModelProperty(notes = "序号")
-    private String orderNum;
-    @ApiModelProperty(notes = "创建时间")
-    @TableField(fill = FieldFill.INSERT)
-    private LocalDateTime createTime;
-    @ApiModelProperty(notes = "创建人")
-    @TableField(fill = FieldFill.INSERT)
-    private Integer createUid;
-    @ApiModelProperty(notes = "修改时间")
-    @TableField(fill = FieldFill.INSERT_UPDATE)
-    private LocalDateTime updateTime;
-    @ApiModelProperty(notes = "修改人")
-    @TableField(fill = FieldFill.INSERT_UPDATE)
-    private Integer updateUid;
+    @ApiModelProperty(notes = "区域名")
+private String name;
 
 }
