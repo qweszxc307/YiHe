@@ -35,4 +35,6 @@ public class BrandDTO extends Convert {
     private Integer orderNum;
     @ApiModelProperty(notes = "状态 0：禁用 1：正常")
     private StatusEnum status;
+    @ApiModelProperty(notes = "产品图片Id")
+    private Integer imageId;
 }

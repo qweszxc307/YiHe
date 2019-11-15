@@ -18,45 +18,27 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package org.crown.service.product;
+package org.crown.controller.product;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import org.crown.enums.StatusEnum;
-import org.crown.model.product.dto.ProductDTO;
-import org.crown.model.product.entity.Product;
-import org.crown.framework.service.BaseService;
-import org.crown.model.product.parm.ProductPARM;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.http.MediaType;
+import org.springframework.validation.annotation.Validated;
 
-import java.util.List;
+import io.swagger.annotations.Api;
+import org.springframework.web.bind.annotation.RestController;
+import org.crown.framework.controller.SuperController;
 
 /**
  * <p>
- * 产品表 服务类
+ * 产品_图片关系表 前端控制器
  * </p>
  *
  * @author whZhang
  */
-public interface IProductService extends BaseService<Product> {
-    /**
-     * 产品列表
-     *
-     * @param page
-     */
-    IPage<ProductDTO> selectProductPage(IPage<ProductDTO> page);
+@Api(tags = {"ProductImage"}, description = "产品_图片关系表相关接口")
+@RestController
+@RequestMapping(value = "/productImage", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+@Validated
+public class ProductImageRestController extends SuperController {
 
-    /**
-     * 添加产品
-     *
-     * @param productPARM
-     */
-    void createProduct(ProductPARM productPARM);
-
-    /**
-     * 修改菜单状态
-     *
-     * @param productId
-     * @param status
-     */
-    void updateStatus(Integer productId, StatusEnum status);
-
-}
+        }

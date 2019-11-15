@@ -113,6 +113,10 @@ public enum ErrorCodeEnum {
      * 品牌名称已存在
      */
     BRAND_ALREADY_EXISTS(HttpServletResponse.SC_BAD_REQUEST, true, "品牌名称已存在"),
+    /**
+     * 产品名称已存在
+     */
+    PRODUCT_ALREADY_EXISTS(HttpServletResponse.SC_BAD_REQUEST, true, "品牌名称已存在"),
     ;
 
     private final int httpCode;

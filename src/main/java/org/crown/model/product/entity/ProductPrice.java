@@ -18,45 +18,40 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package org.crown.service.product;
+package org.crown.model.product.entity;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import org.crown.enums.StatusEnum;
-import org.crown.model.product.dto.ProductDTO;
-import org.crown.model.product.entity.Product;
-import org.crown.framework.service.BaseService;
-import org.crown.model.product.parm.ProductPARM;
+import java.math.BigDecimal;
+import com.baomidou.mybatisplus.annotation.TableName;
+import org.crown.framework.model.BaseModel;
 
-import java.util.List;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
 
 /**
  * <p>
- * 产品表 服务类
+ * 产品价格配置表
  * </p>
  *
  * @author whZhang
  */
-public interface IProductService extends BaseService<Product> {
-    /**
-     * 产品列表
-     *
-     * @param page
-     */
-    IPage<ProductDTO> selectProductPage(IPage<ProductDTO> page);
+@TableName("product_price")
+@Data
+@NoArgsConstructor
+@EqualsAndHashCode(callSuper = false)
+public class ProductPrice extends BaseModel {
 
-    /**
-     * 添加产品
-     *
-     * @param productPARM
-     */
-    void createProduct(ProductPARM productPARM);
+private static final long serialVersionUID=1L;
 
-    /**
-     * 修改菜单状态
-     *
-     * @param productId
-     * @param status
-     */
-    void updateStatus(Integer productId, StatusEnum status);
+    @ApiModelProperty(notes = "产品ID")
+private Integer pid;
+    @ApiModelProperty(notes = "起始区间值")
+private Integer sNum;
+    @ApiModelProperty(notes = "结束区间值")
+private Integer eNum;
+    @ApiModelProperty(notes = "价格")
+private BigDecimal price;
 
 }

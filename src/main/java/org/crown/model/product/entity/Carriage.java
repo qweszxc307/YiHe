@@ -18,45 +18,45 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package org.crown.service.product;
+package org.crown.model.product.entity;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import org.crown.enums.StatusEnum;
-import org.crown.model.product.dto.ProductDTO;
-import org.crown.model.product.entity.Product;
-import org.crown.framework.service.BaseService;
-import org.crown.model.product.parm.ProductPARM;
+import java.math.BigDecimal;
+import com.baomidou.mybatisplus.annotation.TableName;
+import org.crown.framework.model.BaseModel;
+import java.time.LocalDateTime;
 
-import java.util.List;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
 
 /**
  * <p>
- * 产品表 服务类
+ * 产品运费策略信息表
  * </p>
  *
  * @author whZhang
  */
-public interface IProductService extends BaseService<Product> {
-    /**
-     * 产品列表
-     *
-     * @param page
-     */
-    IPage<ProductDTO> selectProductPage(IPage<ProductDTO> page);
+@TableName("carriage")
+@Data
+@NoArgsConstructor
+@EqualsAndHashCode(callSuper = false)
+public class Carriage extends BaseModel {
 
-    /**
-     * 添加产品
-     *
-     * @param productPARM
-     */
-    void createProduct(ProductPARM productPARM);
+private static final long serialVersionUID=1L;
 
-    /**
-     * 修改菜单状态
-     *
-     * @param productId
-     * @param status
-     */
-    void updateStatus(Integer productId, StatusEnum status);
+    @ApiModelProperty(notes = "策略名称")
+private String name;
+    @ApiModelProperty(notes = "满免价格")
+private BigDecimal freePrice;
+    @ApiModelProperty(notes = "创建时间")
+    private LocalDateTime createTime;
+    @ApiModelProperty(notes = "创建人ID")
+    private Integer createUid;
+    @ApiModelProperty(notes = "修改时间")
+    private LocalDateTime updateTime;
+    @ApiModelProperty(notes = "修改人id")
+    private Integer updateUid;
 
 }

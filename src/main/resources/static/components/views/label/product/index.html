@@ -184,7 +184,6 @@
         // 修改状态
         form.on('switch(menu-tpl-status)', function (obj) {
             layer.load(2);
-            debugger;
             crown.put('/labelProduct/' + obj.elem.value + '/status',
                 {data: {status: obj.elem.checked ? 0 : 1}}, function () {
                     layer.closeAll('loading');

@@ -22,9 +22,15 @@ package org.crown.service.brand;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.crown.enums.StatusEnum;
+import org.crown.framework.responses.ApiResponses;
 import org.crown.framework.service.BaseService;
 import org.crown.model.brand.dto.BrandDTO;
+import org.crown.model.brand.dto.BrandImgDTO;
 import org.crown.model.brand.entity.Brand;
+import org.crown.model.brand.parm.BrandPARM;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * <p>
@@ -34,6 +40,12 @@ import org.crown.model.brand.entity.Brand;
  * @author whZhang
  */
 public interface IBrandService extends BaseService<Brand> {
+        /**
+         * 添加品牌
+         *
+         * @param brandPARM
+         */
+        void createBrand(BrandPARM brandPARM);
         /**
          * 品牌列表
          *
@@ -48,4 +60,24 @@ public interface IBrandService extends BaseService<Brand> {
          * @param status
          */
         void updateStatus(Integer brandId, StatusEnum status);
+
+        /**
+         * 删除品牌
+         *
+         * @param brandId
+         */
+        void deleteBrandById(Integer brandId);
+        /**
+         * 获取品牌详情
+         *
+         * @param brandId
+         */
+        BrandDTO getBrandById(Integer brandId);
+        /**
+         * 获取品牌详情
+         *
+         * @param brandId
+         * @param brandPARM
+         */
+        void updateBrand(Integer brandId,BrandPARM brandPARM);
 }

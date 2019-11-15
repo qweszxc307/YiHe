@@ -18,45 +18,48 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package org.crown.service.product;
+package org.crown.enums;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import org.crown.enums.StatusEnum;
-import org.crown.model.product.dto.ProductDTO;
-import org.crown.model.product.entity.Product;
-import org.crown.framework.service.BaseService;
-import org.crown.model.product.parm.ProductPARM;
-
-import java.util.List;
+import com.baomidou.mybatisplus.annotation.EnumValue;
+import com.fasterxml.jackson.annotation.JsonValue;
+import org.crown.framework.enums.IEnum;
 
 /**
  * <p>
- * 产品表 服务类
+ * 状态枚举
  * </p>
  *
  * @author whZhang
  */
-public interface IProductService extends BaseService<Product> {
-    /**
-     * 产品列表
-     *
-     * @param page
-     */
-    IPage<ProductDTO> selectProductPage(IPage<ProductDTO> page);
+public enum ImagesEnum implements IEnum {
 
     /**
-     * 添加产品
-     *
-     * @param productPARM
+     * 轮播图
      */
-    void createProduct(ProductPARM productPARM);
-
+    CAROUSEL_IMAGE(0),
     /**
-     * 修改菜单状态
-     *
-     * @param productId
-     * @param status
+     * 品牌图片
      */
-    void updateStatus(Integer productId, StatusEnum status);
+    BRAND_IMAGE(1),
+    /**
+     * 产品图片
+     */
+    PRODUCT_IMAGE(2),
+    /**
+     * 产品详情图片
+     */
+    PRODUCT_DETAIL_IMAGE(3) ;
 
+    @EnumValue
+    private final int value;
+
+    ImagesEnum(final int value) {
+        this.value = value;
+    }
+
+    @Override
+    @JsonValue
+    public int getValue() {
+        return this.value;
+    }
 }

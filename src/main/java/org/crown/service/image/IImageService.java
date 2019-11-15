@@ -20,8 +20,15 @@
  */
 package org.crown.service.image;
 
+import org.crown.enums.ImagesEnum;
+import org.crown.framework.responses.ApiResponses;
+import org.crown.model.image.dto.ImageDTO;
 import org.crown.model.image.entity.Image;
 import org.crown.framework.service.BaseService;
+import org.crown.model.product.dto.ProductImgDTO;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * <p>
@@ -31,5 +38,11 @@ import org.crown.framework.service.BaseService;
  * @author whZhang
  */
 public interface IImageService extends BaseService<Image> {
-
+    /**
+     * 上传图片
+     *
+     *@param httpServletResponse
+     * @param file
+     */
+    ApiResponses<ImageDTO> uploadImg(HttpServletResponse httpServletResponse, MultipartFile file, ImagesEnum type);
 }
