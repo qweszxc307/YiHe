@@ -1,16 +1,5 @@
-<form id="manage-form" lay-filter="manage-form" class="layui-form model-form" style="padding-right:0px;height:100%">
+<form id="manage-config-form" lay-filter="manage-config-form" class="layui-form model-form" style="padding-right:0px;height:100%">
     <div style=" height:80%;overflow: auto;padding-right:10px;padding-left:10px">
-        <!-- 表格顶部操作列 -->
-        <script type="text/html" id="carriage-config-toolbar">
-            <div class="layui-btn-container">
-                {{# if({{addShow}} == true){ }}
-                <button class="layui-btn layui-btn-normal layui-btn-sm" lay-event="add_manage"><i
-                        class="layui-icon">&#xe654;</i>添加
-                </button>
-                {{# } }}
-            </div>
-        </script>
-        <table class="layui-table" id="carriage-config-table" lay-filter="carriage-config-table"></table>
         <input name="id" type="hidden"/>
         <div class="layui-form-item">
             <label class="layui-form-label">名称</label>
@@ -46,7 +35,7 @@
     </div>
     <div class="layui-form-item model-form-footer" style="margin-top:10px;width:97%">
         <button class="layui-btn layui-btn-primary close" type="button">取消</button>
-        <button class="layui-btn" lay-filter="manage-form-submit" lay-submit>保存</button>
+        <button class="layui-btn" lay-filter="manage-config-form-submit" lay-submit>保存</button>
     </div>
 </form>
 <script>
@@ -64,40 +53,10 @@
         //回显运费策略数据
         var carriage = crown.getTempData('t_carriage');
         if(carriage){
-            form.val('manage-form', carriage);
+            form.val('manage-config-form', carriage);
         }
-        // 表格操作列事件
-        table.on('tool(carriage-config-table)', function (obj) {
-            var data = obj.data;
-            var layEvent = obj.event;
-            if (layEvent === 'add_manage') {
-                // 修改
-                debugger;
-                showManageConfigModel(data);
-            }
-        });
-        //显示管理弹窗
-        var showManageConfigModel = function (data) {
-            debugger;
-            if (data) {
-                crown.get('/carriage/' + data.id, {async:false}, function (data) {
-                    crown.putTempData('t_carriage', data.result);
-                });
-            }
-            crown.popupCenter({
-                type:1,
-                resize:true,
-                title: "运费策略",
-                area:['100%','100%'],
-                offset: 'auto',
-                path: 'components/views/product/carriage/manage_config_form.html',
-                finish: function () {
-                    carriageTable.reload('carriage-config-table', {});
-                }
-            });
-        };
         // 表单提交事件
-        form.on('submit(manage-form-submit)', function (data) {
+        form.on('submit(manage-config-form-submit)', function (data) {
             layer.load(2);
             if (data.field.id) {
                 crown.put('/carriage/' + data.field.id, {data: data.field}, function () {
