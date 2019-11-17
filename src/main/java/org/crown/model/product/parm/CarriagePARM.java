@@ -18,50 +18,56 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package org.crown.model.product.entity;
+package org.crown.model.product.parm;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import org.crown.framework.model.BaseModel;
-import java.time.LocalDateTime;
-
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.crown.enums.StatusEnum;
+import org.crown.framework.model.BaseModel;
+
+import javax.validation.constraints.NotEmpty;
+import java.time.LocalDateTime;
 
 
 /**
  * <p>
- * 产品运费策略信息表
+ * 产品运费策略PARM
  * </p>
  *
  * @author whZhang
  */
-@TableName("carriage")
+@ApiModel
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class Carriage extends BaseModel {
+public class CarriagePARM extends BaseModel {
 
 private static final long serialVersionUID=1L;
 
-    @ApiModelProperty(notes = "策略名称")
+    @ApiModelProperty(notes = "模板名称")
+    @NotEmpty(groups = {ProductPARM.Create.class, ProductPARM.Update.class}, message = "请填写策略模板名称")
     private String name;
+
     @ApiModelProperty(notes = "序号")
+    @NotEmpty(groups = {ProductPARM.Create.class, ProductPARM.Update.class}, message = "请填写序号")
     private String orderNum;
-    @ApiModelProperty(notes = "创建时间")
-    @TableField(fill = FieldFill.INSERT)
-    private LocalDateTime createTime;
-    @ApiModelProperty(notes = "创建人")
-    @TableField(fill = FieldFill.INSERT)
-    private Integer createUid;
-    @ApiModelProperty(notes = "修改时间")
-    @TableField(fill = FieldFill.INSERT_UPDATE)
-    private LocalDateTime updateTime;
-    @ApiModelProperty(notes = "修改人")
-    @TableField(fill = FieldFill.INSERT_UPDATE)
-    private Integer updateUid;
+
+    public interface Create {
+
+    }
+
+    public interface Update {
+
+    }
+
+    public interface Status {
+
+    }
 
 }

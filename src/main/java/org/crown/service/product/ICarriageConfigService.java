@@ -18,59 +18,42 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package org.crown.enums;
+package org.crown.service.product;
 
-import org.crown.common.exception.UnknownEnumException;
-import org.crown.framework.enums.IEnum;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import org.crown.framework.responses.ApiResponses;
+import org.crown.model.product.dto.AreaDTO;
+import org.crown.model.product.dto.CarriageConfigDTO;
+import org.crown.model.product.entity.CarriageConfig;
+import org.crown.framework.service.BaseService;
+import org.crown.model.product.parm.CarriageConfigPARM;
 
-import com.baomidou.mybatisplus.annotation.EnumValue;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
+import java.util.List;
 
 /**
  * <p>
- * 菜单类型枚举
+ * 运费策略配置表 服务类
  * </p>
  *
  * @author whZhang
  */
-public enum MenuTypeEnum implements IEnum {
+public interface ICarriageConfigService extends BaseService<CarriageConfig> {
+        /**
+         * 运费策略价格列表
+         *
+         * @param page
+         */
+        IPage<CarriageConfigDTO> selectCarriageConfigPage(IPage<CarriageConfigDTO> page, Integer cid);
 
-    /**
-     * 目录
-     */
-    CATALOG(1),
-    /**
-     * 菜单
-     */
-    MENU(2),
-    /**
-     * 按钮
-     */
-    BUTTON(3);
-
-
-    @EnumValue
-    private final int value;
-
-    MenuTypeEnum(final int value) {
-        this.value = value;
-    }
-
-    @Override
-    @JsonValue
-    public int getValue() {
-        return this.value;
-    }
-
-
-    @JsonCreator
-    public static MenuTypeEnum getEnum(int value) {
-        for (MenuTypeEnum menuTypeEnum : MenuTypeEnum.values()) {
-            if (menuTypeEnum.getValue() == value) {
-                return menuTypeEnum;
-            }
-        }
-        throw new UnknownEnumException("Error: Invalid MenuTypeEnum type value: " + value);
-    }
+        /**
+         * 添加运费策略配置
+         *
+         * @param carriageConfigPARM
+         */
+        ApiResponses<Void>  saveCarriageConfig(CarriageConfigPARM carriageConfigPARM);
+        /**
+         * 获取运费策略配置区域信息
+         *
+         */
+        List<AreaDTO> getAreas();
 }

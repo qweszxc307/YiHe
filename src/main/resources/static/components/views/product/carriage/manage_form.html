@@ -1,0 +1,258 @@
+<style>
+    #box::-webkit-scrollbar {display: none;}
+</style>
+<form id="manage-form" lay-filter="manage-form" class="layui-form model-form" style="padding-right:0px;height:100%">
+    <div id="box" style=" height:80%;overflow: auto;padding-right:10px;padding-left:10px">
+        <!-- 表格顶部操作列 -->
+        <button type="button" onclick="showCrriageManageModel()" class="layui-btn layui-btn-xs layui-btn-xs" style="float: right;margin-right: 10px;margin-bottom: 10px;">添加</button>
+        <table class="layui-table" id="carriage-config-table" lay-filter="carriage-config-table"></table>
+        <div id="carriage_manage_model" style="visibility: hidden;">
+            <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+                <legend>区域运费配置</legend>
+            </fieldset>
+            <button type="button" onclick="closeCrriageManageModel()" class="layui-btn layui-btn-danger layui-btn-xs" style="float: right;margin-right: 10px;margin-bottom: 10px;">关闭</button>
+            <input name="id" type="hidden"/>
+            <div class="layui-form-item">
+                <label class="layui-form-label">名称</label>
+                <div class="layui-input-block">
+                    <input name="carriageConfigName" placeholder="请输入策略名称" type="text" class="layui-input" lay-verify="required"/>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">满免价格(元)</label>
+                <div class="layui-input-block">
+                    <input name="carriageConfigFreePrice" placeholder="请输入满免价格" type="text" class="layui-input" lay-verify="required|number"/>
+                </div>
+            </div>
+            <div style="padding: 10px; background-color: #F1F1F1;">
+                <div class="layui-card">
+                    <div class="layui-card-header">运费价格区间</div>
+                    <div class="layui-card-body">
+                        <table class="layui-table" id="price_degree_model" lay-filter="price_degree_model">
+                            <thead>
+                            <tr>
+                                <td>起始数量(个)</td>
+                                <td>最大数量(个)</td>
+                                <td>价格(元/个)</td>
+                                <td>操作</td>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td><input type="text"  class="layui-input" name="b_number" lay-verify="required|number"></td>
+                                <td><input type="text"  class="layui-input" name="e_number" lay-verify="required|number"></td>
+                                <td><input type="text"  class="layui-input" name="price" lay-verify="required|number"></td>
+                                <td>
+                                    <a class="layui-btn layui-btn-xs addPriceDegree">添加</a>
+                                    <a class="layui-btn layui-btn-danger layui-btn-xs delPriceDegree">删除</a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div id="square_choose">
+                <div class="layui-row" style="margin-bottom: 10px;margin-top: 10px">
+                    <div class="layui-col-xs4">
+                        <div id="square_transfer1" class="demo-transfer layui-inline"></div>
+                    </div>
+                    <div class="layui-col-xs4">
+                        <div id="square_transfer2" class="demo-transfer layui-inline"></div>
+                    </div>
+                    <div class="layui-col-xs4">
+                        <div id="square_transfer3" class="demo-transfer layui-inline"></div>
+                    </div>
+                </div>
+                <div class="layui-row" style="margin-bottom: 10px;margin-top: 10px">
+                    <div class="layui-col-xs4">
+                        <div id="square_transfer4" class="demo-transfer layui-inline"></div>
+                    </div>
+                    <div class="layui-col-xs4">
+                        <div id="square_transfer5" class="demo-transfer layui-inline"></div>
+                    </div>
+                    <div class="layui-col-xs4">
+                        <div id="square_transfer6" class="demo-transfer layui-inline"></div>
+                    </div>
+                </div>
+                <div class="layui-row" style="margin-bottom: 10px;margin-top: 10px">
+                    <div class="layui-col-xs4">
+                        <div id="square_transfer7" class="demo-transfer layui-inline"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item model-form-footer" style="margin-top:10px;width:97%">
+                <button class="layui-btn layui-btn-primary" onclick="closeCrriageManageModel()" type="button">关闭</button>
+                <button class="layui-btn" lay-filter="carriage-config-form-submit" lay-submit>提交</button>
+            </div>
+            <!--<button type="button" onclick="closeCrriageManageModel()" class="layui-btn layui-btn-xs layui-btn-normal" style="float: right;margin-right: 10px;margin-bottom: 10px;">提交配置</button>-->
+        </div>
+    </div>
+    <!--<div class="layui-form-item model-form-footer" style="margin-top:10px;width:97%">
+        <button class="layui-btn layui-btn-primary close" type="button">取消</button>
+        <button class="layui-btn" lay-filter="manage-form-submit" lay-submit>保存</button>
+    </div>-->
+</form>
+<!-- 表格操作列 -->
+<script type="text/html" id="carriage-config-table-bar">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+<script>
+    layui.use(['layer','transfer', 'crown', 'table', 'form'], function () {
+        var layer = layui.layer;
+        var $ = layui.$
+            ,transfer = layui.transfer
+        var crown = layui.crown;
+        var form = layui.form;
+        var table = layui.table;
+        var config = layui.config;
+        //回显运费策略数据
+        var carriage = crown.getTempData('t_carriage');
+        if(carriage){
+            form.val('manage-form', carriage);
+        }
+        // 表单提交事件
+        form.on('submit(manage-form-submit)', function (data) {
+            layer.load(2);
+            if (data.field.id) {
+                crown.put('/carriage/' + data.field.id, {data: data.field}, function () {
+                    layer.closeAll('loading');
+                    layer.msg('修改成功', {icon: 1});
+                    crown.finishPopupCenter();
+                });
+            } else {
+                crown.post('/carriage', {data:data.field}, function () {
+                    layer.closeAll('loading');
+                    layer.msg('添加成功', {icon: 1});
+                    crown.finishPopupCenter();
+                });
+            }
+            return false;
+        });
+        crown.get('/carriageConfig/areas', {async:false}, function (data) {
+            var areas = data.result;
+            for(var i=0;i< areas.length;i++){
+                transfer.render({
+                    elem: '#square_transfer'+areas[i].id
+                    ,data:areas[i].citys
+                    ,title: [areas[i].name+"候选地",areas[i].name+"已选地"]
+                    ,id: 'squareTransfer'+areas[i].id
+                    ,showSearch: true
+                })
+            }
+        });
+        //因为动态添加的元素class属性是无效的，所以不能用$('.add').click(function(){});
+        $('#price_degree_model').on('click', '.addPriceDegree', function() {
+            //你要添加的html
+            var html = '<tr>'+
+                '<td><input type="text"  class="layui-input" name="b_number" lay-verify="required|number"></td>'+
+                '<td><input type="text"  class="layui-input" name="e_number" lay-verify="required|number"></td>'+
+                '<td><input type="text"  class="layui-input" name="price" lay-verify="required|number"></td>'+
+                '<td>'+
+                '<a class="layui-btn layui-btn-xs addPriceDegree">添加</a>'+
+                '<a class="layui-btn layui-btn-danger layui-btn-xs delPriceDegree">删除</a>'+
+                '</td>'+
+                '</tr>';
+            //添加到表格最后
+            $(html).appendTo($('#price_degree_model tbody:last'));
+            form.render();
+        });
+        $('#price_degree_model').on('click', '.delPriceDegree', function() {
+            if ($('#price_degree_model tbody tr').length === 1) {
+                layer.msg('只有一条不允许删除。', {
+                    time : 2000
+                });
+            } else {
+                //删除当前按钮所在的tr
+                $(this).closest('tr').remove();
+            }
+        });
+
+        // 渲染表格
+        var carriageTable = table.render({
+            elem: '#carriage-config-table',
+            toolbar: null,
+            url: config.serverUrl + '/carriageConfig/'+carriage.id,
+            request: config.request,
+            parseData: config.parseData,
+            response: config.response,
+            headers: {Authorization: config.getToken()},
+            page:true,
+            cols: [[
+                { type: 'numbers', title: '' },
+                {field: 'id', align: 'center', sort: true,title: 'id',hide:true},
+                {field: 'name', align: 'center', sort: true, title: '策略名称'},
+                {field: 'freePrice', align: 'center', sort: true, title: '商品满免价格(元)'},
+                {field: 'carrigeConfigPrices', align: 'center', sort: true, title: '快递费说明',templet: function (d) {
+                        var data = d.carrigeConfigPrices;
+                        var html = "";
+                        for(var i = 0 ;i< data.length;i++){
+                            var obj = data[i];
+                            html += "数量在["+obj.snum+"]至["+obj.enum+"]个,运费价格为["+obj.price+"]元每个</br>";
+                        }
+                        return html;
+                    }
+                },
+                {align: 'center',toolbar: '#carriage-config-table-bar', title: '操作'}
+            ]]
+        });
+        // 表单提交事件
+        form.on('submit(carriage-config-form-submit)', function (data) {
+            layer.load(2);
+            /*if (data.field.id) {
+                crown.put('/carriage/' + data.field.id, {data: data.field}, function () {
+                    layer.closeAll('loading');
+                    layer.msg('修改成功', {icon: 1});
+                    crown.finishPopupCenter();
+                });
+            } else {*/
+            var squareTransfer1Data = transfer.getData('squareTransfer1'); //获取右侧数据
+            var squareTransfer2Data = transfer.getData('squareTransfer2'); //获取右侧数据
+            var squareTransfer3Data = transfer.getData('squareTransfer3'); //获取右侧数据
+            var squareTransfer4Data = transfer.getData('squareTransfer4'); //获取右侧数据
+            var squareTransfer5Data = transfer.getData('squareTransfer5'); //获取右侧数据
+            var squareTransfer6Data = transfer.getData('squareTransfer6'); //获取右侧数据
+            var squareTransfer7Data = transfer.getData('squareTransfer7'); //获取右侧数据
+            var squareTransferData = squareTransfer1Data.concat(squareTransfer2Data,squareTransfer3Data,squareTransfer4Data,squareTransfer5Data,squareTransfer6Data,squareTransfer7Data);
+            var cityIds = [];
+            for(var i=0;i<squareTransferData.length;i++){
+                cityIds.push(squareTransferData[i].value);
+            }
+            var bnums = [];
+                var onums = [];
+                var price = [];
+                $("input[name='b_number']").each(function(b,item){
+                    // 你要实现的业务逻辑
+                    bnums.push(item.value)
+                });
+                $("input[name='e_number']").each(function(o,item){
+                    // 你要实现的业务逻辑
+                    onums.push(item.value)
+                });
+                $("input[name='price']").each(function(p,item){
+                    // 你要实现的业务逻辑
+                    price.push(item.value)
+                });
+                data.field.bnums = bnums;
+                data.field.onums = onums;
+                data.field.price = price;
+                data.field.cityIds = cityIds;
+                crown.post('/carriageConfig', {data:data.field}, function () {
+                    layer.closeAll('loading');
+                    layer.msg('添加成功', {icon: 1});
+                    crown.finishPopupCenter();
+                });
+            /*}*/
+            return false;
+        });
+    })
+    function showCrriageManageModel(){
+        $("#carriage_manage_model").show();
+        $("#carriage_manage_model").css("visibility","visible")
+    }
+    function closeCrriageManageModel(){
+        $("#carriage_manage_model").hide();
+    }
+
+</script>

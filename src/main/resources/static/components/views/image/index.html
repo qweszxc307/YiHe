@@ -1,3 +1,9 @@
+<style>
+    .layui-table-cell {
+        height: auto;
+        line-height: 28px;
+    }
+</style>
 <div class="layui-card">
     <div class="layui-card-header">
         <h2 class="header-title">轮播图</h2>
@@ -63,9 +69,10 @@
             page: true,
             cols: [[
                 {field: 'id', width: 60, title: 'ID'},
-                {field: 'imgUrl', align: 'center', sort: true, title: '图片路径'},
-                {field: 'createTime', align: 'center', sort: true, title: '创建时间'},
-                {field: 'updateTime', align: 'center', sort: true, title: '修改时间'},
+                {field: 'imgUrl', align: 'center', sort: true, title: '图片路径',templet: function (d) {
+                        return  "<img  width='100px' onclick='window.open(\"http://"+d.imgUrl+"\")' title='点击预览产品图片' style='cursor: pointer;' src='"+"http://"+d.imgUrl+"\'\></br>"
+                    }
+                },
                 {align: 'center', toolbar: '#image-table-bar', title: '操作'}
             ]]
         });

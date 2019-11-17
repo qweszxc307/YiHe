@@ -1,0 +1,54 @@
+<!-- carriage表单弹窗 -->
+<form id="carriage-form" lay-filter="carriage-form" class="layui-form model-form" style="padding-right:0px;height:100%">
+    <div style=" height:80%;overflow: auto;padding-right:10px;padding-left:10px">
+        <input name="id" type="hidden"/>
+        <div class="layui-form-item">
+            <label class="layui-form-label">序号</label>
+            <div class="layui-input-block">
+                <input name="orderNum" placeholder="请输入序号" type="text" class="layui-input" lay-verify="required|number"/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">模板名称</label>
+            <div class="layui-input-block">
+                <input id="name" name="name" placeholder="请输入模板名称" type="text" class="layui-input" maxlength="20" />
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item model-form-footer" style="margin-top:10px;width:97%">
+        <button class="layui-btn layui-btn-primary close" type="button">取消</button>
+        <button class="layui-btn" lay-filter="carriage-form-submit" lay-submit>保存</button>
+    </div>
+</form>
+<script>
+    layui.use(['layer', 'crown', 'form','upload','formSelects'], function () {
+        var layer = layui.layer;
+        var crown = layui.crown;
+        var form = layui.form;
+        //回显运费策略数据
+        var carriage = crown.getTempData('t_carriage');
+        if(carriage){
+            form.val('carriage-form', carriage);
+        }
+        // 表单提交事件
+        form.on('submit(carriage-form-submit)', function (data) {
+            layer.load(2);
+            if (data.field.id) {
+                crown.put('/carriage/' + data.field.id, {data: data.field}, function () {
+                    layer.closeAll('loading');
+                    layer.msg('修改成功', {icon: 1});
+                    crown.finishPopupCenter();
+                });
+            } else {
+                crown.post('/carriage', {data:data.field}, function () {
+                    layer.closeAll('loading');
+                    layer.msg('添加成功', {icon: 1});
+                    crown.finishPopupCenter();
+                });
+            }
+            return false;
+        });
+    })
+
+
+</script>

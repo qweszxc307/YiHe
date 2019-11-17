@@ -126,7 +126,6 @@
             formSelects.data('brandId', 'local', {arr: brandSelectData});
             formSelects.btns('brandId', []);
             var product = crown.getTempData('t_product');
-            debugger;
             // 回显产品数据
             if (product) {
                 form.val('product-form', product);
@@ -257,7 +256,6 @@
                     crown.finishPopupCenter();
                 });
             } else {
-                debugger;
                 data.field.productImgs = productImgs;
                 data.field.detailImgId = detailImgId;
                 var bnums = [];

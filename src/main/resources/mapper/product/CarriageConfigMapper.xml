@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.crown.mapper.product.CarriageConfigMapper">
+    <resultMap type="org.crown.model.product.dto.CarriageConfigDTO" id="CarriageConfigPageResultMap">
+        <id column="id" property="id" />
+        <id column="c_id" property="cid" />
+        <result column="cm_name" property="modelName" />
+        <result column="c_name" property="name" />
+        <result column="free_price" property="freePrice" />
+        <collection property="carrigeConfigPrices" column="c_id" ofType="org.crown.model.product.dto.CarriageConfigPriceDTO" select="selectCarriageConfigPrices"/>
+    </resultMap>
+    <select id="selectCarriageConfigPrices" resultType="org.crown.model.product.dto.CarriageConfigPriceDTO">
+         select s_num sNum,e_num eNum,config_id configId,price from carriage_config_price ccp
+            inner join carriage_config cc
+            on cc.id = ccp.config_id
+            and ccp.config_id = #{cid}
+    </select>
+
+    <select id="selectCarriageConfigPage" resultMap="CarriageConfigPageResultMap">
+    select c.id,cc.id c_id,c.name cm_name,cc.name c_name,cc.free_price from carriage c
+        left join carriage_config cc
+        on cc.c_id = c.id
+        where cc.c_id = #{id}
+    </select>
+
+    <resultMap type="org.crown.model.product.dto.AreaDTO" id="CarriageConfigAreaResultMap">
+        <id column="id" property="id" />
+        <id column="name" property="name" />
+        <collection property="citys" column="id" ofType="org.crown.model.product.dto.CityDTO" select="selectCarriageConfigCitys"/>
+    </resultMap>
+    <select id="selectCarriageConfigCitys" resultType="org.crown.model.product.dto.CityDTO">
+      select id as value,area_name title from city where aid = #{id}
+    </select>
+    <select id="getAreas" resultMap="CarriageConfigAreaResultMap">
+        select * from area
+    </select>
+</mapper>

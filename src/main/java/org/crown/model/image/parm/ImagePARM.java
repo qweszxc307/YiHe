@@ -53,8 +53,6 @@ public class ImagePARM extends Convert {
     @NotBlank(groups = {ImagePARM.Create.class, ImagePARM.Update.class}, message = "图片不能为空")
     private String imgUrl;
 
- /*   @ApiModelProperty(notes = "状态:0：禁用 1：正常")
-    private StatusEnum status;*/
 
     public interface Create {
 
