@@ -2,7 +2,7 @@ package org.crown.mapper.product;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import org.crown.model.product.entity.CarriageSquareArea;
+import org.crown.model.product.entity.CarriageAreaCity;
 import org.crown.framework.mapper.BaseMapper;
 
 /**
@@ -13,6 +13,6 @@ import org.crown.framework.mapper.BaseMapper;
  * @author whZhang
  */
 @Mapper
-public interface CarriageSquareAreaMapper extends BaseMapper<CarriageSquareArea> {
+public interface CarriageAreaCityMapper extends BaseMapper<CarriageAreaCity> {
 
         }

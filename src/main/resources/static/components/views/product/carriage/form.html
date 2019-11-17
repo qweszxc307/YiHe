@@ -40,7 +40,6 @@
                     crown.finishPopupCenter();
                 });
             } else {
-                debugger;
                 crown.post('/carriage', {data:data.field}, function () {
                     layer.closeAll('loading');
                     layer.msg('添加成功', {icon: 1});

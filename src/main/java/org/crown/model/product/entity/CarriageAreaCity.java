@@ -18,23 +18,35 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package org.crown.service.product.impl;
+package org.crown.model.product.entity;
 
-import org.crown.model.product.entity.Square;
-import org.crown.mapper.product.SquareMapper;
-import org.crown.service.product.ISquareService;
-import org.crown.framework.service.impl.BaseServiceImpl;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import com.baomidou.mybatisplus.annotation.TableName;
+import org.crown.framework.model.BaseModel;
+
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
 
 /**
  * <p>
- * 区域表 服务实现类
+ * 运费策略区域配置表
  * </p>
  *
  * @author whZhang
  */
-@Service
-        public class SquareServiceImpl extends BaseServiceImpl<SquareMapper, Square>implements ISquareService {
+@TableName("carriage_area_city")
+@Data
+@NoArgsConstructor
+@EqualsAndHashCode(callSuper = false)
+public class CarriageAreaCity extends BaseModel {
 
-        }
+private static final long serialVersionUID=1L;
+
+    @ApiModelProperty(notes = "地区id")
+private String cityId;
+    @ApiModelProperty(notes = "运费策略配置id")
+private Integer configId;
+
+}

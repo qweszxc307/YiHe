@@ -20,9 +20,9 @@
  */
 package org.crown.service.product.impl;
 
-import org.crown.model.product.entity.CarriageSquareArea;
-import org.crown.mapper.product.CarriageSquareAreaMapper;
-import org.crown.service.product.ICarriageSquareAreaService;
+import org.crown.model.product.entity.CarriageAreaCity;
+import org.crown.mapper.product.CarriageAreaCityMapper;
+import org.crown.service.product.ICarriageAreaCityService;
 import org.crown.framework.service.impl.BaseServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,6 +35,6 @@ import org.springframework.transaction.annotation.Transactional;
  * @author whZhang
  */
 @Service
-        public class CarriageSquareAreaServiceImpl extends BaseServiceImpl<CarriageSquareAreaMapper, CarriageSquareArea>implements ICarriageSquareAreaService {
+        public class CarriageAreaCityServiceImpl extends BaseServiceImpl<CarriageAreaCityMapper, CarriageAreaCity>implements ICarriageAreaCityService {
 
         }

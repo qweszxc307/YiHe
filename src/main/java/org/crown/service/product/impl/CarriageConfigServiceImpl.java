@@ -20,12 +20,26 @@
  */
 package org.crown.service.product.impl;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import org.crown.common.utils.TypeUtils;
+import org.crown.framework.responses.ApiResponses;
+import org.crown.model.product.dto.AreaDTO;
+import org.crown.model.product.dto.CarriageConfigDTO;
+import org.crown.model.product.entity.CarriageAreaCity;
 import org.crown.model.product.entity.CarriageConfig;
 import org.crown.mapper.product.CarriageConfigMapper;
+import org.crown.model.product.entity.CarriageConfigPrice;
+import org.crown.model.product.parm.CarriageConfigPARM;
+import org.crown.service.product.ICarriageAreaCityService;
+import org.crown.service.product.ICarriageConfigPriceService;
 import org.crown.service.product.ICarriageConfigService;
 import org.crown.framework.service.impl.BaseServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <p>
@@ -35,6 +49,58 @@ import org.springframework.transaction.annotation.Transactional;
  * @author whZhang
  */
 @Service
-        public class CarriageConfigServiceImpl extends BaseServiceImpl<CarriageConfigMapper, CarriageConfig>implements ICarriageConfigService {
+public class CarriageConfigServiceImpl extends BaseServiceImpl<CarriageConfigMapper, CarriageConfig>implements ICarriageConfigService {
+        @Autowired
+        ICarriageConfigService carriageConfigService;
 
+        @Autowired
+        ICarriageConfigPriceService carriageConfigPriceService;
+
+        @Autowired
+        ICarriageAreaCityService carriageAreaCityService;
+
+        @Override
+        public IPage<CarriageConfigDTO> selectCarriageConfigPage(IPage<CarriageConfigDTO> page, Integer cid) {
+                List<CarriageConfigDTO> list = baseMapper.selectCarriageConfigPage(page,cid);
+                return  page.setRecords(list);
         }
+
+        @Override
+        @Transactional(rollbackFor = Exception.class)
+        public ApiResponses<Void> saveCarriageConfig(CarriageConfigPARM carriageConfigPARM) {
+                /*保存运费策略基本信息*/
+                CarriageConfig carriageConfig = new CarriageConfig();
+                carriageConfig.setName(carriageConfigPARM.getCarriageConfigName());
+                carriageConfig.setFreePrice(TypeUtils.castToBigDecimal(carriageConfigPARM.getCarriageConfigFreePrice()));
+                carriageConfig.setCId(carriageConfigPARM.getId());
+                carriageConfigService.save(carriageConfig);
+                /*保存运费策略区域价格信息*/
+                List<String> pricesList = carriageConfigPARM.getPrice();
+                List<CarriageConfigPrice> carriageConfigPriceList = new ArrayList<>();
+                for(int i=0;i<pricesList.size();i++){
+                        CarriageConfigPrice carriageConfigPrice = new CarriageConfigPrice();
+                        carriageConfigPrice.setConfigId(carriageConfig.getId());
+                        carriageConfigPrice.setPrice(TypeUtils.castToBigDecimal(pricesList.get(i)));
+                        carriageConfigPrice.setSNum(Integer.parseInt(carriageConfigPARM.getBnums().get(i)));
+                        carriageConfigPrice.setENum(Integer.parseInt(carriageConfigPARM.getOnums().get(i)));
+                        carriageConfigPriceList.add(carriageConfigPrice);
+                }
+                carriageConfigPriceService.saveBatch(carriageConfigPriceList);
+                /*保存运费策略适用区域*/
+                List<CarriageAreaCity> areaCityList = new ArrayList<>();
+                for(int i = 0;i<carriageConfigPARM.getCityIds().size();i++){
+                        CarriageAreaCity carriageAreaCity = new CarriageAreaCity();
+                        carriageAreaCity.setCityId(carriageConfigPARM.getCityIds().get(i));
+                        carriageAreaCity.setConfigId(carriageConfig.getId());
+                        areaCityList.add(carriageAreaCity);
+                }
+                carriageAreaCityService.saveBatch(areaCityList);
+                return null;
+        }
+
+        @Override
+        public List<AreaDTO> getAreas() {
+                List<AreaDTO> list = baseMapper.getAreas();
+                return list;
+        }
+}

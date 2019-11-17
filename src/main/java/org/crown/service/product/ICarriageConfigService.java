@@ -20,8 +20,15 @@
  */
 package org.crown.service.product;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import org.crown.framework.responses.ApiResponses;
+import org.crown.model.product.dto.AreaDTO;
+import org.crown.model.product.dto.CarriageConfigDTO;
 import org.crown.model.product.entity.CarriageConfig;
 import org.crown.framework.service.BaseService;
+import org.crown.model.product.parm.CarriageConfigPARM;
+
+import java.util.List;
 
 /**
  * <p>
@@ -31,5 +38,22 @@ import org.crown.framework.service.BaseService;
  * @author whZhang
  */
 public interface ICarriageConfigService extends BaseService<CarriageConfig> {
+        /**
+         * 运费策略价格列表
+         *
+         * @param page
+         */
+        IPage<CarriageConfigDTO> selectCarriageConfigPage(IPage<CarriageConfigDTO> page, Integer cid);
 
-        }
+        /**
+         * 添加运费策略配置
+         *
+         * @param carriageConfigPARM
+         */
+        ApiResponses<Void>  saveCarriageConfig(CarriageConfigPARM carriageConfigPARM);
+        /**
+         * 获取运费策略配置区域信息
+         *
+         */
+        List<AreaDTO> getAreas();
+}
