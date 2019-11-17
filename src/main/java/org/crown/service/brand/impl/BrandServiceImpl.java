@@ -84,7 +84,7 @@ public class BrandServiceImpl extends BaseServiceImpl<BrandMapper, Brand>impleme
         brandImage.setBId(brand.getId());
         brandImage.setImgId(Integer.parseInt(brandPARM.getImageId()));
         brandImageService.save(brandImage);
-    }
+     }
 
     @Override
     public IPage<BrandDTO> selectBrandPage(IPage<BrandDTO> page) {

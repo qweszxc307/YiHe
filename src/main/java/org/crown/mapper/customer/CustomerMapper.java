@@ -3,8 +3,11 @@ package org.crown.mapper.customer;
 import org.apache.ibatis.annotations.Mapper;
 import org.crown.framework.mapper.BaseMapper;
 import org.crown.model.customer.entity.Customer;
-import org.crown.model.customer.entity.CustomerMember;
+import org.crown.model.member.entity.MemberDAO;
+import org.crown.model.member.entity.MemberSum;
 
+import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -66,4 +69,33 @@ public interface CustomerMapper extends BaseMapper<Customer> {
      * @return level 等级
      */
     String queryLevelBycId(Integer cId);
+
+    /**
+     *  查询所有消费金额在 x~x 之间的用户
+     * @param upgrade
+     * @param sum
+     * @return
+     */
+    List<MemberDAO> queryIdAndSumByUpgrade(BigDecimal upgrade, BigDecimal sum);
+
+    /**
+     * 根据 id 修改mid
+     * @param cId
+     * @param mId
+     */
+    void updateMIdById(Integer cId, Integer mId);
+
+    /**
+     * 根据上一级会员等级查询所有用户
+     * @param front
+     * @return
+     */
+    List<MemberDAO> queryIdAndSumByFront(BigDecimal front);
+
+    /**
+     * 根据下一集会员扽及查询所有用户
+     * @param next
+     * @return
+     */
+    List<MemberDAO> queryIdAndSumByNext(BigDecimal next);
 }

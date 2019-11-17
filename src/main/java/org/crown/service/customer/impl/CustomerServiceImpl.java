@@ -93,7 +93,7 @@ public class CustomerServiceImpl extends BaseServiceImpl<CustomerMapper, Custome
     @Override
     public void updateCustomerByMember(Integer id, CustomerPARM customerPARM) {
         Customer customer = customerMapper.selectById(id);
-        String memberName = customerPARM.getMemberName();
+        String memberName = customerPARM.getMember();
         Member member = memberMapper.queryMemberByMemberName(memberName);
         customer.setMId(member.getId());
         customerMapper.updateById(customer);

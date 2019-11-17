@@ -40,16 +40,37 @@ select id from member where `level` = #{level};
         <where>
             <if test="cId !=null and cId != ''">
                 id = #{cId}
-        </if>
+            </if>
         </where>
     </select>
 
 
-
-    <select id="queryLevelBycId" resultType="String" >
-        select  m.`name` from member m,customer c
-     <where>
-             c.id = #{cId} and m.id = c.m_id
-    </where>
+    <select id="queryLevelBycId" resultType="String">
+        select m.`name` from member m,customer c
+        <where>
+            c.id = #{cId} and m.id = c.m_id
+        </where>
     </select>
+
+    <select id="queryIdAndSumByUpgrade" resultType="MemberDAO" parameterType="java.math.BigDecimal">
+        select id,sum from customer
+        <where>
+            <if test="upgrade !=null and upgrade !=''">
+                sum >= #{upgrade}
+            </if>
+            <if test="sum != null and sum !=''">
+               and sum  &lt; #{sum}
+            </if>
+        </where>
+    </select>
+    <select id="queryIdAndSumByFront" resultType="MemberDAO" parameterType="java.math.BigDecimal">
+          select id,sum from customer where sum >= #{front}
+    </select>
+
+    <select id="queryIdAndSumByNext" resultType="MemberDAO" parameterType="java.math.BigDecimal">
+          select id,sum from customer where sum &lt; #{next}
+    </select>
+    <update id="updateMIdById" parameterType="Integer">
+        update customer set m_id = #{mId} where id = #{cId}
+    </update>
 </mapper>

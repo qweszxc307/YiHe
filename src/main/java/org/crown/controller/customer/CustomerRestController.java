@@ -34,7 +34,9 @@ import org.crown.model.customer.dto.CustomerDTO;
 import org.crown.model.customer.dto.CustomerDetailsDTO;
 import org.crown.model.customer.entity.Customer;
 import org.crown.model.customer.parm.CustomerPARM;
+import org.crown.model.member.entity.Member;
 import org.crown.service.customer.ICustomerService;
+import org.crown.service.member.IMemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
@@ -57,21 +59,30 @@ import java.util.Objects;
 public class CustomerRestController extends SuperController {
     @Autowired
     private ICustomerService customerService;
-
+    @Autowired
+    private IMemberService memberService;
 
     @Resources(auth = AuthTypeEnum.OPEN)
     @ApiOperation("查询所有客户基本信息")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "memberNum", value = "会员号", paramType = "query")
+            @ApiImplicitParam(name = "memberNum", value = "会员号", paramType = "query"),
+            @ApiImplicitParam(name = "members", value = "会员等级名称", paramType = "query")
+
     })
     @GetMapping
-    public ApiResponses<IPage<CustomerDTO>> page(@RequestParam(value = "memberNum", required = false) String memberNum) {
-            IPage<CustomerDTO> convert = customerService.query()
-                    .eq(StringUtils.isNotEmpty(memberNum), Customer::getMemberNum, memberNum)
-                    .page(this.<Customer>getPage())
-                    .convert(e -> e.convert(CustomerDTO.class));
-            convert.getRecords().forEach(e -> e.setMemberName(customerService.queryLevelBycId(e.getId())));
-            return success(convert);
+    public ApiResponses<IPage<CustomerDTO>> page(@RequestParam(value = "memberNum", required = false) String memberNum,
+                                                 @RequestParam(value = "members", required = false) String memberName) {
+        Member member = new Member();
+        if (memberName != null && memberName.length() != 0) {
+            member = memberService.queryOneByMemberName(memberName);
+        }
+        IPage<CustomerDTO> convert = customerService.query()
+                .eq(StringUtils.isNotEmpty(memberNum), Customer::getMemberNum, memberNum)
+                .eq(Objects.nonNull(member.getId()), Customer::getMId, member.getId())
+                .page(this.<Customer>getPage())
+                .convert(e -> e.convert(CustomerDTO.class));
+        convert.getRecords().forEach(e -> e.setMemberName(customerService.queryLevelBycId(e.getId())));
+        return success(convert);
 
 
     }
@@ -114,7 +125,7 @@ public class CustomerRestController extends SuperController {
     @PutMapping("/{id}")
     public ApiResponses<Void> update(@PathVariable("id") Integer id, @RequestBody @Validated(CustomerPARM.Update.class) CustomerPARM customerPARM) {
         //修改详情表的id
-      customerService.updateCustomerByMember(id,customerPARM);
+        customerService.updateCustomerByMember(id, customerPARM);
         return success();
     }
 

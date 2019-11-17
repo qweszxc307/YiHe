@@ -48,7 +48,13 @@ public enum ImagesEnum implements IEnum {
     /**
      * 产品详情图片
      */
-    PRODUCT_DETAIL_IMAGE(3) ;
+    PRODUCT_DETAIL_IMAGE(3) ,
+    /**
+     * 会员特权图片
+     */
+    MEMBER_PRIVILEGE_IMAGE(4);
+
+
 
     @EnumValue
     private final int value;

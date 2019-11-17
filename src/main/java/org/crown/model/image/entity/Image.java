@@ -23,6 +23,7 @@ package org.crown.model.image.entity;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import org.crown.enums.ImagesEnum;
 import org.crown.framework.model.BaseModel;
 import java.time.LocalDateTime;
 
@@ -49,8 +50,8 @@ public class Image extends BaseModel {
 
     @ApiModelProperty(notes = "图片url")
     private String imgUrl;
-    @ApiModelProperty(notes = "图片类型(0:轮播图;1:品牌图片;2:产品图片;3:产品详情图片")
-    private Integer type;
+    @ApiModelProperty(notes = "图片类型(0:轮播图;1:品牌图片;2:产品图片;3:产品详情图片)")
+    private ImagesEnum type;
     @ApiModelProperty(notes = "创建时间")
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;

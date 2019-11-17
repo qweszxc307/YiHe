@@ -28,6 +28,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.crown.framework.model.BaseModel;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 
@@ -46,6 +47,8 @@ public class MemberDTO extends BaseModel {
 
     private static final long serialVersionUID = 1L;
 
+    @ApiModelProperty(notes = "会员等级id")
+    private Integer id;
     @ApiModelProperty(notes = "会员等级")
     private Integer level;
     @ApiModelProperty(notes = "等级名称")
@@ -53,7 +56,7 @@ public class MemberDTO extends BaseModel {
     @ApiModelProperty(notes = "会员卡背景图")
     private String backImage;
     @ApiModelProperty(notes = "升级条件")
-    private String upgrade;
+    private BigDecimal upgrade;
     @ApiModelProperty(notes = "会员特权")
     private String special;
 

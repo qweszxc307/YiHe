@@ -4,7 +4,9 @@ import org.apache.ibatis.annotations.Mapper;
 
 import org.crown.model.member.entity.Member;
 import org.crown.framework.mapper.BaseMapper;
+import org.crown.model.member.entity.MemberSum;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -36,7 +38,25 @@ public interface MemberMapper extends BaseMapper<Member> {
      */
     Integer queryMemberIdByLevel(Integer level);
 
-    Double queryNextUpgradeByUpgrade(Double upgrade);
+    /**
+     * 查询下一级别 等级id和升级条件
+     * @param upgrade
+     * @return
+     */
+    MemberSum queryNextUpgradeByUpgrade(BigDecimal upgrade);
 
+    /**
+     * 查询上一级别的等级id 和升级条件
+     * @param upgrade
+     * @return
+     */
+    MemberSum queryFrontUpgradeByUpgrade(BigDecimal upgrade);
+    /**
+     * 根据等级名称查询 等级实体类
+     * @param memberName
+     * @return
+     */
     Member queryMemberByMemberName(String memberName);
+
+
 }

@@ -1,3 +1,4 @@
+
 /*
  * Copyright (c) 2018-2022 Caratacus, (caratacus@qq.com).
  *
@@ -18,58 +19,27 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package org.crown.model.product.entity;
-
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableName;
-import org.crown.enums.StatusEnum;
-import org.crown.framework.model.BaseModel;
-
-import java.time.LocalDateTime;
+package org.crown.model.member.entity;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 
 /**
- * <p>
- * 产品表
- * </p>
- *
- * @author whZhang
+ * @author ykMa
  */
-@TableName("product")
+
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class Product extends BaseModel {
-
+public class MemberDAO {
     private static final long serialVersionUID = 1L;
-
-    @ApiModelProperty(notes = "产品名称")
-    private String name;
-    @ApiModelProperty(notes = "品牌id")
-    private String brandId;
-    @ApiModelProperty(notes = "模板id")
-    private String modelId;
-    @ApiModelProperty(notes = "状态")
-    private StatusEnum status;
-    @ApiModelProperty(notes = "序号")
-    private Integer orderNum;
-    @ApiModelProperty(notes = "创建时间")
-    @TableField(fill = FieldFill.INSERT)
-    private LocalDateTime createTime;
-    @ApiModelProperty(notes = "创建人")
-    @TableField(fill = FieldFill.INSERT)
-    private Integer createUid;
-    @ApiModelProperty(notes = "修改时间")
-    @TableField(fill = FieldFill.INSERT_UPDATE)
-    private LocalDateTime updateTime;
-    @ApiModelProperty(notes = "修改人")
-    @TableField(fill = FieldFill.INSERT_UPDATE)
-    private Integer updateUid;
-
+    @ApiModelProperty(notes = "等级id")
+    private Integer id;
+    @ApiModelProperty(notes = "客户消费总额")
+    private BigDecimal sum;
 }

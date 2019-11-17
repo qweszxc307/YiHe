@@ -20,9 +20,15 @@
  */
 package org.crown.service.member;
 
+import org.crown.enums.ImagesEnum;
+import org.crown.framework.responses.ApiResponses;
+import org.crown.model.member.dto.MemberImgDTO;
 import org.crown.model.member.entity.Member;
 import org.crown.framework.service.BaseService;
 import org.crown.model.member.parm.MemberPARM;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * <p>
@@ -42,9 +48,13 @@ public interface IMemberService extends BaseService<Member> {
 
     /**
      * 修改所有满足的客户修改其权限等级
-     * @param convert
+     * @param member
      */
-    void updateCustomerLevel(Member convert);
+    void updateCustomerLevel(Member member);
 
     void deleteMember(Integer id);
+
+    ApiResponses<MemberImgDTO> uploadImg(HttpServletResponse httpServletResponse, MultipartFile file, ImagesEnum memberPrivilegeImage);
+
+    Member queryOneByMemberName(String memberName);
 }

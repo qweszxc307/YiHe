@@ -21,18 +21,33 @@
 package org.crown.service.member.impl;
 
 
+import org.crown.common.utils.QiNiuUtils;
+import org.crown.enums.ImagesEnum;
+import org.crown.framework.responses.ApiResponses;
 import org.crown.mapper.customer.CustomerDetailsMapper;
 import org.crown.mapper.customer.CustomerMapper;
+import org.crown.model.image.entity.Image;
+import org.crown.model.member.dto.MemberImgDTO;
 import org.crown.model.member.entity.Member;
 import org.crown.mapper.member.MemberMapper;
+import org.crown.model.member.entity.MemberDAO;
+import org.crown.model.member.entity.MemberSum;
 import org.crown.model.member.parm.MemberPARM;
+import org.crown.service.image.IImageService;
 import org.crown.service.member.IMemberService;
 import org.crown.framework.service.impl.BaseServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.List;
-import java.util.Objects;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletResponse;
+import java.math.BigDecimal;
+import java.util.*;
+
+import static org.crown.common.utils.ApiUtils.currentUid;
+import static org.crown.framework.responses.ApiResponses.success;
 
 /**
  * <p>
@@ -48,7 +63,9 @@ public class MemberServiceImpl extends BaseServiceImpl<MemberMapper, Member> imp
     @Autowired
     private CustomerMapper customerMapper;
     @Autowired
-    private CustomerDetailsMapper customerDetailsMapper;
+    private QiNiuUtils qiniuService;
+    @Autowired
+    IImageService imageService;
 
     /**
      * @param id         会员等级id
@@ -59,58 +76,99 @@ public class MemberServiceImpl extends BaseServiceImpl<MemberMapper, Member> imp
     public void updateMember(Integer id, MemberPARM memberPARM) {
         Member member = memberPARM.convert(Member.class);
         member.setId(id);
-        Integer level = member.getLevel();
-        List<Integer> cIds = memberMapper.queryCustomerIdByMemberId(id);
-        if (cIds.size() != 0) {
-            for (Integer cId : cIds) {
-                Integer integer2 = customerMapper.updateCustomerMember(cId, id);
-                Integer integer1 = customerMapper.updateCustomerLevelById(cId, level);
-                Integer integer = customerDetailsMapper.updateLevelBycId(cId, level);
-                if (!Objects.nonNull(integer) || !Objects.nonNull(integer1) || !Objects.nonNull(integer2)) {
-                    throw new RuntimeException("修改客户等级出错");
-                }
-            }
-        }
+        updateCustomerLevel(member);
         memberMapper.updateById(member);
     }
 
     /**
      * 修改所有满足的客户修改其权限等级
      *
-     * @param convert
+     * @param member
      */
     @Transactional(readOnly = false)
     @Override
-    public void updateCustomerLevel(Member convert) {
-        Integer level = convert.getLevel();
-        Integer mId = convert.getId();
-////        Double upgrade = convert.getUpgrade();
-//        Double nextUpgrade = memberMapper.queryNextUpgradeByUpgrade(upgrade);
-//        List<Integer> cIds = customerMapper.queryIdsByUpgrade(upgrade, nextUpgrade);
-//        for (Integer cId : cIds) {
-//            customerMapper.updateCustomerMember(cId, mId);
-//            customerMapper.updateCustomerLevelById(cId, level);
-//            customerDetailsMapper.updateLevelBycId(cId, level);
+    public void updateCustomerLevel(Member member) {
 
+        MemberSum memberSum = memberMapper.queryNextUpgradeByUpgrade(member.getUpgrade());
+        List<MemberDAO> maps = customerMapper.queryIdAndSumByUpgrade(member.getUpgrade(), memberSum.getUpgrade());
+        for (MemberDAO map : maps) {
+            customerMapper.updateMIdById(map.getId(), member.getId());
         }
+    }
 
     /**
      * 根据id 删除会员等级
+     *
      * @param id 会员等级id
      */
     @Transactional(readOnly = false)
     @Override
     public void deleteMember(Integer id) {
-        /**
-         * 查找当前等级下所有的cid
-         * 查询出客户的总消费
-         * 设置等级
-         */
-        List<Integer> cIdList = customerMapper.queryCIdsByMId(id);
-        if (cIdList != null || cIdList.size() <= 0) {
-            for (Integer cId : cIdList) {
-                Double sum = customerMapper.querySumByCId(cId);
+        Member member = memberMapper.selectById(id);
+        MemberSum memberSumNext = memberMapper.queryNextUpgradeByUpgrade(member.getUpgrade());
+        MemberSum memberSumFront = memberMapper.queryFrontUpgradeByUpgrade(member.getUpgrade());
+
+        List<MemberDAO> memberDAOS = new ArrayList<>();
+        if (Objects.isNull(memberSumNext)) {
+
+            BigDecimal front = memberSumFront.getUpgrade();
+            //如果下一个是空，则修改大于等于上一个值的客户
+            memberDAOS = customerMapper.queryIdAndSumByFront(front);
+
+        } else if (Objects.isNull(memberSumFront)) {
+            BigDecimal next = memberSumNext.getUpgrade();
+            //如果上一个是空 则修改小于 小于下一个值的
+            memberDAOS = customerMapper.queryIdAndSumByNext(next);
+        } else {
+            //其他则全部修改
+            BigDecimal front = memberSumFront.getUpgrade();
+            BigDecimal next = memberSumNext.getUpgrade();
+            memberDAOS = customerMapper.queryIdAndSumByUpgrade(front, next);
+        }
+
+
+        if (memberDAOS.size() != 0) {
+            for (MemberDAO memberDAO : memberDAOS) {
+                customerMapper.updateMIdById(memberDAO.getId(), memberSumFront.getId());
             }
+        }
+
+        memberMapper.deleteById(member);
+    }
+
+
+    @Transactional(readOnly = false)
+    @Override
+    public Member queryOneByMemberName(String memberName) {
+        return memberMapper.queryMemberByMemberName(memberName);
+    }
+
+
+    @Transactional(readOnly = false)
+    @Override
+    public ApiResponses<MemberImgDTO> uploadImg(HttpServletResponse response, MultipartFile file, ImagesEnum type) {
+        MemberImgDTO imageDTO = new MemberImgDTO();
+        try {
+            String originalFilename = file.getOriginalFilename();
+            String fileExtend = originalFilename.substring(originalFilename.lastIndexOf("."));
+            //默认不指定key的情况下，以文件内容的hash值作为文件名
+            String fileKey = UUID.randomUUID().toString().replace("-", "") + fileExtend;
+            String imgUrl = qiniuService.upload(file.getInputStream(), fileKey);
+            if (imgUrl.equals(null)) {
+                return success(response, HttpStatus.BAD_REQUEST, null);
+            } else {
+                Image baseImg = new Image();
+                baseImg.setImgUrl(imgUrl);
+                baseImg.setCreateUid(currentUid());
+                baseImg.setType(type);
+                imageService.save(baseImg);
+                imageDTO.setImgId(baseImg.getId());
+                imageDTO.setImgUrl(imgUrl);
+                return success(response, HttpStatus.OK, imageDTO);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return success(response, HttpStatus.BAD_REQUEST, null);
         }
     }
 }

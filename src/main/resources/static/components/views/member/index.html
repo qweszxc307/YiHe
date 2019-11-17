@@ -1,0 +1,156 @@
+<style>
+    .layui-table-cell {
+        height: auto;
+        line-height: 28px;
+    }
+</style>
+<div class="layui-card">
+    <div class="layui-card-header">
+        <h2 class="header-title">会员管理</h2>
+        <span class="layui-breadcrumb pull-right">
+          <a href="#!console">首页</a>
+          <a><cite>会员</cite></a>
+        </span>
+    </div>
+    <div class="layui-card-body">
+        <!-- 表格顶部操作列 -->
+        <script type="text/html" id="member-toolbar">
+            <div class="layui-btn-container">
+                {{# if({{addShow}} == true){ }}
+                <button class="layui-btn layui-btn-normal layui-btn-sm" lay-event="add"><i
+                        class="layui-icon">&#xe654;</i>添加
+                </button>
+                {{# } }}
+            </div>
+        </script>
+        <!-- 数据表格 -->
+        <table class="layui-table" id="member-table" lay-filter="member-table"></table>
+    </div>
+</div>
+
+
+<!-- 表格操作列 -->
+<script type="text/html" id="member-table-bar">
+    {{#  if({{updateShow}} == true){ }}
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="update">修改</a>
+    {{#  } }}
+    {{#  if({{deleteShow}} == true){ }}
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>
+    {{#  } }}
+
+</script>
+
+<script>
+    layui.use(['form', 'table', 'config', 'crown'], function () {
+        var form = layui.form;
+        var table = layui.table;
+        var config = layui.config;
+        var layer = layui.layer;
+        var crown = layui.crown;
+        var $ = layui.jquery;
+        $('#member-toolbar').vm({
+            addShow: crown.hasPerm("member:add")
+        });
+        $('#member-table-bar').vm({
+            deleteShow: crown.hasPerm("member:delete"),
+            updateShow: crown.hasPerm("member:update")
+        });
+        //渲染表格
+        var memberTable = table.render({
+            elem: '#member-table',
+            toolbar:'#member-toolbar',
+            url: config.serverUrl + '/member',
+            request: config.request,
+            parseData: config.parseData,
+            response: config.response,
+            headers: {Authorization: config.getToken()},
+            page: true,
+            cols: [[
+                {field: 'id', width: 60, title: 'ID', hide: true},
+                {field: 'level', align: 'center', width: 100, sort: true, title: '会员等级值'},
+                {field: 'name', align: 'center', sort: true, title: '会员名称'},
+                {
+                    field: 'backImage', align: 'center',
+                    templet: function (d) {
+                        return "<img  width='100px' onclick='window.open(\"http://" + d.backImage + "\")' title='点击预览图片' style='cursor: pointer;' src='" + "http://" + d.backImage + "\'\>"
+                    }, title: '会员卡背景图'
+                },
+                {field: 'upgrade', align: 'center', sort: true, title: '升级条件'},
+                {
+                    field: 'special', align: 'center',
+                    templet: function (d) {
+                        return "<img  width='100px' onclick='window.open(\"http://" + d.special + "\")' title='点击预览图片' style='cursor: pointer;' src='" + "http://" + d.special + "\'\>"
+                    }, title: '会员特权图'
+                },
+                {align: 'center', toolbar: '#member-table-bar', title: '操作'}
+            ]]
+        });
+        // 表格顶部操作列
+        table.on('toolbar(member-table)', function (obj) {
+            if (obj.event === 'add') {
+                showEditModel();
+            }
+        });
+
+
+
+        //显示表单弹窗
+        var showEditModel = function (data) {
+            if (data) {
+                crown.get('/member/' + data.id, {async:false}, function (data) {
+                    crown.putTempData('t_member', data.result);
+                });
+            }
+            crown.popupCenter({
+                type:1,
+                resize:true,
+                title: data ? '添加会员' : '修改会员',
+                area:['80%','80%'],
+                offset: 'auto',
+                path: '/components/views/member/form.html',
+                finish: function () {
+                    memberTable.reload('member-table', {});
+                }
+            });
+        };
+
+
+        // 表格操作列事件
+        table.on('tool(member-table)', function (obj) {
+            var data = obj.data;
+            var layEvent = obj.event;
+
+            if (layEvent === 'update') {
+                // 修改
+                showEditModel(data);
+            }else if (layEvent === 'delete') {
+                // 删除
+                doDelete(obj);
+            }
+        });
+
+            // 删除
+            var doDelete = function (obj) {
+                layer.confirm('确定要删除吗？', function (i) {
+                    layer.close(i);
+                    layer.load(2);
+                    crown.delete('/member/' + obj.data.id, {}, function () {
+                        layer.closeAll('loading');
+                        layer.msg('删除成功', {icon: 1});
+                        obj.del();
+                    });
+                });
+            };
+
+
+        // 搜索按钮点击事件
+        $('#brand-btn-search').click(function () {
+            memberTable.reload({where: crown.getSearchForm()});
+        });
+
+
+
+
+    });
+
+</script>

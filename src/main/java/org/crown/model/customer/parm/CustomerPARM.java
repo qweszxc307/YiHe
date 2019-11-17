@@ -50,7 +50,7 @@ public class CustomerPARM extends BaseModel {
 
     @NotNull(groups = Status.class, message = "用户等级不能为空")
     @ApiModelProperty("用户等级名称")
-    private String memberName;
+    private String member;
 
     public interface Create {
 

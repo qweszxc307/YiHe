@@ -26,8 +26,10 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.crown.common.annotations.Resources;
 import org.crown.enums.AuthTypeEnum;
+import org.crown.enums.ImagesEnum;
 import org.crown.framework.responses.ApiResponses;
 import org.crown.model.member.dto.MemberDTO;
+import org.crown.model.member.dto.MemberImgDTO;
 import org.crown.model.member.entity.Member;
 import org.crown.model.member.parm.MemberPARM;
 import org.crown.service.member.IMemberService;
@@ -36,9 +38,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
-
 import io.swagger.annotations.Api;
 import org.crown.framework.controller.SuperController;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * <p>
@@ -61,15 +65,23 @@ public class MemberRestController extends SuperController {
     public ApiResponses<IPage<MemberDTO>> page() {
         return success(memberService.query().page(this.<Member>getPage()).convert(e -> e.convert(MemberDTO.class)));
     }
-
+    @Resources(auth = AuthTypeEnum.AUTH)
+    @ApiOperation("查询单个会员等级")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "会员等级id", required = true, paramType = "path")
+    })
+    @GetMapping("/{id}")
+    public ApiResponses<MemberDTO> get(@PathVariable("id") Integer id) {
+        return success(memberService.getById(id).convert(MemberDTO.class));
+    }
 
     @Resources(auth = AuthTypeEnum.OPEN)
     @ApiOperation(value = "新增会员等级")
     @PostMapping
     public ApiResponses<Void> create(@RequestBody @Validated(MemberPARM.Create.class) MemberPARM memberPARM) {
-        Member convert = memberPARM.convert(Member.class);
-        memberService.save(convert);
-        memberService.updateCustomerLevel(convert);
+        Member member = memberPARM.convert(Member.class);
+        memberService.save(member);
+        memberService.updateCustomerLevel(member);
         return success(HttpStatus.CREATED);
     }
     /**
@@ -97,6 +109,13 @@ public class MemberRestController extends SuperController {
     public ApiResponses<Void> delete(@PathVariable("id") Integer id) {
         memberService.deleteMember(id);
         return success();
+    }
+
+    @Resources(auth = AuthTypeEnum.AUTH)
+    @ApiOperation("上传单个图片")
+    @PostMapping(value = "/upload")
+    public ApiResponses<MemberImgDTO> create(HttpServletResponse httpServletResponse, MultipartFile file) {
+        return memberService.uploadImg(httpServletResponse,file, ImagesEnum.MEMBER_PRIVILEGE_IMAGE);
     }
 
 }
