@@ -166,7 +166,7 @@ public class SuperGenerator {
                 .setDriverName("com.mysql.cj.jdbc.Driver")
                 .setUsername("boostech")
                 .setPassword("admin")
-                .setUrl("jdbc:mysql://127.0.0.1:3306/zwh?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8&useSSL=false");
+                .setUrl("jdbc:mysql://127.0.0.1:3306/yihe?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8&useSSL=false");
     }
 
     /**

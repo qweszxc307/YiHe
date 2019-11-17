@@ -20,6 +20,7 @@
  */
 package org.crown.controller.system;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -91,7 +92,11 @@ public class ResourceRestController extends SuperController {
     @ApiOperation(value = "查询所有资源")
     @GetMapping("/resources")
     public ApiResponses<List<Resource>> list() {
-        return success(resourceService.list());
+        return success(
+                resourceService.query()
+                .orderByAsc(Resource::getMethod)
+                .list()
+        );
     }
 
     @Resources(auth = AuthTypeEnum.AUTH)

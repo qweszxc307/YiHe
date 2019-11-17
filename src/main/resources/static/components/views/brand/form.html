@@ -1,0 +1,124 @@
+<!-- brand表单弹窗 -->
+<form id="product-form" lay-filter="product-form" class="layui-form model-form" style="padding-right:0px;height:100%">
+    <div style=" height:80%;overflow: auto;padding-right:10px;padding-left:10px">
+        <input name="id" type="hidden"/>
+        <input name="status" type="hidden"/>
+        <input name="imageId" type="hidden"/>
+        <input name="imgUrl" type="hidden"/>
+        <div class="layui-form-item">
+            <label class="layui-form-label">序号</label>
+            <div class="layui-input-block">
+                <input name="orderNum" placeholder="请输入序号" type="text" class="layui-input" lay-verify="required|number"/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">品牌名称</label>
+            <div class="layui-input-block">
+                <input id="name" name="name" placeholder="请输入品牌名称" type="text" class="layui-input" maxlength="20" lay-verify="required"/>
+            </div>
+        </div>
+        <div style="padding: 10px; background-color: #F1F1F1;">
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-md12">
+                    <div class="layui-card">
+                        <div class="layui-card-header">品牌图片</div>
+                        <div class="layui-card-body">
+                            <div class="layui-upload" >
+                                <button type="button" class="layui-btn" id="brand_img" style="margin-left: 20px;">上传品牌图片</button>
+                                <div class="layui-upload-list" style="text-align: center">
+                                    <img class="layui-upload-img" id="brand_img_preview" style="max-width: 100%;max-height: 500px;vertical-align: middle;">
+                                    <p id="brand_img_txt"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item model-form-footer" style="margin-top:10px;width:97%">
+        <button class="layui-btn layui-btn-primary close" type="button">取消</button>
+        <button class="layui-btn" lay-filter="brand-form-submit" lay-submit>保存</button>
+    </div>
+</form>
+
+<script>
+    layui.use(['layer', 'crown','form','upload'], function () {
+        var $ = layui.jquery
+            ,upload = layui.upload;
+        var crown = layui.crown;
+        var config = layui.config;
+        var layer = layui.layer;
+        var form = layui.form;
+        var imgId;
+        var brand = crown.getTempData('t_brand');
+        if(brand){
+            crown.fromVal('brand-form', brand);
+            $("#form-submit").hide();
+            imgId = brand.imageId;
+            if(brand.imgUrl){
+                $('#brand_img_preview').attr('src', "http://"+brand.imgUrl); //图片链接（base64）
+            }
+        }
+        //品牌图片上传
+        var uploadBrandImg = upload.render({
+            elem: '#brand_img'
+            ,url: 'brand/upload'
+            ,headers: {Authorization: config.getToken()}
+            ,before: function(obj){
+                layer.load(2);
+                //预读本地文件示例，不支持ie8
+                obj.preview(function(index, file, result){
+                    $('#brand_img_preview').attr('src', result); //图片链接（base64）
+                });
+            }
+            ,done: function(res){
+                layer.closeAll('loading');
+                ////上传成功
+                var data = res.result;
+                if(data.id){
+                    imgId = data.id;
+                    return layer.msg('上传成功');
+                }
+                //如果上传失败
+            }
+            ,error: function(){
+                layer.closeAll('loading');
+                //演示失败状态，并实现重传
+                var demoText = $('#brand_img_txt');
+                demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+                demoText.find('.demo-reload').on('click', function(){
+                    uploadBrandImg.upload();
+                });
+            }
+        });
+
+        // 表单提交事件
+        form.on('submit(brand-form-submit)', function (data) {
+            layer.load(2);
+            if (data.field.id) {
+                data.field.imageId = imgId.toString();
+                crown.put('/brand/' + data.field.id, {data: data.field}, function () {
+                    layer.closeAll('loading');
+                    layer.msg('修改成功', {icon: 1});
+                    crown.finishPopupCenter();
+                });
+            } else {
+                //若已经上传图片
+                if(!imgId){
+                    layer.msg('请上传图片！');
+                    layer.closeAll('loading');
+                    return false;
+                }
+                data.field.imageId = imgId.toString();
+                data.field.status = 0;
+                crown.post('/brand', {data:data.field}, function () {
+                    layer.closeAll('loading');
+                    layer.msg('添加成功', {icon: 1});
+                    crown.finishPopupCenter();
+                });
+            }
+            return false;
+        });
+    })
+</script>

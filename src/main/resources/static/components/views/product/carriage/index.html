@@ -1,0 +1,172 @@
+<style>
+    .layui-table-cell {
+        height: auto;
+        line-height: 28px;
+    }
+</style>
+<div class="layui-card">
+    <div class="layui-card-header">
+        <h2 class="header-title">运费策略管理</h2>
+        <span class="layui-breadcrumb pull-right">
+          <a href="#!console">运费策略管理</a>
+          <a><cite>运费策略管理</cite></a>
+        </span>
+    </div>
+    <div class="layui-card-body">
+        <!-- 表格顶部操作列 -->
+        <script type="text/html" id="carriage-toolbar">
+            <div class="layui-btn-container">
+                {{# if({{addShow}} == true){ }}
+                <button class="layui-btn layui-btn-normal layui-btn-sm" lay-event="add"><i
+                        class="layui-icon">&#xe654;</i>添加
+                </button>
+                {{# } }}
+            </div>
+        </script>
+        <table class="layui-table" id="carriage-table" lay-filter="carriage-table"></table>
+    </div>
+</div>
+
+<!-- 表格操作列 -->
+<script type="text/html" id="carriage-table-bar">
+    {{#  if({{editShow}} == true){ }}
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">编辑</a>
+    {{#  } }}
+    {{#  if({{manageShow}} == true){ }}
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="manage">管理</a>
+    {{#  } }}
+    {{#  if({{deleteShow}} == true){ }}
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    {{#  } }}
+</script>
+
+<!-- 表格状态列 -->
+<script type="text/html" id="carriage-tpl-status">
+    <input type="checkbox" lay-filter="carriage-tpl-status" value="{{d.id}}" lay-skin="switch"
+           lay-text="正常|禁用" {{d.status==0?'checked':''}}/>
+</script>
+
+<script>
+    layui.use(['form', 'table', 'config', 'crown'], function () {
+        var form = layui.form;
+        var table = layui.table;
+        var config = layui.config;
+        var layer = layui.layer;
+        var crown = layui.crown;
+        $('#carriage-toolbar').vm({
+            addShow: crown.hasPerm("carriage:add")
+        });
+        $('#carriage-table-bar').vm({
+            manageShow: crown.hasPerm("carriage:manage"),
+            editShow: crown.hasPerm("carriage:edit"),
+            deleteShow: crown.hasPerm("carriage:delete")
+        });
+        // 渲染表格
+        var carriageTable = table.render({
+            elem: '#carriage-table',
+            toolbar: '#carriage-toolbar',
+            url: config.serverUrl + '/carriage',
+            request: config.request,
+            parseData: config.parseData,
+            response: config.response,
+            headers: {Authorization: config.getToken()},
+            page:true,
+            cols: [[
+                { type: 'numbers', title: '' },
+                {field: 'id', align: 'center', sort: true,title: 'id',hide:true},
+                {field: 'orderNum', align: 'center', sort: true, title: '序号'},
+                {field: 'name', align: 'center', sort: true, title: '运费策略模板名称'},
+                {align: 'center',toolbar: '#carriage-table-bar', title: '操作'}
+            ]]
+        });
+        // 表格顶部操作列
+        table.on('toolbar(carriage-table)', function (obj) {
+            if (obj.event === 'add') {
+                showEditModel();
+            }
+        });
+        // 表格操作列事件
+        table.on('tool(carriage-table)', function (obj) {
+            var data = obj.data;
+            var layEvent = obj.event;
+            if (layEvent === 'edit') {
+                // 修改
+                showEditModel(data);
+            }else if (layEvent === 'manage') {
+                // 管理
+                showManageModel(data);
+            }else if (layEvent === 'del') {
+                // 删除
+                doDelete(obj);
+            }
+        });
+
+        // 删除
+        var doDelete = function (obj) {
+            layer.confirm('确定要删除吗？', function (i) {
+                layer.close(i);
+                layer.load(2);
+                crown.delete('/carriage/' + obj.data.id, {}, function () {
+                    layer.closeAll('loading');
+                    layer.msg('删除成功', {icon: 1});
+                    obj.del();
+                });
+            });
+        };
+
+        //显示表单弹窗
+        var showEditModel = function (data) {
+            if (data) {
+                crown.get('/carriage/' + data.id, {async:false}, function (data) {
+                    crown.putTempData('t_carriage', data.result);
+                });
+            }
+            crown.popupCenter({
+                type:1,
+                resize:true,
+                title: "运费策略",
+                area:['80%','80%'],
+                offset: 'auto',
+                path: 'components/views/product/carriage/form.html',
+                finish: function () {
+                    carriageTable.reload('carriage-table', {});
+                }
+            });
+        };
+        //显示管理弹窗
+        var showManageModel = function (data) {
+            if (data) {
+                crown.get('/carriage/' + data.id, {async:false}, function (data) {
+                    crown.putTempData('t_carriage', data.result);
+                });
+            }
+            crown.popupCenter({
+                type:1,
+                resize:true,
+                title: "运费策略",
+                area:['100%','100%'],
+                offset: 'auto',
+                path: 'components/views/product/carriage/manage_form.html',
+                finish: function () {
+                    carriageTable.reload('carriage-table', {});
+                }
+            });
+        };
+
+
+        // 搜索按钮点击事件
+        $('#carriage-btn-search').click(function () {
+            carriageTable.reload({where: crown.getSearchForm()});
+        });
+
+        // 修改carriage状态
+        form.on('switch(carriage-tpl-status)', function (obj) {
+            layer.load(2);
+            crown.put('/carriage/' + obj.elem.value + '/status',
+                {data: {status: obj.elem.checked ? 0 : 1}}, function () {
+                    layer.closeAll('loading');
+                    layer.msg('用户状态更新成功', {icon: 1});
+                });
+        });
+    });
+</script>

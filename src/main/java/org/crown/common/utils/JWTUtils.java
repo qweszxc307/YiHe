@@ -69,6 +69,26 @@ public abstract class JWTUtils {
                 .signWith(SignatureAlgorithm.HS512, SECRET)
                 .compact();
     }
+    /**
+     * 微信生成token
+     *
+     * @param code
+     * @return
+     */
+    public static String generate(String code) {
+        Date nowDate = new Date();
+        //过期时间
+        Date expireDate = new Date(nowDate.getTime() + EXPIRE * 1000);
+        Map<String, Object> claims = new HashMap<>(1);
+        claims.put(UID, code);
+        return Jwts.builder()
+                .setClaims(claims)
+                .setIssuedAt(nowDate)
+                .setExpiration(expireDate)
+                .signWith(SignatureAlgorithm.HS512, SECRET)
+                .compact();
+    }
+
 
     /**
      * 解析Claims

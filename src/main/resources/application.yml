@@ -60,3 +60,8 @@ spring:
   aop:
     auto: true
     proxy-target-class: true
+qiniu:
+  accessKey: 4Xgx3ORBO0oMGaOTe4qNZLE3R9yK_X1irnadwNEL
+  secretKey: SGEQW42gGP09ecTgWEa65n1_H81XsXQ-EadDRh6z
+  bucket: boostech
+  prefix: q0lhgg606.bkt.clouddn.com

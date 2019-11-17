@@ -49,6 +49,7 @@ public enum MenuTypeEnum implements IEnum {
      */
     BUTTON(3);
 
+
     @EnumValue
     private final int value;
 

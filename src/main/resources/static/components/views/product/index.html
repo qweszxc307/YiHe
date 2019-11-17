@@ -1,0 +1,188 @@
+<style>
+    .layui-table-cell {
+        height: auto;
+        line-height: 28px;
+    }
+</style>
+<div class="layui-card">
+    <div class="layui-card-header">
+        <h2 class="header-title">产品管理</h2>
+        <span class="layui-breadcrumb pull-right">
+          <a href="#!console">产品管理</a>
+          <a><cite>产品管理</cite></a>
+        </span>
+    </div>
+    <div class="layui-card-body">
+        <!-- 表格顶部操作列 -->
+        <script type="text/html" id="product-toolbar">
+            <div class="layui-btn-container">
+                {{# if({{addShow}} == true){ }}
+                <button class="layui-btn layui-btn-normal layui-btn-sm" lay-event="add"><i
+                        class="layui-icon">&#xe654;</i>添加
+                </button>
+                {{# } }}
+            </div>
+        </script>
+        <table class="layui-table" id="product-table" lay-filter="product-table"></table>
+    </div>
+</div>
+
+<!-- 表格操作列 -->
+<script type="text/html" id="product-table-bar">
+    {{#  if({{detailShow}} == true){ }}
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">详情</a>
+    {{#  } }}
+    {{#  if({{editShow}} == true){ }}
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>
+    {{#  } }}
+    {{#  if({{deleteShow}} == true){ }}
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    {{#  } }}
+</script>
+
+<!-- 表格状态列 -->
+<script type="text/html" id="product-tpl-status">
+    <input type="checkbox" lay-filter="product-tpl-status" value="{{d.id}}" lay-skin="switch"
+           lay-text="正常|禁用" {{d.status==0?'checked':''}}/>
+</script>
+
+<script>
+    layui.use(['form', 'table', 'config', 'crown'], function () {
+        var form = layui.form;
+        var table = layui.table;
+        var config = layui.config;
+        var layer = layui.layer;
+        var crown = layui.crown;
+        $('#product-toolbar').vm({
+            addShow: crown.hasPerm("product:add")
+        });
+        $('#product-table-bar').vm({
+            detailShow: crown.hasPerm("product:detail"),
+            editShow: crown.hasPerm("product:edit"),
+            deleteShow: crown.hasPerm("product:delete")
+        });
+        // 渲染表格
+        var productTable = table.render({
+            elem: '#product-table',
+            toolbar: '#product-toolbar',
+            url: config.serverUrl + '/product',
+            request: config.request,
+            parseData: config.parseData,
+            response: config.response,
+            headers: {Authorization: config.getToken()},
+            page:true,
+            cols: [[
+                {field: 'id',  title: 'ID',hide: true},
+                {field: 'orderNum', width: 100, align: 'center', sort: true, title: '序号'},
+                {field: 'name', width: 160, align: 'center', sort: true, title: '品牌名称'},
+                {field: 'brandId', hide: true, align: 'center', sort: true, title: '品牌id'},
+                {field: 'productImgList', width: 360, align: 'center',templet: function (d) {
+                        var data = d.productImgList;
+                        var html = "";
+                        for(var i = 0 ;i< data.length;i++){
+                            var obj = data[i];
+                            if(obj.type == 2){
+                                html += "<img  width='100px' onclick='window.open(\"http://"+obj.imgUrl+"\")' title='点击预览产品图片' style='cursor: pointer;' src='"+"http://"+obj.imgUrl+"\'\></br>"
+                            }
+                        }
+                        return html;
+                    }, title: '产品图片'},
+                {field: 'productImgList', width: 160,align: 'center',templet: function (d) {
+                        var data = d.productImgList;
+                        var html = "";
+                        for(var i = 0 ;i< data.length;i++){
+                            var obj = data[i];
+                            if(obj.type == 1){
+                                html += "<img  width='100px' onclick='window.open(\"http://"+obj.imgUrl+"\")' title='点击预览产品图片' style='cursor: pointer;' src='"+"http://"+obj.imgUrl+"\'\></br>"
+                            }
+                        }
+                        return html;
+                    }, title: '品牌图片'},
+                {field: 'productImgList',width: 160, align: 'center',templet: function (d) {
+                        var data = d.productImgList;
+                        var html = "";
+                        for(var i = 0 ;i< data.length;i++){
+                            var obj = data[i];
+                            if(obj.type == 3){
+                                html += "<img  width='100px' onclick='window.open(\"http://"+obj.imgUrl+"\")' title='点击预览产品图片' style='cursor: pointer;' src='"+"http://"+obj.imgUrl+"\'\></br>"
+                            }
+                        }
+                        return html;
+                    }, title: '产品详情图片'},
+                {field: 'modelId',width: 160, align: 'center', sort: true, title: '模板id'},
+                {field: 'status', width: 160,align: 'center', sort: true,templet: '#product-tpl-status', title: '状态'},
+                {align: 'center',toolbar: '#product-table-bar', title: '操作'}
+            ]]
+        });
+        // 表格顶部操作列
+        table.on('toolbar(product-table)', function (obj) {
+            if (obj.event === 'add') {
+                showEditModel();
+            }
+        });
+        // 表格操作列事件
+        table.on('tool(product-table)', function (obj) {
+            var data = obj.data;
+            var layEvent = obj.event;
+            if (layEvent === 'detail') {
+                // 查看
+                showEditModel(data);
+            }
+            if (layEvent === 'edit') {
+                // 修改
+                showEditModel(data);
+            }else if (layEvent === 'del') {
+                // 删除
+                doDelete(obj);
+            }
+        });
+
+        // 删除
+        var doDelete = function (obj) {
+            layer.confirm('确定要删除吗？', function (i) {
+                layer.close(i);
+                layer.load(2);
+                crown.delete('/product/' + obj.data.id, {}, function () {
+                    layer.closeAll('loading');
+                    layer.msg('删除成功', {icon: 1});
+                    obj.del();
+                });
+            });
+        };
+
+        //显示表单弹窗
+        var showEditModel = function (data) {
+            if (data) {
+                crown.get('/product/' + data.id, {async:false}, function (data) {
+                    crown.putTempData('t_product', data.result);
+                });
+            }
+            crown.popupCenter({
+                type:1,
+                resize:true,
+                title: data ? '修改产品' : '添加产品',
+                area:['80%','80%'],
+                offset: 'auto',
+                path: 'components/views/product/form.html',
+                finish: function () {
+                    productTable.reload('product-table', {});
+                }
+            });
+        };
+
+        // 搜索按钮点击事件
+        $('#product-btn-search').click(function () {
+            productTable.reload({where: crown.getSearchForm()});
+        });
+
+        // 修改product状态
+        form.on('switch(product-tpl-status)', function (obj) {
+            layer.load(2);
+            crown.put('/product/' + obj.elem.value + '/status',
+                {data: {status: obj.elem.checked ? 0 : 1}}, function () {
+                    layer.closeAll('loading');
+                    layer.msg('用户状态更新成功', {icon: 1});
+                });
+        });
+    });
+</script>
