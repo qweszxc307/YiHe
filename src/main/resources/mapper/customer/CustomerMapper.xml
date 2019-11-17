@@ -4,7 +4,7 @@
 
 
     <select id="getMemberIdByLevel" resultType="Integer">
-select id from member where `level` = #{level};
+select id from `member` where `level` = #{level};
     </select>
 
     <update id="updateCustomerMember" parameterType="Integer">
@@ -46,7 +46,7 @@ select id from member where `level` = #{level};
 
 
     <select id="queryLevelBycId" resultType="String">
-        select m.`name` from member m,customer c
+        select m.`name` from `member` m,customer c
         <where>
             c.id = #{cId} and m.id = c.m_id
         </where>

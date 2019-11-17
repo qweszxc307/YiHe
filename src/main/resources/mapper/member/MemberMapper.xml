@@ -8,19 +8,19 @@
 </select>
 
     <select id="queryAllMember" parameterType="Member">
-    select id,level,name,back_image,upgrade,special,create_time,update_time from member;
+    select id,level,name,back_image,upgrade,special,create_time,update_time from `member`;
 </select>
 
     <select id="queryMemberIdByLevel" parameterType="Integer">
-        select id from member where `level` = #{level};
+        select id from `member` where `level` = #{level};
     </select>
 
     <select id="queryNextUpgradeByUpgrade" parameterType="java.math.BigDecimal" resultType="MemberSum">
-        SELECT id , `upgrade` FROM member WHERE `upgrade` > #{upgrade} ORDER BY `upgrade` LIMIT 0,1;
+        SELECT id , `upgrade` FROM `member` WHERE `upgrade` > #{upgrade} ORDER BY `upgrade` LIMIT 0,1;
     </select>
 
     <select id="queryFrontUpgradeByUpgrade" parameterType="java.math.BigDecimal" resultType="MemberSum">
-select id,`upgrade` from member where `upgrade` &lt; #{upgrade} order by `upgrade` desc limit 0,1;
+select id,`upgrade` from `member` where `upgrade` &lt; #{upgrade} order by `upgrade` desc limit 0,1;
     </select>
 
     <select id="queryMemberByMemberName" parameterType="String" resultType="Member">
