@@ -27,6 +27,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.crown.framework.model.BaseModel;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 
@@ -58,13 +59,13 @@ public class OrderDTO extends BaseModel {
     @ApiModelProperty(notes = "地址")
     private String address;
     @ApiModelProperty(notes = "快递单号")
-    private String logisticsNum;
+    private String logisticsNumber;
     @ApiModelProperty(notes = "运费")
-    private Double postFee;
+    private BigDecimal postFee;
     @ApiModelProperty(notes = "商品总价")
-    private Double totalFee;
+    private BigDecimal totalFee;
     @ApiModelProperty(notes = "实付金额")
-    private Double actualFee;
+    private BigDecimal actualFee;
     @ApiModelProperty(notes = "下单时间")
     private LocalDateTime createTime;
     @ApiModelProperty(notes = "支付时间")

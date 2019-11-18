@@ -29,6 +29,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.crown.framework.model.BaseModel;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 
@@ -39,7 +40,7 @@ import java.time.LocalDateTime;
  *
  * @author ykMa
  */
-@TableName("orders")
+@TableName("`order`")
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
@@ -47,35 +48,27 @@ public class Order extends BaseModel {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(notes = "id")
+    @ApiModelProperty(notes = "订单id")
     private Integer id;
     @ApiModelProperty(notes = "订单号")
     private String orderNum;
-    @ApiModelProperty(notes = "物流单号")
-    private String logisticsNum;
     @ApiModelProperty(notes = "订单类型：0普通订单，1活动订单")
     private String orderType;
-    @ApiModelProperty(notes = "收货人")
-    private String  addressee;
-    @ApiModelProperty(notes = "收货电话")
-    private String phone;
-    @ApiModelProperty(notes = "收货地址")
-    private String address;
     @ApiModelProperty(notes = "总金额")
-    private Double totalFee;
+    private BigDecimal totalFee;
     @ApiModelProperty(notes = "实付金额")
-    private Double actualFee;
+    private BigDecimal actualFee;
     @ApiModelProperty(notes = "活动id")
     private String promotionIds;
     @ApiModelProperty(notes = "支付类型：1在线支付，2货到付款")
     private Integer paymentType;
     @ApiModelProperty(notes = "邮费")
-    private Double postFee;
+    private BigDecimal postFee;
     @ApiModelProperty(notes = " 客户id")
     private Long customerId;
     @ApiModelProperty(notes = "发票类型：（0无发票，1普通发票，2电子发票，3增值税发票）")
     private Integer invoiceType;
-    @ApiModelProperty(notes = "订单状态：（1未付款，2已付款，未发货，3已发货，确认收货）")
+    @ApiModelProperty(notes = "订单状态：（1：未付款，2：已付款 未发货，3：已发货 未收货，4：已收货 未确认，5：确认收货 未评价，6：已评价）")
     private Integer status;
     @ApiModelProperty(notes = "下单时间")
     @TableField(fill = FieldFill.INSERT)
@@ -91,6 +84,7 @@ public class Order extends BaseModel {
     @ApiModelProperty(notes = "评价时间")
     private LocalDateTime commentTime;
     @ApiModelProperty(notes = "更新时间")
+
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updateTime;
 

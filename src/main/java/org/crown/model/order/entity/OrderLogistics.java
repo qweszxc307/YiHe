@@ -20,6 +20,8 @@
  */
 package org.crown.model.order.entity;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -65,8 +67,10 @@ public class OrderLogistics extends BaseModel {
     private String street;
     @ApiModelProperty(notes = "邮编")
     private Long postcode;
-    @ApiModelProperty(notes = "创建时间")
+    @TableField(fill = FieldFill.INSERT)
+     @ApiModelProperty(notes = "创建时间")
     private LocalDateTime createTime;
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     @ApiModelProperty(notes = "更新时间")
     private LocalDateTime updateTime;
 

@@ -72,14 +72,17 @@ public class OrderRestController extends SuperController {
                                               @RequestParam(value = "orderNum", required = false) String orderNum,
                                               @RequestParam(value = "beforeTime", required = false) String beforeTime,
                                               @RequestParam(value = "afterTime", required = false) String afterTime) {
-
-        return success(orderService.query()
+        IPage<OrderDTO> convert = orderService.query()
                 .eq(Objects.nonNull(status), Order::getStatus, status)
                 .eq(StringUtils.isNotEmpty(orderNum), Order::getOrderNum, orderNum)
                 .ge(StringUtils.isNotEmpty(beforeTime), Order::getCreateTime, beforeTime)
                 .le(StringUtils.isNotEmpty(afterTime), Order::getCreateTime, afterTime)
                 .page(this.<Order>getPage())
-                .convert(e -> e.convert(OrderDTO.class)));
+                .convert(e -> e.convert(OrderDTO.class));
+        if (convert.getRecords().size() != 0) {
+            convert.setRecords(orderService.setOrderDTO(convert.getRecords()));
+        }
+        return success(convert);
     }
 
 

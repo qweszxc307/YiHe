@@ -2,6 +2,7 @@ package org.crown.mapper.order;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.crown.framework.mapper.BaseMapper;
+import org.crown.model.order.dto.OrderDAO;
 import org.crown.model.order.entity.Order;
 
 import java.time.LocalDateTime;
@@ -17,4 +18,5 @@ import java.time.LocalDateTime;
 public interface OrderMapper extends BaseMapper<Order> {
 
 
+    OrderDAO queryLogisticsByOrderId(Integer id);
 }

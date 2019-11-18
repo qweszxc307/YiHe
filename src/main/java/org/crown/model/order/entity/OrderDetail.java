@@ -20,6 +20,8 @@
  */
 package org.crown.model.order.entity;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -44,23 +46,24 @@ import java.time.LocalDateTime;
 public class OrderDetail extends BaseModel {
 
     private static final long serialVersionUID = 1L;
-
+    @ApiModelProperty(notes = "订单详情id")
+    private Integer id;
     @ApiModelProperty(notes = "订单id")
     private Integer orderId;
-    @ApiModelProperty(notes = "sku商品id")
+    @ApiModelProperty(notes = "商品id")
     private Integer skuId;
     @ApiModelProperty(notes = "购买数量")
     private Integer num;
     @ApiModelProperty(notes = "商品标题")
     private String title;
-    @ApiModelProperty(notes = "商品动态属性键值集")
-    private String ownSpec;
     @ApiModelProperty(notes = "价格,单位：分")
     private Double price;
     @ApiModelProperty(notes = "商品图片")
     private String image;
+    @TableField(fill = FieldFill.INSERT)
     @ApiModelProperty(notes = "创建时间")
     private LocalDateTime createTime;
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     @ApiModelProperty(notes = "更新时间")
     private LocalDateTime updateTime;
 
