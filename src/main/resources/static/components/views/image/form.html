@@ -1,19 +1,30 @@
 <!-- user表单弹窗 -->
-<form id="image-form" lay-filter="image-form" class="layui-form model-form" style="padding-left: 45px;padding-bottom: 10px">
-    <div class="layui-upload">
-        <button type="button" class="layui-btn layui-btn-normal" id="testList">选择多文件</button>
-        <div class="layui-upload-list">
-            <table class="layui-table">
-                <thead>
-                <tr><th>文件名</th>
-                    <th>大小</th>
-                    <th>状态</th>
-                    <th>操作</th>
-                </tr></thead>
-                <tbody id="demoList"></tbody>
-            </table>
+<form id="image-form" lay-filter="image-form" class="layui-form model-form" style="padding-right:0px;height:100%">
+    <div style=" height:80%;overflow: auto;padding-right:10px;padding-left:10px">
+        <div class="layui-upload">
+            <!--<button type="button" class="layui-btn layui-btn-normal" id="testList">选择多文件</button>
+            <div class="layui-upload-list">
+                <table class="layui-table">
+                    <thead>
+                    <tr><th>文件名</th>
+                        <th>大小</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                    </tr></thead>
+                    <tbody id="demoList"></tbody>
+                </table>
+            </div>
+            <button type="button" class="layui-btn" id="testListAction">开始上传</button>-->
+            <button type="button" class="layui-btn" id="image" style="margin-left: 20px;">上传轮播图</button>
+            <div class="layui-upload-list">
+                <img class="layui-upload-img" id="image_preview" style="width: 100%">
+                <p id="image_txt"></p>
+            </div>
         </div>
-        <button type="button" class="layui-btn" id="testListAction">开始上传</button>
+    </div>
+    <div class="layui-form-item model-form-footer" style="margin-top:10px;width:97%">
+        <button class="layui-btn layui-btn-primary close" type="button">取消</button>
+        <button class="layui-btn" lay-filter="brand-form-submit" lay-submit>保存</button>
     </div>
 </form>
 
@@ -23,11 +34,51 @@
             ,upload = layui.upload;
         var crown = layui.crown;
         var config = layui.config;
-        $('#testListAction').vm({
+        var imageData = crown.getTempData("t_image");
+        debugger;
+        if(imageData){
+            crown.fromVal('image-form', imageData);
+            $("#form-submit").hide();
+            $('#image_preview').attr('src', "http://"+imageData.imgUrl); //图片链接（base64）
+        }
+        $('#image').vm({
             refreshShow: crown.hasPerm("image:add")
         });
+        //品牌图片上传
+        var uploadProductImg = upload.render({
+            elem: '#image'
+            ,url: 'image/upload'
+            ,headers: {Authorization: config.getToken()}
+            ,before: function(obj){
+                layer.load(2);
+                //预读本地文件示例，不支持ie8
+                obj.preview(function(index, file, result){
+                    $('#image_preview').attr('src', result); //图片链接（base64）
+                });
+            }
+            ,done: function(res){
+                layer.closeAll('loading');
+                ////上传成功
+                debugger;
+                if(res.status == 200){
+                    var data = res.result;
+                    imgId = data.id;
+                    return layer.msg('上传成功');
+                }
+                //如果上传失败
+            }
+            ,error: function(){
+                layer.closeAll('loading');
+                //演示失败状态，并实现重传
+                var demoText = $('#image_txt');
+                demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+                demoText.find('.demo-reload').on('click', function(){
+                    uploadProductImg.upload();
+                });
+            }
+        });
         //多文件列表示例
-        var demoListView = $('#demoList')
+        /*var demoListView = $('#demoList')
             ,uploadListIns = upload.render({
             elem: '#testList'
             ,url: 'image/upload'
@@ -80,6 +131,6 @@
                 tds.eq(2).html('<span style="color: #FF5722;">上传失败</span>');
                 tds.eq(3).find('.demo-reload').removeClass('layui-hide'); //显示重传
             }
-        });
+        });*/
     });
 </script>

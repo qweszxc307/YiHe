@@ -47,8 +47,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class CustomerServiceImpl extends BaseServiceImpl<CustomerMapper, Customer> implements ICustomerService {
     @Autowired
-    private CustomerMapper customerMapper;
-    @Autowired
     private CustomerDetailsMapper customerDetailsMapper;
     @Autowired
     private ILabelBrandService labelBrandService;
@@ -72,7 +70,7 @@ public class CustomerServiceImpl extends BaseServiceImpl<CustomerMapper, Custome
         Customer customer = getById(id);
         detailsDTO.setLastTime(customer.getLastTime());
         detailsDTO.setOrderNum(customer.getOrderNum());
-        detailsDTO.setMemberName(customerMapper.queryLevelBycId(id));
+        detailsDTO.setMemberName(baseMapper.queryLevelBycId(id));
         detailsDTO.setMemberNum(customer.getMemberNum());
         detailsDTO.setBrands(labelBrandService.queryLabelBrandDTOByCustomerId(id));
         return detailsDTO;
@@ -80,7 +78,7 @@ public class CustomerServiceImpl extends BaseServiceImpl<CustomerMapper, Custome
 
     @Override
     public String queryLevelBycId(Integer cId) {
-        return customerMapper.queryLevelBycId(cId);
+        return baseMapper.queryLevelBycId(cId);
     }
 
     /**
@@ -92,11 +90,11 @@ public class CustomerServiceImpl extends BaseServiceImpl<CustomerMapper, Custome
     @Transactional(readOnly = false)
     @Override
     public void updateCustomerByMember(Integer id, CustomerPARM customerPARM) {
-        Customer customer = customerMapper.selectById(id);
+        Customer customer = baseMapper.selectById(id);
         String memberName = customerPARM.getMember();
         Member member = memberMapper.queryMemberByMemberName(memberName);
         customer.setMId(member.getId());
-        customerMapper.updateById(customer);
+        baseMapper.updateById(customer);
     }
 
 
