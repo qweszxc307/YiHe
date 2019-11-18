@@ -39,7 +39,7 @@ import java.util.List;
  * 客户详情表
  * </p>
  *
- * @author whZhang
+ * @author ykMa
  */
 @ApiModel
 @Data

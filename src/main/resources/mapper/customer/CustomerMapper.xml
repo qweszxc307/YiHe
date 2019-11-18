@@ -63,6 +63,7 @@ select id from `member` where `level` = #{level};
             </if>
         </where>
     </select>
+
     <select id="queryIdAndSumByFront" resultType="MemberDAO" parameterType="java.math.BigDecimal">
           select id,sum from customer where sum >= #{front}
     </select>
@@ -70,6 +71,7 @@ select id from `member` where `level` = #{level};
     <select id="queryIdAndSumByNext" resultType="MemberDAO" parameterType="java.math.BigDecimal">
           select id,sum from customer where sum &lt; #{next}
     </select>
+
     <update id="updateMIdById" parameterType="Integer">
         update customer set m_id = #{mId} where id = #{cId}
     </update>

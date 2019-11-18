@@ -36,7 +36,7 @@ import lombok.NoArgsConstructor;
  * 客户详情表
  * </p>
  *
- * @author whZhang
+ * @author ykMa
  */
 @TableName("customer_details")
 @Data

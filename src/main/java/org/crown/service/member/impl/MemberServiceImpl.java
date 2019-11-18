@@ -90,9 +90,20 @@ public class MemberServiceImpl extends BaseServiceImpl<MemberMapper, Member> imp
     public void updateCustomerLevel(Member member) {
 
         MemberSum memberSum = memberMapper.queryNextUpgradeByUpgrade(member.getUpgrade());
-        List<MemberDAO> maps = customerMapper.queryIdAndSumByUpgrade(member.getUpgrade(), memberSum.getUpgrade());
-        for (MemberDAO map : maps) {
-            customerMapper.updateMIdById(map.getId(), member.getId());
+        if (memberSum != null) {
+            List<MemberDAO> maps = customerMapper.queryIdAndSumByUpgrade(member.getUpgrade(), memberSum.getUpgrade());
+            if (maps.size() != 0) {
+                for (MemberDAO map : maps) {
+                    customerMapper.updateMIdById(map.getId(), member.getId());
+                }
+            }
+        }else {
+            List<MemberDAO> memberDAOS = customerMapper.queryIdAndSumByFront(member.getUpgrade());
+            if (memberDAOS.size() != 0) {
+                for (MemberDAO memberDAO : memberDAOS) {
+                    customerMapper.updateMIdById(memberDAO.getId(), member.getId());
+                }
+            }
         }
     }
 
@@ -112,15 +123,12 @@ public class MemberServiceImpl extends BaseServiceImpl<MemberMapper, Member> imp
         if (Objects.isNull(memberSumNext)) {
 
             BigDecimal front = memberSumFront.getUpgrade();
-            //如果下一个是空，则修改大于等于上一个值的客户
             memberDAOS = customerMapper.queryIdAndSumByFront(front);
 
         } else if (Objects.isNull(memberSumFront)) {
             BigDecimal next = memberSumNext.getUpgrade();
-            //如果上一个是空 则修改小于 小于下一个值的
             memberDAOS = customerMapper.queryIdAndSumByNext(next);
         } else {
-            //其他则全部修改
             BigDecimal front = memberSumFront.getUpgrade();
             BigDecimal next = memberSumNext.getUpgrade();
             memberDAOS = customerMapper.queryIdAndSumByUpgrade(front, next);

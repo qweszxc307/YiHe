@@ -36,7 +36,7 @@ import lombok.NoArgsConstructor;
  * 用户会员等级中间表
  * </p>
  *
- * @author whZhang
+ * @author ykMa
  */
 
 @Data

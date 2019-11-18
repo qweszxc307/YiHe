@@ -67,8 +67,8 @@
             page: true,
             cols: [[
                 {field: 'id', width: 60, title: 'ID', hide: true},
-                {field: 'level', align: 'center', width: 100, sort: true, title: '会员等级值'},
-                {field: 'name', align: 'center', sort: true, title: '会员名称'},
+                {field: 'level', align: 'center', width: 100, sort: true, title: '会员等级'},
+                {field: 'name', align: 'center', sort: true, title: '等级名称'},
                 {
                     field: 'backImage', align: 'center',
                     templet: function (d) {
@@ -104,7 +104,7 @@
             crown.popupCenter({
                 type:1,
                 resize:true,
-                title: data ? '添加会员' : '修改会员',
+                title: data ? '修改会员' : '添加会员',
                 area:['80%','80%'],
                 offset: 'auto',
                 path: '/components/views/member/form.html',

@@ -41,7 +41,7 @@ import lombok.NoArgsConstructor;
  *
  * @author ykMa
  */
-@TableName("member")
+@TableName("`member`")
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
