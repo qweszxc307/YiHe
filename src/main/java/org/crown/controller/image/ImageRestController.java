@@ -73,7 +73,9 @@ public class ImageRestController extends SuperController {
     @GetMapping
     public ApiResponses<IPage<ImageDTO>> page() {
         return success(
-                imageService.page(this.<Image>getPage())
+                imageService.query()
+                        .eq(Image::getType,0)
+                        .page(this.<Image>getPage())
                         .convert(e -> e.convert(ImageDTO.class))
         );
     }

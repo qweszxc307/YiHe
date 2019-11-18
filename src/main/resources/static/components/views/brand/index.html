@@ -78,8 +78,8 @@
                 {field: 'name', align: 'center', sort: true, title: '品牌名称'},
                 {field: 'imageUrl', align: 'center',
                     templet: function (d) {
-                        return "<img  width='100px' onclick='window.open(\"http://"+d.imgUrl+"\")' title='点击预览产品图片' style='cursor: pointer;' src='"+"http://"+d.imgUrl+"\'\>"
-                    }, title: '产品图片'
+                        return "<img  width='100px' onclick='window.open(\"http://"+d.imgUrl+"\")' title='点击预览品牌图片' style='cursor: pointer;' src='"+"http://"+d.imgUrl+"\'\>"
+                    }, title: '品牌图片'
                 },
                 {field: 'status', align: 'center', sort: true, templet: '#brand-tpl-status', title: '状态'},
                 {align: 'center', toolbar: '#brand-table-bar', title: '操作'}

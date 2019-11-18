@@ -29,12 +29,12 @@ public class BrandDTO extends Convert {
     private Integer id;
     @ApiModelProperty(notes = "品牌名")
     private String name;
-    @ApiModelProperty(notes = "产品图片")
+    @ApiModelProperty(notes = "品牌图片")
     private String imgUrl;
     @ApiModelProperty(notes = "序号")
     private Integer orderNum;
     @ApiModelProperty(notes = "状态 0：禁用 1：正常")
     private StatusEnum status;
-    @ApiModelProperty(notes = "产品图片Id")
+    @ApiModelProperty(notes = "品牌图片Id")
     private Integer imageId;
 }

@@ -44,10 +44,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 import java.util.UUID;
 
-import static org.crown.common.utils.ApiUtils.currentUid;
 import static org.crown.framework.responses.ApiResponses.success;
 
 /**
@@ -77,7 +75,6 @@ public class BrandServiceImpl extends BaseServiceImpl<BrandMapper, Brand>impleme
         ApiAssert.isTrue(ErrorCodeEnum.BRAND_ALREADY_EXISTS, count == 0);
         Brand brand = brandPARM.convert(Brand.class);
         //默认启用
-        brand.setCreateUid(currentUid());
         brand.setStatus(StatusEnum.NORMAL);
         brandService.save(brand);
         BrandImage brandImage = new BrandImage();
@@ -123,7 +120,6 @@ public class BrandServiceImpl extends BaseServiceImpl<BrandMapper, Brand>impleme
             }else{
                 Image baseImg = new Image();
                 baseImg.setImgUrl(imgUrl);
-                baseImg.setCreateUid(currentUid());
                 imageService.save(baseImg);
                 imageDTO.setImgId(baseImg.getId());
                 imageDTO.setImgUrl(imgUrl);
