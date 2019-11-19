@@ -21,35 +21,41 @@
 package org.crown.controller.product;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.crown.common.annotations.Resources;
+import org.crown.common.utils.TypeUtils;
 import org.crown.enums.AuthTypeEnum;
 import org.crown.enums.ImagesEnum;
+import org.crown.framework.controller.SuperController;
 import org.crown.framework.responses.ApiResponses;
-import org.crown.model.brand.dto.BrandDTO;
-import org.crown.model.brand.dto.BrandImgDTO;
-import org.crown.model.brand.parm.BrandPARM;
 import org.crown.model.image.dto.ImageDTO;
-import org.crown.model.image.entity.Image;
 import org.crown.model.product.dto.ProductDTO;
 import org.crown.model.product.dto.ProductImgDTO;
+import org.crown.model.product.dto.ProductPriceDTO;
 import org.crown.model.product.entity.Product;
+import org.crown.model.product.entity.ProductCarriage;
+import org.crown.model.product.entity.ProductImage;
+import org.crown.model.product.entity.ProductPrice;
 import org.crown.model.product.parm.ProductPARM;
 import org.crown.service.image.IImageService;
+import org.crown.service.product.IProductCarriageService;
+import org.crown.service.product.IProductImageService;
+import org.crown.service.product.IProductPriceService;
 import org.crown.service.product.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
-
-import io.swagger.annotations.Api;
-import org.crown.framework.controller.SuperController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <p>
@@ -67,6 +73,12 @@ public class ProductRestController extends SuperController {
     private IProductService productService;
     @Autowired
     private IImageService imageService;
+    @Autowired
+    private IProductCarriageService productCarriageService;
+    @Autowired
+    private IProductPriceService productPriceService;
+    @Autowired
+    private IProductImageService productImageService;
 
     @Resources(auth = AuthTypeEnum.AUTH)
     @ApiOperation("查询所有产品")
@@ -87,6 +99,20 @@ public class ProductRestController extends SuperController {
     public ApiResponses<ProductDTO> get(@PathVariable("id") Integer id) {
             Product product = productService.getById(id);
             ProductDTO productDTO = product.convert(ProductDTO.class);
+            /*获取产品运费策略模板*/
+            ProductCarriage productCarriage = productCarriageService.query().eq(ProductCarriage::getPid,id).getOne();
+            /*获取产品价格*/
+            List<ProductPrice> productPriceList =  productPriceService.query().eq(ProductPrice::getPid,id).list();
+            List<ProductPriceDTO> productPriceDTOList = new ArrayList<>();
+            for(ProductPrice productPrice : productPriceList){
+                ProductPriceDTO productPriceDTO = productPrice.convert(ProductPriceDTO.class);
+                productPriceDTOList.add(productPriceDTO);
+            }
+            /*获取产品相关图片*/
+            List<ProductImgDTO> productImgDTOList = productImageService.getProductImagesById(id);
+            productDTO.setProductImgList(productImgDTOList);
+            productDTO.setCarriageId(productCarriage.getCid());
+            productDTO.setProductPriceList(productPriceDTOList);
             return success(productDTO);
     }
 
@@ -106,6 +132,7 @@ public class ProductRestController extends SuperController {
 
     @DeleteMapping("/{id}")
     public ApiResponses<Void> delete(@PathVariable("id") Integer id) {
+            productService.deletProductById(id);
             return success(HttpStatus.NO_CONTENT);
     }
 
@@ -115,7 +142,8 @@ public class ProductRestController extends SuperController {
             @ApiImplicitParam(name = "id", value = "产品ID", required = true, paramType = "path")
     })
     @PutMapping("/{id}")
-    public ApiResponses<Void> update(@PathVariable("id") Integer id) {
+    public ApiResponses<Void> update(@PathVariable("id") Integer id,@RequestBody @Validated  ProductPARM productPARM) {
+            productService.updateProductById(id,productPARM);
             return success();
     }
 

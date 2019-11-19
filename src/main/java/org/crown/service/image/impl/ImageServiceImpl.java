@@ -20,15 +20,15 @@
  */
 package org.crown.service.image.impl;
 
-import com.qiniu.common.QiniuException;
 import org.crown.common.utils.QiNiuUtils;
 import org.crown.enums.ImagesEnum;
+import org.crown.enums.StatusEnum;
 import org.crown.framework.responses.ApiResponses;
+import org.crown.framework.service.impl.BaseServiceImpl;
+import org.crown.mapper.image.ImageMapper;
 import org.crown.model.image.dto.ImageDTO;
 import org.crown.model.image.entity.Image;
-import org.crown.mapper.image.ImageMapper;
 import org.crown.service.image.IImageService;
-import org.crown.framework.service.impl.BaseServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -38,7 +38,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 import java.util.UUID;
 
-import static org.crown.common.utils.ApiUtils.currentUid;
 import static org.crown.framework.responses.ApiResponses.success;
 
 /**
@@ -71,6 +70,7 @@ public class ImageServiceImpl extends BaseServiceImpl<ImageMapper, Image>impleme
                 Image baseImg = new Image();
                 baseImg.setImgUrl(imgUrl);
                 baseImg.setType(type);
+                baseImg.setStatus(StatusEnum.NORMAL);
                 imageService.save(baseImg);
                 imageDTO.setId(baseImg.getId());
                 imageDTO.setImgUrl(imgUrl);

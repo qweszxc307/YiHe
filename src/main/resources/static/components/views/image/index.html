@@ -58,7 +58,7 @@
             deleteShow: crown.hasPerm("image:delete")
         });
         // 渲染表格
-        var userTable = table.render({
+        var imageTable = table.render({
             elem: '#image-table',
             toolbar: '#image-toolbar',
             url: config.serverUrl + '/image',
@@ -73,6 +73,7 @@
                         return  "<img  width='100px' onclick='window.open(\"http://"+d.imgUrl+"\")' title='点击预览产品图片' style='cursor: pointer;' src='"+"http://"+d.imgUrl+"\'\></br>"
                     }
                 },
+                {field: 'status', align: 'center', sort: true, templet: '#image-tpl-status', title: '状态'},
                 {align: 'center', toolbar: '#image-table-bar', title: '操作'}
             ]]
         });
@@ -122,14 +123,14 @@
                 offset: 'auto',
                 path: 'components/views/image/form.html',
                 finish: function () {
-                    userTable.reload('image-table', {});
+                    imageTable.reload('image-table', {});
                 }
             });
         };
 
         // 搜索按钮点击事件
         $('#image-btn-search').click(function () {
-            userTable.reload({where: crown.getSearchForm()});
+            imageTable.reload({where: crown.getSearchForm()});
         });
 
         // 修改image状态

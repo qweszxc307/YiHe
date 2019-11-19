@@ -21,6 +21,7 @@
 package org.crown.service.product;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import io.swagger.models.auth.In;
 import org.crown.enums.StatusEnum;
 import org.crown.model.product.dto.ProductDTO;
 import org.crown.model.product.entity.Product;
@@ -52,11 +53,24 @@ public interface IProductService extends BaseService<Product> {
     void createProduct(ProductPARM productPARM);
 
     /**
-     * 修改菜单状态
+     * 修改产品状态
      *
      * @param productId
      * @param status
      */
     void updateStatus(Integer productId, StatusEnum status);
+    /**
+     * 修改产品信息
+     *
+     * @param id
+     * @param productPARM
+     */
+    void updateProductById(Integer id,ProductPARM productPARM);
+    /**
+     * 删除产品信息
+     *
+     * @param id
+     */
+    void deletProductById(Integer id);
 
 }

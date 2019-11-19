@@ -21,26 +21,21 @@
 package org.crown.controller.image;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.apache.commons.codec.digest.Md5Crypt;
+import org.apache.ibatis.annotations.Param;
 import org.crown.common.annotations.Resources;
+import org.crown.common.utils.TypeUtils;
 import org.crown.enums.AuthTypeEnum;
 import org.crown.enums.ImagesEnum;
-import org.crown.enums.StatusEnum;
 import org.crown.framework.controller.SuperController;
-import org.crown.framework.enums.ErrorCodeEnum;
 import org.crown.framework.responses.ApiResponses;
-import org.crown.framework.utils.ApiAssert;
 import org.crown.model.image.dto.ImageDTO;
 import org.crown.model.image.entity.Image;
 import org.crown.model.image.parm.ImagePARM;
-import org.crown.model.system.dto.UserDTO;
-import org.crown.model.system.entity.User;
-import org.crown.model.system.parm.UserPARM;
+import org.crown.model.system.parm.MenuPARM;
 import org.crown.service.image.IImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -50,8 +45,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
-import java.util.Objects;
 
 /**
  * <p>
@@ -106,6 +99,7 @@ public class ImageRestController extends SuperController {
     })
     @DeleteMapping("/{id}")
     public ApiResponses<Void> delete(@PathVariable("id") Integer id) {
+        imageService.removeById(id);
         return success(HttpStatus.NO_CONTENT);
     }
 
@@ -115,7 +109,25 @@ public class ImageRestController extends SuperController {
             @ApiImplicitParam(name = "id", value = "图片ID", required = true, paramType = "path")
     })
     @PutMapping("/{id}")
-    public ApiResponses<Void> update(@PathVariable("id") Integer id) {
+    public ApiResponses<Void> update(@PathVariable("id") Integer id,@RequestBody String imgId) {
+        Image oldImage = imageService.getById(id);
+        Image newImage = imageService.getById(Integer.parseInt(imgId));
+        oldImage.setImgUrl(newImage.getImgUrl());
+        imageService.saveOrUpdate(oldImage);
+        imageService.removeById(Integer.parseInt(imgId));
+        return success();
+    }
+
+    @Resources(auth = AuthTypeEnum.AUTH)
+    @ApiOperation(value = "修改图片启用状态")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "图片ID", required = true, paramType = "path")
+    })
+    @PutMapping("/{id}/status")
+    public ApiResponses<Void> updateStatus(@PathVariable("id") Integer id,@RequestBody @Validated(ImagePARM.Status.class) ImagePARM imagePARM) {
+        Image image = imageService.getById(id);
+        image.setStatus(imagePARM.getStatus());
+        imageService.updateById(image);
         return success();
     }
 }

@@ -20,8 +20,11 @@
  */
 package org.crown.service.product;
 
+import org.crown.model.product.dto.ProductImgDTO;
 import org.crown.model.product.entity.ProductImage;
 import org.crown.framework.service.BaseService;
+
+import java.util.List;
 
 /**
  * <p>
@@ -31,5 +34,8 @@ import org.crown.framework.service.BaseService;
  * @author whZhang
  */
 public interface IProductImageService extends BaseService<ProductImage> {
-
-        }
+        /**
+         * 获取所有产品图片
+        */
+        List<ProductImgDTO> getProductImagesById(Integer productId);
+}

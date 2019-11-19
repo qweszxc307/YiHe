@@ -21,6 +21,8 @@
 package org.crown.service.product.impl;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import org.crown.common.utils.TypeUtils;
+import org.crown.enums.ImagesEnum;
 import org.crown.enums.StatusEnum;
 import org.crown.framework.enums.ErrorCodeEnum;
 import org.crown.framework.service.impl.BaseServiceImpl;
@@ -28,6 +30,7 @@ import org.crown.framework.utils.ApiAssert;
 import org.crown.mapper.product.ProductMapper;
 import org.crown.model.brand.entity.Brand;
 import org.crown.model.product.dto.ProductDTO;
+import org.crown.model.product.dto.ProductImgDTO;
 import org.crown.model.product.entity.Product;
 import org.crown.model.product.entity.ProductCarriage;
 import org.crown.model.product.entity.ProductImage;
@@ -119,5 +122,82 @@ public class ProductServiceImpl extends BaseServiceImpl<ProductMapper, Product>i
         Product product = baseMapper.selectById(productId);
         product.setStatus(status);
         updateById(product);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void updateProductById(Integer id, ProductPARM productPARM) {
+        /*产品基本信息*/
+        Product product = productService.getById(id);
+        product.setBrandId(productPARM.getBrandId());
+        product.setName(productPARM.getName());
+        product.setOrderNum(Integer.parseInt(productPARM.getOrderNum()));
+        productService.updateById(product);
+        /*产品价格区间*/
+        List<ProductPrice> productPriceList = new ArrayList<>();
+        List<String> sNumList = productPARM.getBnums();
+        for(int i = 0;i<sNumList.size();i++){
+            ProductPrice productPrice = new ProductPrice();
+            productPrice.setSNum(Integer.parseInt(sNumList.get(i)));
+            productPrice.setENum(Integer.parseInt(productPARM.getOnums().get(i)));
+            productPrice.setPrice(TypeUtils.castToBigDecimal(productPARM.getPrice().get(i)));
+            productPrice.setPid(id);
+            productPriceList.add(productPrice);
+        }
+        productPriceService.delete().eq(ProductPrice::getPid,id).execute();
+        productPriceService.saveBatch(productPriceList);
+        /*产品相关图片*/
+        if(productPARM.getProductImgs().size()>0){
+            List<ProductImgDTO> productImageDTOList = productImageService.getProductImagesById(id);
+            /*删除旧的产品图片依赖关系*/
+            for(int i = 0;i<productImageDTOList.size();i++){
+                ProductImgDTO productImgDTO = productImageDTOList.get(i);
+                if(productImgDTO.getType() == ImagesEnum.PRODUCT_IMAGE){
+                    ProductImage productImage = productImageService.query()
+                            .eq(ProductImage::getImgId,productImgDTO.getImgId())
+                            .eq(ProductImage::getPId,productImgDTO.getPId())
+                            .getOne();
+                    productImageService.removeById(productImage);
+                }
+            }
+            /*添加新的产品图片依赖*/
+            List<ProductImage> productImages = new ArrayList<>();
+            for(int i =0;i<productPARM.getProductImgs().size();i++){
+                ProductImage productImage = new ProductImage();
+                productImage.setImgId(productPARM.getProductImgs().get(i));
+                productImage.setPId(id);
+                productImages.add(productImage);
+            }
+            productImageService.saveBatch(productImages);
+        }
+        /*产品详情图片*/
+        if(productPARM.getDetailImgId() != null){
+            List<ProductImgDTO> productImageDTOList = productImageService.getProductImagesById(id);
+            /*删除旧的产品详情图片依赖关系*/
+            for(int i = 0;i<productImageDTOList.size();i++){
+                ProductImgDTO productImgDTO = productImageDTOList.get(i);
+                if(productImgDTO.getType() == ImagesEnum.PRODUCT_DETAIL_IMAGE){
+                    ProductImage productImage = productImageService.query()
+                            .eq(ProductImage::getImgId,productImgDTO.getImgId())
+                            .eq(ProductImage::getPId,productImgDTO.getPId())
+                            .getOne();
+                    productImageService.removeById(productImage);
+                }
+            }
+            /*添加新的产品详情图片依赖*/
+            ProductImage productImage = new ProductImage();
+            productImage.setPId(id);
+            productImage.setImgId(Integer.parseInt(productPARM.getDetailImgId()));
+            productImageService.save(productImage);
+        }
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void deletProductById(Integer id) {
+        productService.delete().eq(Product::getId,id).execute();
+        productPriceService.delete().eq(ProductPrice::getPid,id).execute();
+        productImageService.delete().eq(ProductImage::getPId,id).execute();
+        productCarriageService.delete().eq(ProductCarriage::getPid,id).execute();
     }
 }

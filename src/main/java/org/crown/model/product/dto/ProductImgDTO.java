@@ -23,10 +23,12 @@ import org.crown.framework.model.convert.Convert;
 public class ProductImgDTO extends Convert {
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(notes = "id")
+    @ApiModelProperty(notes = "imgId")
     private Integer imgId;
     @ApiModelProperty(notes = "url")
     private String imgUrl;
     @ApiModelProperty(notes = "type")
     private ImagesEnum type;
+    @ApiModelProperty(notes = "pId")
+    private Integer pId;
 }

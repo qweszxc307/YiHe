@@ -101,7 +101,6 @@
                 showDetailModel(data);
             } else if (obj.event === 'update') { //删除
                 showUpdateModel(data);
-                debugger;
             }
         });
 
@@ -137,25 +136,21 @@
         // 编辑客户等级显示编辑弹窗
         // 显示编辑弹窗
                 var showUpdateModel = function (data) {
-                    debugger;
                     layer.open({
                         type: 1,
                         area: '450px',
                         offset: '120px',
                         content: $('#member-model').html(),
                         success: function () {
-                            debugger;
                             form.val('member-form', data);
                             formSelects.data('member', 'local', {arr: members});
                         }
                     });
-                    debugger;
                 };
 
 
         // 表单提交事件
         form.on('submit(member-form-submit)', function (data) {
-            debugger;
             if (data.field.id) {
                 crown.put('/customer/' + data.field.id, {data: data.field}, function () {
                     layer.closeAll('loading');

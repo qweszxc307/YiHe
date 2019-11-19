@@ -24,18 +24,19 @@
     </div>
     <div class="layui-form-item model-form-footer" style="margin-top:10px;width:97%">
         <button class="layui-btn layui-btn-primary close" type="button">取消</button>
-        <button class="layui-btn" lay-filter="brand-form-submit" lay-submit>保存</button>
+        <button class="layui-btn" lay-filter="image-form-submit" lay-submit>保存</button>
     </div>
 </form>
 
 <script>
-    layui.use('upload', function() {
+    layui.use(['layer', 'crown','upload','form'], function() {
         var $ = layui.jquery
             ,upload = layui.upload;
         var crown = layui.crown;
+        var form = layui.form;
         var config = layui.config;
         var imageData = crown.getTempData("t_image");
-        debugger;
+        var imgId;
         if(imageData){
             crown.fromVal('image-form', imageData);
             $("#form-submit").hide();
@@ -59,7 +60,6 @@
             ,done: function(res){
                 layer.closeAll('loading');
                 ////上传成功
-                debugger;
                 if(res.status == 200){
                     var data = res.result;
                     imgId = data.id;
@@ -76,6 +76,23 @@
                     uploadProductImg.upload();
                 });
             }
+        });
+
+        // 表单提交事件
+        form.on('submit(image-form-submit)', function (data) {
+            layer.load(2);
+            if (imageData) {
+                crown.put('/image/' + imageData.id, {data: imgId}, function () {
+                    layer.closeAll('loading');
+                    layer.msg('修改成功', {icon: 1});
+                    crown.finishPopupCenter();
+                });
+            }
+            else{
+                layer.closeAll('loading');
+                crown.finishPopupCenter();
+            }
+            return false;
         });
         //多文件列表示例
         /*var demoListView = $('#demoList')

@@ -31,11 +31,15 @@ public class ProductDTO extends Convert {
     @ApiModelProperty(notes = "产品名称")
     private String name;
     @ApiModelProperty(notes = "品牌id")
-    private BigDecimal brandId;
+    private Integer brandId;
     @ApiModelProperty(notes = "模板id")
-    private BigDecimal modelId;
+    private Integer modelId;
+    @ApiModelProperty(notes = "运费策略模板id")
+    private Integer carriageId;
     @ApiModelProperty(notes = "产品相关图片")
     private List<ProductImgDTO> productImgList;
+    @ApiModelProperty(notes = "产品相关图片")
+    private List<ProductPriceDTO> productPriceList;
     @ApiModelProperty(notes = "状态")
     private Integer status;
     @ApiModelProperty(notes = "序号")

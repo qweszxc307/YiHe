@@ -1,14 +1,13 @@
-package org.crown.model.image.dto;
+package org.crown.model.product.dto;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.crown.enums.StatusEnum;
 import org.crown.framework.model.convert.Convert;
 
-import java.time.LocalDateTime;
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -23,13 +22,13 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class ImageDTO extends Convert {
+public class ProductPriceDTO extends Convert {
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(notes = "id")
-    private Integer id;
-    @ApiModelProperty(notes = "图片url")
-    private String imgUrl;
-    @ApiModelProperty(notes = "图片状态")
-    private StatusEnum status;
+    @ApiModelProperty(notes = "起始区间值")
+    private Integer sNum;
+    @ApiModelProperty(notes = "结束区间值")
+    private Integer eNum;
+    @ApiModelProperty(notes = "价格")
+    private BigDecimal price;
 }

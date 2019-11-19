@@ -52,7 +52,7 @@ public class BrandPARM extends Convert {
     @NotBlank(groups = {BrandPARM.Create.class, BrandPARM.Update.class}, message = "品牌名称不能为空")
     private String name;
     @ApiModelProperty(notes = "图片ID")
-    @NotBlank(groups = {BrandPARM.Create.class, BrandPARM.Update.class}, message = "品牌图片不能为空")
+    @NotBlank(groups = {BrandPARM.Create.class}, message = "品牌图片不能为空")
     private String imageId;
     @ApiModelProperty(notes = "状态:0：禁用 1：正常")
     private StatusEnum status;

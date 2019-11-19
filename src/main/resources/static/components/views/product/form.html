@@ -40,14 +40,14 @@
                             <td>价格(元/个)</td>
                             <td>操作</td>
                         </tr>
+                        <a class="layui-btn layui-btn-xs" onclick="addPrice()" style="float:right;margin-bottom: 10px;">添加</a>
                         </thead>
                         <tbody>
                         <tr>
-                            <td><input type="text"  class="layui-input" name="b_number" lay-verify="required|number"></td>
-                            <td><input type="text"  class="layui-input" name="e_number" lay-verify="required|number"></td>
-                            <td><input type="text"  class="layui-input" name="price" lay-verify="required|number"></td>
+                            <td><input type="text" id="b_number" class="layui-input" name="b_number" lay-verify="required|number"></td>
+                            <td><input type="text" id="e_number" class="layui-input" name="e_number" lay-verify="required|number"></td>
+                            <td><input type="text" id="price" class="layui-input" name="price" lay-verify="required|number"></td>
                             <td>
-                                <a class="layui-btn layui-btn-xs addPriceDegree">添加</a>
                                 <a class="layui-btn layui-btn-danger layui-btn-xs delPriceDegree">删除</a>
                             </td>
                         </tr>
@@ -66,7 +66,8 @@
                                 <button type="button" class="layui-btn" id="productImgList">选择产品图片</button>
                                 <button type="button" class="layui-btn" id="upload">开始上传</button>
                                 <div class="layui-upload-list">
-                                    <table class="layui-table">
+                                    <div id="previewList" style="float: left;width: 100%;"></div>
+                                    <table class="layui-table" id="files_table">
                                         <thead>
                                         <tr><th>文件名</th>
                                             <th>大小</th>
@@ -114,8 +115,41 @@
         var detailImgId;
         var $ = layui.jquery
             ,upload = layui.upload;
+        var product = crown.getTempData('t_product');
+        if(product){
+            /*回显产品基本信息*/
+            form.val('product-form', product);
+            /*回显产品价格区间*/
+            var data = product.productPriceList;
+            $("#b_number").val(data[0].snum);
+            $("#e_number").val(data[0].enum);
+            $("#price").val(data[0].price);
+            /*此处从1开始遍历，因为页面有默认数据*/
+            for(var i = 1; i< data.length;i++){
+                var obj = data[i];
+                var html = '<tr>'+
+                    '<td><input type="text" value=\"'+ obj.snum +'\" class="layui-input" name="b_number" lay-verify="required|number"></td>'+
+                    '<td><input type="text" value=\"'+obj.enum +'\"  class="layui-input" name="e_number" lay-verify="required|number"></td>'+
+                    '<td><input type="text" value=\"'+obj.price+'\" class="layui-input" name="price" lay-verify="required|number"></td>'+
+                    '<td>'+
+                    '<a class="layui-btn layui-btn-danger layui-btn-xs delPriceDegree">删除</a>'+
+                    '</td>'+
+                    '</tr>';
+                $(html).appendTo($('#price_degree_model tbody:last'));
+            }
+            /*回显产品图片信息*/
+            var imgData = product.productImgList;
+            for(var i = 0; i< imgData.length;i++){
+                var obj = imgData[i];
+                if(obj.type == 3){
+                    $('#detail_img_preview').attr('src', "http://"+obj.imgUrl); //图片链接（base64）
+                }else if(obj.type == 2){
+                    $('#files_table').hide();
+                    $('#previewList').append('<img style="width: 200px;cursor: pointer;margin:5px"  title=\'点击预览产品图片\' onclick="window.open(\''+ 'http://'+obj.imgUrl+'\') "src="'+ 'http://'+obj.imgUrl +'"  class="layui-upload-img">')
+                }
+            }
+        }
         // 获取所有品牌
-        // 获取所有角色
         layer.load(2);
         crown.get('/brand/brands', {}, function (data) {
             // 渲染多选下拉框
@@ -125,10 +159,8 @@
             }
             formSelects.data('brandId', 'local', {arr: brandSelectData});
             formSelects.btns('brandId', []);
-            var product = crown.getTempData('t_product');
             // 回显产品数据
-            if (product) {
-                form.val('product-form', product);
+            if(product){
                 var rds = new Array();
                 rds.push(product.brandId);
                 formSelects.value('brandId', rds);
@@ -139,19 +171,16 @@
         // 获取所有运费策略
         crown.get('/carriage/carriages', {}, function (data) {
             // 渲染多选下拉框
-            var brandSelectData = new Array();
+            var carriageSelectData = new Array();
             for (var i = 0; i < data.result.length; i++) {
-                brandSelectData.push({name: data.result[i].name, value: data.result[i].id});
+                carriageSelectData.push({name: data.result[i].name, value: data.result[i].id});
             }
-            formSelects.data('carriageId', 'local', {arr: brandSelectData});
+            formSelects.data('carriageId', 'local', {arr: carriageSelectData});
             formSelects.btns('carriageId', []);
             // 回显产品数据
-            if (product) {
-                form.val('product-form', product);
+            if(product){
                 var rds = new Array();
-                for (var i = 0; i < product.carriageId.length; i++) {
-                    rds.push(product.roleIds[i]);
-                }
+                rds.push(product.carriageId);
                 formSelects.value('carriageId', rds);
             }
             layer.closeAll('loading');
@@ -198,6 +227,8 @@
             ,bindAction: "#upload"
             ,headers: {Authorization: config.getToken()}
             ,choose: function(obj){
+                $("#files_table").show();
+                $("#previewList").hide();
                 var files = this.files = obj.pushFile(); //将每次选择的文件追加到文件队列
                 //读取本地文件
                 obj.preview(function(index, file, result){
@@ -250,6 +281,30 @@
         form.on('submit(product-form-submit)', function (data) {
             layer.load(2);
             if (data.field.id) {
+                if(productImgs){
+                    data.field.productImgs = productImgs;
+                }
+                if(detailImgId){
+                    data.field.detailImgId = detailImgId;
+                }
+                var bnums = [];
+                var onums = [];
+                var price = [];
+                $("input[name='b_number']").each(function(b,item){
+                    // 你要实现的业务逻辑
+                    bnums.push(item.value)
+                });
+                $("input[name='e_number']").each(function(o,item){
+                    // 你要实现的业务逻辑
+                    onums.push(item.value)
+                });
+                $("input[name='price']").each(function(p,item){
+                    // 你要实现的业务逻辑
+                    price.push(item.value)
+                });
+                data.field.bnums = bnums;
+                data.field.onums = onums;
+                data.field.price = price;
                 crown.put('/product/' + data.field.id, {data: data.field}, function () {
                     layer.closeAll('loading');
                     layer.msg('修改成功', {icon: 1});
@@ -284,19 +339,7 @@
             }
             return false;
         });
-
-        //因为动态添加的元素class属性是无效的，所以不能用$('.add').click(function(){});
         $('#price_degree_model').on('click', '.addPriceDegree', function() {
-            //你要添加的html
-            var html = '<tr>'+
-                '<td><input type="text"  class="layui-input" name="b_number" lay-verify="required|number"></td>'+
-                '<td><input type="text"  class="layui-input" name="e_number" lay-verify="required|number"></td>'+
-                '<td><input type="text"  class="layui-input" name="price" lay-verify="required|number"></td>'+
-                '<td>'+
-                '<a class="layui-btn layui-btn-xs addPriceDegree">添加</a>'+
-                '<a class="layui-btn layui-btn-danger layui-btn-xs delPriceDegree">删除</a>'+
-                '</td>'+
-                '</tr>';
             //添加到表格最后
             $(html).appendTo($('#price_degree_model tbody:last'));
             form.render();
@@ -311,8 +354,22 @@
                 $(this).closest('tr').remove();
             }
         });
-
     })
+
+    var html = '<tr>'+
+        '<td><input type="text"  class="layui-input" name="b_number" lay-verify="required|number"></td>'+
+        '<td><input type="text"  class="layui-input" name="e_number" lay-verify="required|number"></td>'+
+        '<td><input type="text"  class="layui-input" name="price" lay-verify="required|number"></td>'+
+        '<td>'+
+        '<a class="layui-btn layui-btn-danger layui-btn-xs delPriceDegree">删除</a>'+
+        '</td>'+
+        '</tr>';
+
+    function addPrice() {
+        //添加到表格最后
+        $(html).appendTo($('#price_degree_model tbody:last'));
+        form.render();
+    }
 
 
 </script>

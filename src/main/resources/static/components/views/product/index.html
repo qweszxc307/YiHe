@@ -76,13 +76,13 @@
                 {field: 'orderNum', width: 100, align: 'center', sort: true, title: '序号'},
                 {field: 'name', width: 160, align: 'center', sort: true, title: '品牌名称'},
                 {field: 'brandId', hide: true, align: 'center', sort: true, title: '品牌id'},
-                {field: 'productImgList', width: 360, align: 'center',templet: function (d) {
+                {field: 'productImgList', width: 800, align: 'center',templet: function (d) {
                         var data = d.productImgList;
                         var html = "";
                         for(var i = 0 ;i< data.length;i++){
                             var obj = data[i];
                             if(obj.type == 2){
-                                html += "<img  width='100px' onclick='window.open(\"http://"+obj.imgUrl+"\")' title='点击预览产品图片' style='cursor: pointer;' src='"+"http://"+obj.imgUrl+"\'\></br>"
+                                html += "<img  width='100px' style='margin:5px' onclick='window.open(\"http://"+obj.imgUrl+"\")' title='点击预览产品图片' style='cursor: pointer;' src='"+"http://"+obj.imgUrl+"\'\>"
                             }
                         }
                         return html;
@@ -93,7 +93,7 @@
                         for(var i = 0 ;i< data.length;i++){
                             var obj = data[i];
                             if(obj.type == 1){
-                                html += "<img  width='100px' onclick='window.open(\"http://"+obj.imgUrl+"\")' title='点击预览产品图片' style='cursor: pointer;' src='"+"http://"+obj.imgUrl+"\'\></br>"
+                                html += "<img  width='100px' onclick='window.open(\"http://"+obj.imgUrl+"\")' title='点击预览产品图片' style='cursor: pointer;' src='"+"http://"+obj.imgUrl+"\'\>"
                             }
                         }
                         return html;
@@ -104,14 +104,14 @@
                         for(var i = 0 ;i< data.length;i++){
                             var obj = data[i];
                             if(obj.type == 3){
-                                html += "<img  width='100px' onclick='window.open(\"http://"+obj.imgUrl+"\")' title='点击预览产品图片' style='cursor: pointer;' src='"+"http://"+obj.imgUrl+"\'\></br>"
+                                html += "<img  width='100px'  onclick='window.open(\"http://"+obj.imgUrl+"\")' title='点击预览产品图片' style='cursor: pointer;' src='"+"http://"+obj.imgUrl+"\'\>"
                             }
                         }
                         return html;
                     }, title: '产品详情图片'},
-                {field: 'modelId',width: 160, align: 'center', sort: true, title: '模板id'},
+                {field: 'modelId',width: 160, align: 'center', sort: true, title: '模板id',hide: true},
                 {field: 'status', width: 160,align: 'center', sort: true,templet: '#product-tpl-status', title: '状态'},
-                {align: 'center',toolbar: '#product-table-bar', title: '操作'}
+                {align: 'center', width: 160,toolbar: '#product-table-bar', title: '操作'}
             ]]
         });
         // 表格顶部操作列

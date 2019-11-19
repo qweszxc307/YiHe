@@ -20,12 +20,15 @@
  */
 package org.crown.service.product.impl;
 
+import org.crown.model.product.dto.ProductImgDTO;
 import org.crown.model.product.entity.ProductImage;
 import org.crown.mapper.product.ProductImageMapper;
 import org.crown.service.product.IProductImageService;
 import org.crown.framework.service.impl.BaseServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * <p>
@@ -35,6 +38,10 @@ import org.springframework.transaction.annotation.Transactional;
  * @author whZhang
  */
 @Service
-        public class ProductImageServiceImpl extends BaseServiceImpl<ProductImageMapper, ProductImage>implements IProductImageService {
+public class ProductImageServiceImpl extends BaseServiceImpl<ProductImageMapper, ProductImage>implements IProductImageService {
 
+        @Override
+        public List<ProductImgDTO> getProductImagesById(Integer productId) {
+                return baseMapper.getProductImagesById(productId);
         }
+}

@@ -31,6 +31,7 @@ import org.crown.framework.controller.SuperController;
 import org.crown.framework.responses.ApiResponses;
 import org.crown.model.brand.dto.BrandDTO;
 import org.crown.model.brand.dto.BrandImgDTO;
+import org.crown.model.brand.entity.Brand;
 import org.crown.model.brand.parm.BrandPARM;
 import org.crown.service.brand.IBrandService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  * <p>
@@ -58,13 +60,20 @@ public class BrandRestController extends SuperController {
         private IBrandService brandService;
 
         @Resources(auth = AuthTypeEnum.AUTH)
-        @ApiOperation("查询所有品牌")
+        @ApiOperation("查询所有品牌(分页)")
         @GetMapping
         public ApiResponses<IPage<BrandDTO>> page() {
                 return success(
                         brandService.selectBrandPage(this.<BrandDTO>getPage())
                                 .convert(e -> e.convert(BrandDTO.class))
                 );
+        }
+
+        @Resources(auth = AuthTypeEnum.AUTH)
+        @ApiOperation("查询所有品牌")
+        @GetMapping(value = "/brands")
+        public ApiResponses<List<Brand>> list() {
+                return success(brandService.list());
         }
 
         @Resources(auth = AuthTypeEnum.AUTH)
@@ -103,7 +112,7 @@ public class BrandRestController extends SuperController {
                 @ApiImplicitParam(name = "id", value = "产品ID", required = true, paramType = "path")
         })
         @PutMapping("/{id}")
-        public ApiResponses<Void> update(@PathVariable("id") Integer id,@RequestBody @Validated(BrandPARM.Create.class) BrandPARM brandPARM) {
+        public ApiResponses<Void> update(@PathVariable("id") Integer id,@RequestBody @Validated(BrandPARM.Update.class) BrandPARM brandPARM) {
                 brandService.updateBrand(id,brandPARM);
                 return success();
         }

@@ -144,10 +144,12 @@ public class BrandServiceImpl extends BaseServiceImpl<BrandMapper, Brand>impleme
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void updateBrand(Integer brandId, BrandPARM brandPARM) {
-        BrandImage brandImage = brandImageService.query().eq(BrandImage::getBId, brandId).getOne();
-        brandImage.setImgId(Integer.parseInt(brandPARM.getImageId()));
-        brandImageService.updateById(brandImage);
-        Brand brand = brandService.query().eq(Brand::getId, brandImage.getBId()).getOne();
+        if(brandPARM.getImageId().isEmpty() == false){
+            BrandImage brandImage = brandImageService.query().eq(BrandImage::getBId, brandId).getOne();
+            brandImage.setImgId(Integer.parseInt(brandPARM.getImageId()));
+            brandImageService.updateById(brandImage);
+        }
+        Brand brand = brandService.getById(brandId);
         brand.setName(brandPARM.getName());
         brand.setOrderNum(Integer.parseInt(brandPARM.getOrderNum()));
         brandService.saveOrUpdate(brand);

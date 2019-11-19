@@ -21,33 +21,23 @@
 package org.crown.controller.product;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.crown.common.annotations.Resources;
 import org.crown.enums.AuthTypeEnum;
+import org.crown.framework.controller.SuperController;
 import org.crown.framework.responses.ApiResponses;
-import org.crown.model.brand.dto.BrandDTO;
-import org.crown.model.brand.entity.Brand;
-import org.crown.model.image.dto.ImageDTO;
-import org.crown.model.image.entity.Image;
-import org.crown.model.product.dto.CarriageConfigDTO;
 import org.crown.model.product.dto.CarriageDTO;
-import org.crown.model.product.dto.ProductDTO;
 import org.crown.model.product.entity.Carriage;
-import org.crown.model.product.entity.CarriageConfig;
-import org.crown.model.product.entity.Product;
 import org.crown.model.product.parm.CarriagePARM;
-import org.crown.model.system.entity.User;
 import org.crown.service.product.ICarriageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
-
-import io.swagger.annotations.Api;
-import org.crown.framework.controller.SuperController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
