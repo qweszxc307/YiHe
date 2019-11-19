@@ -21,7 +21,7 @@
         and p.id = #{id}
     </select>
 
-    <select id="getProductPage" resultMap="ProductPageResultMap">
+    <select id="selectProductPage" resultMap="ProductPageResultMap">
         select p.id,p.name,p.brand_id,p.model_id,p.status,p.order_num from product p order by p.order_num
     </select>
 </mapper>

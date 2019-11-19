@@ -21,5 +21,5 @@ public interface ProductMapper extends BaseMapper<Product> {
      * 获取品牌列表
      * @return
      */
-    List<ProductDTO> getProductPage(IPage<ProductDTO> page);
+    List<ProductDTO> selectProductPage(IPage<ProductDTO> page);
 }

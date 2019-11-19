@@ -67,7 +67,7 @@ public class ProductServiceImpl extends BaseServiceImpl<ProductMapper, Product>i
 
     @Override
     public IPage<ProductDTO> selectProductPage(IPage<ProductDTO> page) {
-        return  page.setRecords(baseMapper.getProductPage(page));
+        return  page.setRecords(baseMapper.selectProductPage(page));
     }
 
     @Override
