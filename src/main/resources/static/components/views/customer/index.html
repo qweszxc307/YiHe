@@ -73,7 +73,7 @@
         //渲染表格
         var customerTable = table.render({
             elem: '#customer-table',
-
+            toolbar: '#customer-toolbar',
             url: config.serverUrl + '/customer',
             request: config.request,
             parseData: config.parseData,
@@ -99,7 +99,7 @@
             var data = obj.data;
             if (obj.event === 'detail') { //修改   查看详情
                 showDetailModel(data);
-            } else if (obj.event === 'update') { //删除
+            } else if (obj.event === 'update') { //
                 showUpdateModel(data);
             }
         });
@@ -142,10 +142,12 @@
                         offset: '120px',
                         content: $('#member-model').html(),
                         success: function () {
+
                             form.val('member-form', data);
                             formSelects.data('member', 'local', {arr: members});
                         }
                     });
+
                 };
 
 

@@ -10,7 +10,7 @@
         <!-- 搜索条件 -->
         <div class="layui-form toolbar">
             <form id="searchForm" onsubmit="return false;">
-                订单号查询：<input name="memberNum" class="layui-input search-input" type="text" placeholder="订单号"/>&emsp;
+                订单号查询：<input name="orderNum" class="layui-input search-input" type="text" placeholder="订单号"/>&emsp;
                 <div class="layui-input-inline">
                     订单状态： <select name="status">
                     <option value="">请选择</option>
@@ -20,51 +20,60 @@
                     <option value="4">已确认</option>
                 </select>
                 </div>
-                <button id="customer-btn-search" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索
+                <div class="layui-inline">
+                    <label class="layui-form-label">起始日期：</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="beforeTime" id="date1" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">结束日期:</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="afterTime" id="date2" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <button id="order-btn-search" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索
                 </button>
             </form>
         </div>
-        <!-- 表格顶部操作列 -->
-        <script type="text/html" id="order-toolbar">
-            <div class="layui-btn-container">
-                {{# if({{addShow}} == true){ }}
-                <button class="layui-btn layui-btn-normal layui-btn-sm" lay-event="add"><i
-                        class="layui-icon">&#xe654;</i>添加
-                </button>
-                {{# } }}
-            </div>
-        </script>
+
         <!-- 数据表格 -->
         <table class="layui-table" id="order-table" lay-filter="order-table"></table>
     </div>
 </div>
 
-
 <!-- 表格操作列 -->
 <script type="text/html" id="order-table-bar">
-    {{#  if({{updateShow}} == true){ }}
-    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="update">修改</a>
+    {{#  if({{detailShow}} == true){ }}
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">详情</a>
     {{#  } }}
     {{#  if({{deleteShow}} == true){ }}
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>
     {{#  } }}
-
 </script>
 
 <script>
-    layui.use(['form', 'table', 'config', 'crown'], function () {
+    layui.use(['form', 'table', 'config', 'crown', 'laydate'], function () {
         var form = layui.form;
         var table = layui.table;
         var config = layui.config;
         var layer = layui.layer;
         var crown = layui.crown;
         var $ = layui.jquery;
-        $('#order-toolbar').vm({
-            addShow: crown.hasPerm("order:add")
+        var laydate = layui.laydate;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#date1' //指定元素
+            , format: 'yyyy-MM-dd HH:mm:ss' //可任意组合
+        });
+        laydate.render({
+            elem: '#date2' //指定元素
+            , format: 'yyyy-MM-dd HH:mm:ss' //可任意组合
         });
         $('#order-table-bar').vm({
-            deleteShow: crown.hasPerm("order:delete"),
-            updateShow: crown.hasPerm("order:update")
+            detailShow: crown.hasPerm("order:detail"),
+            deleteShow: crown.hasPerm("order:delete")
         });
         //渲染表格
         var orderTable = table.render({
@@ -93,8 +102,11 @@
                         }
                         if (d.status == 4) {
                             return '<div style="color: #ff5e54">已确认</div>'
-                        }else {
-                            return '<div style="color: #ff1000">错误订单</div>'
+                        }
+                        if (d.status == 5) {
+                            return '<div style="color: #48153a">已确认</div>'
+                        } else {
+                            return '<div style="color: #ff1000">已结束</div>'
                         }
                     }, title: '订单状态'
                 },
@@ -102,51 +114,44 @@
                 {field: 'phone', align: 'center', sort: true, title: '收货电话'},
                 {field: 'address', align: 'center', sort: true, title: '地址'},
                 {field: 'logisticsNumber', align: 'center', sort: true, title: '快递单号'},
+                {field: 'logisticsCompany', align: 'center', sort: true, title: '快递公司'},
                 {field: 'postFee', align: 'center', sort: true, title: '运费'},
                 {field: 'totalFee', align: 'center', sort: true, title: '商品总价'},
                 {field: 'actualFee', align: 'center', sort: true, title: '实付金额'},
                 {field: 'createTime', align: 'center', sort: true, title: '创建时间'},
                 {field: 'payTime', align: 'center', sort: true, title: '支付时间'},
-                {align: 'center', toolbar: '#member-table-bar', title: '操作'}
+                {align: 'center', toolbar: '#order-table-bar', title: '操作'}
             ]]
         });
-        // 表格顶部操作列
-        table.on('toolbar(order-table)', function (obj) {
-            if (obj.event === 'add') {
-                showEditModel();
-            }
-        });
 
-
-        //显示表单弹窗
-        var showEditModel = function (data) {
+        //显示表单弹窗detail
+        var showDetailModel = function (data) {
             if (data) {
+                crown.putTempData('t_order', data);
                 crown.get('/order/' + data.id, {async: false}, function (data) {
-                    crown.putTempData('t_order', data.result);
+                    crown.putTempData('t_orderDetail', data.result);
                 });
             }
             crown.popupCenter({
                 type: 1,
                 resize: true,
-                title: data ? '修改会员' : '添加会员',
-                area: ['80%', '80%'],
-                offset: 'auto',
-                path: '/components/views/order/form.html',
+                title: "订单详情",
+                area: ['89%', '100%'],
+                offset: 'r',
+                path: 'components/views/order/form.html',
                 finish: function () {
-                    orderTable.reload('order-table', {});
+                    orderTable.reload('carriage-table', {});
                 }
             });
         };
-
 
         // 表格操作列事件
         table.on('tool(order-table)', function (obj) {
             var data = obj.data;
             var layEvent = obj.event;
-
-            if (layEvent === 'update') {
+            if (layEvent === 'detail') {
                 // 修改
-                showEditModel(data);
+                showDetailModel(data);
             } else if (layEvent === 'delete') {
                 // 删除
                 doDelete(obj);
@@ -168,7 +173,7 @@
 
 
         // 搜索按钮点击事件
-        $('#brand-btn-search').click(function () {
+        $('#order-btn-search').click(function () {
             orderTable.reload({where: crown.getSearchForm()});
         });
 

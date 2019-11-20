@@ -29,6 +29,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.crown.framework.model.BaseModel;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 
@@ -51,13 +52,15 @@ public class OrderDetail extends BaseModel {
     @ApiModelProperty(notes = "订单id")
     private Integer orderId;
     @ApiModelProperty(notes = "商品id")
-    private Integer skuId;
+    private Integer produckId;
     @ApiModelProperty(notes = "购买数量")
     private Integer num;
     @ApiModelProperty(notes = "商品标题")
     private String title;
     @ApiModelProperty(notes = "价格,单位：分")
-    private Double price;
+    private BigDecimal price;
+    @ApiModelProperty(notes = "折后价")
+    private BigDecimal discountPrice;
     @ApiModelProperty(notes = "商品图片")
     private String image;
     @TableField(fill = FieldFill.INSERT)
@@ -66,5 +69,4 @@ public class OrderDetail extends BaseModel {
     @TableField(fill = FieldFill.INSERT_UPDATE)
     @ApiModelProperty(notes = "更新时间")
     private LocalDateTime updateTime;
-
 }

@@ -30,6 +30,7 @@ import org.crown.enums.AuthTypeEnum;
 import org.crown.framework.controller.SuperController;
 import org.crown.framework.responses.ApiResponses;
 import org.crown.model.order.dto.OrderDTO;
+import org.crown.model.order.dto.OrderDetailDTO;
 import org.crown.model.order.entity.Order;
 import org.crown.model.order.parm.OrderPARM;
 import org.crown.service.order.IOrderService;
@@ -39,7 +40,7 @@ import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.math.BigDecimal;
 import java.util.Objects;
 
 /**
@@ -84,7 +85,15 @@ public class OrderRestController extends SuperController {
         }
         return success(convert);
     }
-
+    @Resources(auth = AuthTypeEnum.AUTH)
+    @ApiOperation("查询订单详情")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "会员等级id", required = true, paramType = "path")
+    })
+    @GetMapping("/{id}")
+    public ApiResponses<OrderDetailDTO> get(@PathVariable("id") Integer id) {
+        return success(orderService.queryOrderDetail(id));
+    }
 
     /**
      * 退款之后也需要删除订单   删除订单之后要查询用户消费把消费回退到之前的状态
@@ -108,13 +117,30 @@ public class OrderRestController extends SuperController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "订单ID", required = true, paramType = "path")
     })
-    @PutMapping("/{id}")
+    @PutMapping("/{id}/address")
     public ApiResponses<Void> update(@PathVariable("id") Integer id, @RequestBody @Validated(OrderPARM.Update.class) OrderPARM orderPARM) {
         Order order = orderPARM.convert(Order.class);
         order.setId(id);
         orderService.updateById(order);
         return success();
     }
+
+    @Resources(auth = AuthTypeEnum.AUTH)
+    @ApiOperation("订单改价")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "订单ID", required = true, paramType = "path"),
+            @ApiImplicitParam(name = "totalFee", value = "修改的价格", required = true, paramType = "path")
+    })
+    @PutMapping("/{id}")
+    public ApiResponses<Void> updateTotalFee(@PathVariable("id") Integer id, @RequestBody BigDecimal totalFee) {
+        try {
+            orderService.updateTotalFeeByOrderId(id, totalFee);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return success();
+    }
+
 
 
     @Resources(auth = AuthTypeEnum.AUTH)

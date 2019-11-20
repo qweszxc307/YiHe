@@ -75,4 +75,7 @@ select id from `member` where `level` = #{level};
     <update id="updateMIdById" parameterType="Integer">
         update customer set m_id = #{mId} where id = #{cId}
     </update>
+    <select id="queryMemberNumById" parameterType="Integer" resultType="String">
+        select member_num from customer where id =#{id};
+    </select>
 </mapper>

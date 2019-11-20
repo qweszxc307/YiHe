@@ -60,4 +60,6 @@ public class OrderDAO extends BaseModel {
     private String street;
     @ApiModelProperty(notes = "快递单号")
     private String logisticsNumber;
+    @ApiModelProperty(notes = "物流公司名称")
+    private String logisticsCompany;
 }

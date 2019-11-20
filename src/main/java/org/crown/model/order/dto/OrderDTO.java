@@ -70,5 +70,7 @@ public class OrderDTO extends BaseModel {
     private LocalDateTime createTime;
     @ApiModelProperty(notes = "支付时间")
     private LocalDateTime payTime;
+    @ApiModelProperty(notes = "物流公司名称")
+    private String logisticsCompany;
 
 }

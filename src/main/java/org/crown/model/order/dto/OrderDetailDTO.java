@@ -18,45 +18,47 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package org.crown.service.order;
+package org.crown.model.order.dto;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import org.crown.framework.service.BaseService;
-import org.crown.model.order.dto.OrderDTO;
-import org.crown.model.order.dto.OrderDetailDTO;
-import org.crown.model.order.entity.Order;
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import org.crown.framework.model.BaseModel;
 import org.crown.model.order.entity.OrderDetail;
-import org.crown.model.order.parm.OrderPARM;
-import org.springframework.http.HttpStatus;
 
-import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
+
 
 /**
  * <p>
- *  服务类
+ * 订单详情表
  * </p>
  *
  * @author ykMa
  */
-public interface IOrderService extends BaseService<Order> {
-    /**
-     * 设置分页查询订单DTO的属性
-     * @param records
-     */
-    List<OrderDTO> setOrderDTO(List<OrderDTO> records);
+@ApiModel
+@Data
+@NoArgsConstructor
+@EqualsAndHashCode(callSuper = false)
+public class OrderDetailDTO extends BaseModel {
 
-    /**
-     * 给OrderDetailDTO赋值
-     * @param id
-     * @return
-     */
-    OrderDetailDTO queryOrderDetail(Integer id);
+    private static final long serialVersionUID = 1L;
+    @ApiModelProperty(notes = "发货时间")
+    private LocalDateTime consignTime;
+    @ApiModelProperty(notes = "订单完成时间")
+    private LocalDateTime endTime;
+    @ApiModelProperty(notes = "付款方式")
+    private Integer paymentType;
+    @ApiModelProperty(notes = "商品信息")
+    private List<OrderDetail> products;
+    @ApiModelProperty(notes = "会员号")
+    private String memberNum;
 
-    /**
-     * 订单改价，根据订单id设置订单价格
-     * @param id
-     * @param totalFee
-     */
-    void updateTotalFeeByOrderId(Integer id, BigDecimal totalFee);
+
 }

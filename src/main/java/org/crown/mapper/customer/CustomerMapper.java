@@ -98,4 +98,11 @@ public interface CustomerMapper extends BaseMapper<Customer> {
      * @return
      */
     List<MemberDAO> queryIdAndSumByNext(BigDecimal next);
+
+    /**
+     * 根据用户id查询会员号
+     * @param id
+     * @return
+     */
+    String queryMemberNumById(Integer id);
 }

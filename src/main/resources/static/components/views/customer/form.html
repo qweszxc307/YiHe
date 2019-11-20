@@ -1,5 +1,5 @@
 <!-- product表单弹窗 -->
-<form id="customer-form" lay-filter="customer-form" class="layui-form model-form" style="padding-right:0px;height:100%">
+<form id="customer-form" lay-filter="customer-form" class="layui-form layui-form-pane" style="padding-right:0px;height:100%">
         <div class="layui-tab">
             <ul class="layui-tab-title">
                 <li class="layui-this">会员详情</li>
@@ -119,8 +119,7 @@
         var formSelects = layui.formSelects;
         var productImgs = [];
         var detailImgId;
-        var $ = layui.jquery
-            , upload = layui.upload;
+        var $ = layui.jquery, upload = layui.upload;
         var customer = crown.getTempData('t_customer');
         if (customer) {
             form.val('customer-form', customer);
