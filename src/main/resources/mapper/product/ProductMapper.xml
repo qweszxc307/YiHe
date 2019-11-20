@@ -24,4 +24,8 @@
     <select id="selectProductPage" resultMap="ProductPageResultMap">
         select p.id,p.name,p.brand_id,p.model_id,p.status,p.order_num from product p order by p.order_num
     </select>
+
+    <select id="selectProducts" resultType="java.util.Map">
+        select id ,name from product;
+    </select>
 </mapper>

@@ -66,6 +66,7 @@
         var uploadProductImg = upload.render({
             elem: '#brand_img'
             ,url: 'brand/upload'
+            ,size: 2048 //限制文件大小，单位 KB
             ,headers: {Authorization: config.getToken()}
             ,before: function(obj){
                 layer.load(2);

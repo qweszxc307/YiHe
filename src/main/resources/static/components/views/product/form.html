@@ -190,6 +190,7 @@
         var uploadDetailImg = upload.render({
             elem: '#detail_img'
             ,url: 'product/upload'
+            ,size: 2048 //限制文件大小，单位 KB
             ,headers: {Authorization: config.getToken()}
             ,before: function(obj){
                 //预读本地文件示例，不支持ie8
@@ -221,6 +222,7 @@
             elem: '#productImgList'
             ,url: 'product/uploads'
             ,accept: 'images'
+            ,size: 2048 //限制文件大小，单位 KB
             ,number:6
             ,multiple: true
             ,auto: false

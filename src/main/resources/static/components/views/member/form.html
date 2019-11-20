@@ -98,6 +98,7 @@
         var uploadSpecialImg = upload.render({
             elem: '#special_img'
             , url: 'member/upload'
+            ,size: 2048 //限制文件大小，单位 KB
             , headers: {Authorization: config.getToken()}
             , before: function (obj) {
                 layer.load(2);
@@ -130,6 +131,7 @@
         var uploadBackImage = upload.render({
             elem: '#back_img'
             , url: 'member/upload'
+            ,size: 2048 //限制文件大小，单位 KB
             , headers: {Authorization: config.getToken()}
             , before: function (obj) {
                 layer.load(2);

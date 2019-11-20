@@ -45,6 +45,7 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -199,5 +200,10 @@ public class ProductServiceImpl extends BaseServiceImpl<ProductMapper, Product>i
         productPriceService.delete().eq(ProductPrice::getPid,id).execute();
         productImageService.delete().eq(ProductImage::getPId,id).execute();
         productCarriageService.delete().eq(ProductCarriage::getPid,id).execute();
+    }
+
+    @Override
+    public List<Map<String, String>> selectProducts() {
+        return baseMapper.selectProducts();
     }
 }

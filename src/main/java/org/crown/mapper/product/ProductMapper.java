@@ -7,6 +7,7 @@ import org.crown.model.product.dto.ProductDTO;
 import org.crown.model.product.entity.Product;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -22,4 +23,9 @@ public interface ProductMapper extends BaseMapper<Product> {
      * @return
      */
     List<ProductDTO> selectProductPage(IPage<ProductDTO> page);
+    /**
+     * 获取产品信息(下拉框)
+     * @return
+     */
+    List<Map<String,String>> selectProducts();
 }

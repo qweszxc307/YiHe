@@ -22,6 +22,7 @@ package org.crown.service.brand.impl;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.crown.common.utils.QiNiuUtils;
+import org.crown.enums.ImagesEnum;
 import org.crown.enums.StatusEnum;
 import org.crown.framework.enums.ErrorCodeEnum;
 import org.crown.framework.responses.ApiResponses;
@@ -119,6 +120,7 @@ public class BrandServiceImpl extends BaseServiceImpl<BrandMapper, Brand>impleme
                 return success(response,HttpStatus.BAD_REQUEST,null);
             }else{
                 Image baseImg = new Image();
+                baseImg.setType(ImagesEnum.BRAND_IMAGE);
                 baseImg.setImgUrl(imgUrl);
                 imageService.save(baseImg);
                 imageDTO.setImgId(baseImg.getId());

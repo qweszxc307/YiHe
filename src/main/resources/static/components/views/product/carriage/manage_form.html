@@ -8,7 +8,7 @@
 <form id="manage-form" lay-filter="manage-form" class="layui-form model-form" style="padding-right:0px;height:100%">
     <div id="box" style=" height:80%;overflow: auto;padding-right:10px;padding-left:10px">
         <!-- 表格顶部操作列 -->
-        <a href="#carriage_manage_model" onclick="showCrriageManageModel('add')" >
+        <a onclick="showCrriageManageModel('add')" >
             <button type="button" class="layui-btn layui-btn-xs layui-btn-xs" style="float: right;margin-right: 10px;margin-bottom: 10px;">添加</button>
         </a>
         <table class="layui-table" id="carriage-config-table" lay-filter="carriage-config-table"></table>
@@ -297,23 +297,27 @@
                     layer.closeAll('loading');
                     layer.msg('修改成功', {icon: 1});
                     crown.finishPopupCenter();
+                    window.location.href='#!carriage';
                 });
             } else {
                 crown.post('/carriageConfig', {data:data.field}, function () {
                     layer.closeAll('loading');
                     layer.msg('添加成功', {icon: 1});
                     crown.finishPopupCenter();
+                    window.location.href='#!carriage';
                 });
             }
             return false;
         });
     })
     function showCrriageManageModel(type){
+        debugger;
         if(type == 'add'){
             cid = null;
         }
         $("#carriage_manage_model").show();
         carriageTable.reload('carriage-config-table', {});
+        $('#carriage-config-table')[0].scrollIntoView(true);
     }
     function closeCrriageManageModel(){
         $("#carriage_manage_model").hide();

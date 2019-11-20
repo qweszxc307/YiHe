@@ -121,7 +121,6 @@
             , element = layui.element;
         var orderDetail = crown.getTempData('t_orderDetail');
         var order = crown.getTempData('t_order');
-        debugger;
         if (order && orderDetail) {
             form.val('order-form', order);
             if (orderDetail.paymentType = 1) {
@@ -137,7 +136,6 @@
             }
             $("#memberNum").val(orderDetail.memberNum);
             $("#produckPrice").val(produckPrice);
-            debugger;
             $("#postFee").val(order.postFee);
             $("#totalFee").val(order.totalFee);
             $("#actualFee").val(order.actualFee);
@@ -177,7 +175,6 @@
                 "                        <i class=\"layui-icon layui-anim layui-anim-rotate layui-anim-loop layui-timeline-axis\"></i>\n" +
                 "                    </li>");
             if (order.status != 1) {
-                debugger;
                 $("#button").attr({"class": "layui-btn layui-btn-radius layui-btn-disabled"});
             } else {
                 $("#button").click(function () {

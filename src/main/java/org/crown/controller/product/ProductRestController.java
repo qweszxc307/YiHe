@@ -56,6 +56,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -170,5 +171,13 @@ public class ProductRestController extends SuperController {
     @PostMapping(value = "/uploads")
     public ApiResponses<ImageDTO> uploads(HttpServletResponse httpServletResponse, MultipartFile file) {
         return imageService.uploadImg(httpServletResponse,file, ImagesEnum.PRODUCT_IMAGE);
+    }
+
+    @Resources(auth = AuthTypeEnum.AUTH)
+    @ApiOperation("查询所有产品(下拉框)")
+    @GetMapping(value = "/products")
+    public ApiResponses<List<Map<String,String>>> products() {
+        List<Map<String,String>> list = productService.selectProducts();
+        return success(list);
     }
 }

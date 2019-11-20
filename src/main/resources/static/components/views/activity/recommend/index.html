@@ -1,0 +1,160 @@
+<style>
+    .layui-table-cell {
+        height: auto;
+        line-height: 28px;
+    }
+</style>
+<div class="layui-card">
+    <div class="layui-card-header">
+        <h2 class="header-title">推荐返礼</h2>
+        <span class="layui-breadcrumb pull-right">
+          <a href="#!console">推荐返礼</a>
+          <a><cite>推荐返礼</cite></a>
+        </span>
+    </div>
+    <div class="layui-card-body">
+        <!-- 表格顶部操作列 -->
+        <script type="text/html" id="recommend-toolbar">
+            <div class="layui-btn-container">
+                {{# if({{addShow}} == true){ }}
+                <button class="layui-btn layui-btn-normal layui-btn-sm" lay-event="add"><i
+                        class="layui-icon">&#xe654;</i>添加
+                </button>
+                {{# } }}
+            </div>
+        </script>
+        <table class="layui-table" id="recommend-table" lay-filter="recommend-table"></table>
+    </div>
+</div>
+
+<!-- 表格操作列 -->
+<script type="text/html" id="recommend-table-bar">
+    {{#  if({{detailShow}} == true){ }}
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">详情</a>
+    {{#  } }}
+    {{#  if({{editShow}} == true){ }}
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>
+    {{#  } }}
+    {{#  if({{deleteShow}} == true){ }}
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    {{#  } }}
+</script>
+
+<!-- 表格状态列 -->
+<script type="text/html" id="recommend-tpl-status">
+    <input type="checkbox" lay-filter="recommend-tpl-status" value="{{d.id}}" lay-skin="switch"
+           lay-text="正常|禁用" {{d.status==0?'checked':''}}/>
+</script>
+
+<script>
+    layui.use(['form', 'table', 'config', 'crown'], function () {
+        var form = layui.form;
+        var table = layui.table;
+        var config = layui.config;
+        var layer = layui.layer;
+        var crown = layui.crown;
+        $('#recommend-toolbar').vm({
+            addShow: crown.hasPerm("recommend:add")
+        });
+        $('#recommend-table-bar').vm({
+            detailShow: crown.hasPerm("recommend:detail"),
+            editShow: crown.hasPerm("recommend:edit"),
+            deleteShow: crown.hasPerm("recommend:delete")
+        });
+        // 渲染表格
+        var recommendTable = table.render({
+            elem: '#recommend-table',
+            toolbar: '#recommend-toolbar',
+            url: config.serverUrl + '/marketRecommend',
+            request: config.request,
+            parseData: config.parseData,
+            response: config.response,
+            headers: {Authorization: config.getToken()},
+            page:true,
+            cols: [[
+                {field: 'id',  title: 'ID',hide: true},
+                {field: 'mid', width: 160, align: 'center', sort: true, title: '指定用户'},
+                {field: 'apid', width: 160, align: 'center', sort: true, title: '指定商品'},
+                {field: 'pprice',width: 160, align: 'center', sort: true, title: '指定商品价格'},
+                {field: 'spid', width: 160, align: 'center',  sort: true,title: '领取商品'},
+                {field: 'sprice',width: 160, align: 'center', sort: true, title: '领取商品价格'},
+                {field: 'carriagePrice',width: 160, align: 'center', sort: true, title: '领取支付费用'},
+                {field: 'peopleNum',width: 160, align: 'center', sort: true, title: '领取人数'},
+                {field: 'payReturnMoney',width: 160, align: 'center', sort: true, title: '支付成功返现'},
+                {field: 'buyReturnMoney',width: 160, align: 'center', sort: true, title: '购买指定返现'},
+                {field: 'status', width: 160,align: 'center', sort: true,templet: '#recommend-tpl-status', title: '状态'},
+                {align: 'center', width: 160,toolbar: '#recommend-table-bar', title: '操作'}
+            ]]
+        });
+        // 表格顶部操作列
+        table.on('toolbar(recommend-table)', function (obj) {
+            if (obj.event === 'add') {
+                showEditModel();
+            }
+        });
+        // 表格操作列事件
+        table.on('tool(recommend-table)', function (obj) {
+            var data = obj.data;
+            var layEvent = obj.event;
+            if (layEvent === 'detail') {
+                // 查看
+                showEditModel(data);
+            }
+            if (layEvent === 'edit') {
+                // 修改
+                showEditModel(data);
+            }else if (layEvent === 'del') {
+                // 删除
+                doDelete(obj);
+            }
+        });
+
+        // 删除
+        var doDelete = function (obj) {
+            layer.confirm('确定要删除吗？', function (i) {
+                layer.close(i);
+                layer.load(2);
+                crown.delete('/marketRecommend/' + obj.data.id, {}, function () {
+                    layer.closeAll('loading');
+                    layer.msg('删除成功', {icon: 1});
+                    obj.del();
+                });
+            });
+        };
+
+        //显示表单弹窗
+        var showEditModel = function (data) {
+            if (data) {
+                crown.get('/marketRecommend/' + data.id, {async:false}, function (data) {
+                    crown.putTempData('t_recommend', data.result);
+                });
+            }
+            crown.popupCenter({
+                type:1,
+                resize:true,
+                title: data ? '修改推荐返礼信息' : '添加推荐返礼信息',
+                area:['80%','80%'],
+                offset: 'auto',
+                path: 'components/views/activity/recommend/form.html',
+                finish: function () {
+                    recommendTable.reload('recommend-table', {});
+                }
+            });
+        };
+
+        // 搜索按钮点击事件
+        $('#recommend-btn-search').click(function () {
+            recommendTable.reload({where: crown.getSearchForm()});
+        });
+
+        // 修改recommend状态
+        form.on('switch(recommend-tpl-status)', function (obj) {
+            layer.load(2);
+            crown.put('/marketRecommend/' + obj.elem.value + '/status',
+                {data: {status: obj.elem.checked ? 0 : 1}}, function () {
+                    layer.closeAll('loading');
+                    layer.msg('用户状态更新成功', {icon: 1});
+                });
+        });
+    });
+</script>

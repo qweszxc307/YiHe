@@ -18,66 +18,18 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package org.crown.service.product;
+package org.crown.service.activity;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.swagger.models.auth.In;
-import org.crown.enums.StatusEnum;
-import org.crown.model.product.dto.ProductDTO;
-import org.crown.model.product.entity.Product;
+import org.crown.model.activity.entity.MarketRecommend;
 import org.crown.framework.service.BaseService;
-import org.crown.model.product.parm.ProductPARM;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * <p>
- * 产品表 服务类
+ * 推荐返礼信息表 服务类
  * </p>
  *
  * @author whZhang
  */
-public interface IProductService extends BaseService<Product> {
-    /**
-     * 产品列表
-     *
-     * @param page
-     */
-    IPage<ProductDTO> selectProductPage(IPage<ProductDTO> page);
+public interface IMarketRecommendService extends BaseService<MarketRecommend> {
 
-    /**
-     * 添加产品
-     *
-     * @param productPARM
-     */
-    void createProduct(ProductPARM productPARM);
-
-    /**
-     * 修改产品状态
-     *
-     * @param productId
-     * @param status
-     */
-    void updateStatus(Integer productId, StatusEnum status);
-    /**
-     * 修改产品信息
-     *
-     * @param id
-     * @param productPARM
-     */
-    void updateProductById(Integer id,ProductPARM productPARM);
-    /**
-     * 删除产品信息
-     *
-     * @param id
-     */
-    void deletProductById(Integer id);
-    /**
-     * 查询产品信息(下拉框)
-     *
-     */
-    List<Map<String,String>> selectProducts();
-
-
-}
+        }
