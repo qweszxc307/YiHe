@@ -25,15 +25,20 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.crown.common.annotations.Resources;
+import org.crown.common.utils.TypeUtils;
 import org.crown.enums.AuthTypeEnum;
 import org.crown.framework.responses.ApiResponses;
 import org.crown.model.product.dto.AreaDTO;
 import org.crown.model.product.dto.CarriageConfigDTO;
 import org.crown.model.product.dto.ProductDTO;
 import org.crown.model.product.entity.Carriage;
+import org.crown.model.product.entity.CarriageAreaCity;
 import org.crown.model.product.entity.CarriageConfig;
+import org.crown.model.product.entity.CarriageConfigPrice;
 import org.crown.model.product.parm.CarriageConfigPARM;
 import org.crown.model.product.parm.CarriagePARM;
+import org.crown.service.product.ICarriageAreaCityService;
+import org.crown.service.product.ICarriageConfigPriceService;
 import org.crown.service.product.ICarriageConfigService;
 import org.crown.service.product.ICarriageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,11 +68,15 @@ public class CarriageConfigRestController extends SuperController {
 
         @Autowired
         private ICarriageConfigService carriageConfigService;
+        @Autowired
+        private ICarriageConfigPriceService carriageConfigPriceService;
+        @Autowired
+        private ICarriageAreaCityService carriageAreaCityService;
 
         @Resources(auth = AuthTypeEnum.AUTH)
-        @ApiOperation("查询运费模板相关运费策略")
+        @ApiOperation("查询运费策略")
         @ApiImplicitParams({
-                @ApiImplicitParam(name = "id", value = "产品运费策略ID", required = true, paramType = "path")
+                @ApiImplicitParam(name = "id", value = "产品运费模板ID", required = true, paramType = "path")
         })
         @GetMapping("/{id}")
         public ApiResponses<IPage<CarriageConfigDTO>> page(@PathVariable("id") Integer id) {
@@ -75,6 +84,44 @@ public class CarriageConfigRestController extends SuperController {
                         carriageConfigService.selectCarriageConfigPage(this.getPage(),id)
                                 .convert(e -> e.convert(CarriageConfigDTO.class))
                 );
+        }
+        @Resources(auth = AuthTypeEnum.AUTH)
+        @ApiOperation(value = "修改产品运费策略配置信息")
+        @ApiImplicitParams({
+                @ApiImplicitParam(name = "id", value = "产品运费策略配置信息ID", required = true, paramType = "path")
+        })
+        @PutMapping("/{id}")
+        public ApiResponses<Void> update(@PathVariable("id") Integer id,@RequestBody @Validated(CarriageConfigPARM.Update.class) CarriageConfigPARM carriageConfigPARM) {
+                /*修改运费策略配置基本信息*/
+                CarriageConfig carriageConfig = new CarriageConfig();
+                carriageConfig.setId(id);
+                carriageConfig.setFreePrice(TypeUtils.castToBigDecimal(carriageConfigPARM.getCarriageConfigFreePrice()));
+                carriageConfig.setName(carriageConfigPARM.getCarriageConfigName());
+                carriageConfigService.saveOrUpdate(carriageConfig);
+                /*修改运费策略配置价格信息*/
+                List<CarriageConfigPrice> carriageConfigPrices = new ArrayList<>();
+                for(int i = 0;i<carriageConfigPARM.getBnums().size();i++){
+                        CarriageConfigPrice carriageConfigPrice = new CarriageConfigPrice();
+                        carriageConfigPrice.setSNum(TypeUtils.castToInt(carriageConfigPARM.getBnums().get(i)));
+                        carriageConfigPrice.setENum(TypeUtils.castToInt(carriageConfigPARM.getOnums().get(i)));
+                        carriageConfigPrice.setPrice(TypeUtils.castToBigDecimal(carriageConfigPARM.getPrice().get(i)));
+                        carriageConfigPrice.setConfigId(id);
+                        carriageConfigPrices.add(carriageConfigPrice);
+
+                }
+                carriageConfigPriceService.delete().eq(CarriageConfigPrice::getConfigId,id).execute();
+                carriageConfigPriceService.saveOrUpdateBatch(carriageConfigPrices);
+                /*修改运费策略配置地区信息*/
+                carriageAreaCityService.delete().eq(CarriageAreaCity::getConfigId,id).execute();
+                List<CarriageAreaCity> areaCityList = new ArrayList<>();
+                for(int i = 0;i<carriageConfigPARM.getCityIds().size();i++){
+                        CarriageAreaCity carriageAreaCity = new CarriageAreaCity();
+                        carriageAreaCity.setCityId(carriageConfigPARM.getCityIds().get(i));
+                        carriageAreaCity.setConfigId(carriageConfig.getId());
+                        areaCityList.add(carriageAreaCity);
+                }
+                carriageAreaCityService.saveBatch(areaCityList);
+                return success();
         }
 
         @Resources(auth = AuthTypeEnum.AUTH)
@@ -90,6 +137,29 @@ public class CarriageConfigRestController extends SuperController {
         @GetMapping(value = "/areas")
         public ApiResponses<List<AreaDTO>> getAreas() {
                 return success(carriageConfigService.getAreas());
+        }
+
+        @Resources(auth = AuthTypeEnum.AUTH)
+        @ApiOperation("获取运费配置对应相关运费区域")
+        @ApiImplicitParams({
+                @ApiImplicitParam(name = "id", value = "产品运费策略配置信息ID", required = true, paramType = "path")
+        })
+        @GetMapping(value = "/areas/{id}")
+        public ApiResponses<List<String>> getAreasById(@PathVariable("id") Integer id) {
+                return success(carriageConfigService.getAreasByConfigId(id));
+        }
+
+        @Resources(auth = AuthTypeEnum.AUTH)
+        @ApiOperation("删除相关运费配置信息")
+        @ApiImplicitParams({
+                @ApiImplicitParam(name = "id", value = "产品运费策略配置信息ID", required = true, paramType = "path")
+        })
+        @DeleteMapping(value = "/{id}")
+        public ApiResponses<Void> delete(@PathVariable("id") Integer id) {
+                carriageAreaCityService.delete().eq(CarriageAreaCity::getConfigId,id).execute();
+                carriageConfigService.delete().eq(CarriageConfig::getId,id).execute();
+                carriageConfigPriceService.delete().eq(CarriageConfigPrice::getConfigId,id).execute();
+                return success(HttpStatus.NO_CONTENT);
         }
 
 }

@@ -50,6 +50,10 @@ private static final long serialVersionUID=1L;
     @NotEmpty(groups = {ProductPARM.Create.class, ProductPARM.Update.class}, message = "关联运费策略信息失败，请重试")
     private Integer id;
 
+    @ApiModelProperty(notes = "运费策略配置Id")
+    @NotEmpty(groups = {ProductPARM.Update.class}, message = "运费策略配置Id")
+    private Integer cid;
+
     @ApiModelProperty(notes = "策略名称")
     @NotEmpty(groups = {ProductPARM.Create.class, ProductPARM.Update.class}, message = "请填写策略名称")
     private String carriageConfigName;

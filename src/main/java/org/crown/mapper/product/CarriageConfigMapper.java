@@ -33,4 +33,9 @@ public interface CarriageConfigMapper extends BaseMapper<CarriageConfig> {
          * @return
          */
         List<AreaDTO> getAreas();
+        /**
+         * 获取运费策略配置相关区域信息
+         * @return
+         */
+        List<String> getAreasByConfigId(@Param("id") Integer cid);
 }

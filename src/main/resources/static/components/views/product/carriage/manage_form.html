@@ -1,11 +1,15 @@
 <style>
     #box::-webkit-scrollbar {display: none;}
+    .layui-table-cell {
+         height: auto;
+         line-height: 28px;
+     }
 </style>
 <form id="manage-form" lay-filter="manage-form" class="layui-form model-form" style="padding-right:0px;height:100%">
     <div id="box" style=" height:80%;overflow: auto;padding-right:10px;padding-left:10px">
         <!-- 表格顶部操作列 -->
-        <a href="#carriage_manage_model">
-            <button type="button" onclick="showCrriageManageModel()" class="layui-btn layui-btn-xs layui-btn-xs" style="float: right;margin-right: 10px;margin-bottom: 10px;">添加</button>
+        <a href="#carriage_manage_model" onclick="showCrriageManageModel('add')" >
+            <button type="button" class="layui-btn layui-btn-xs layui-btn-xs" style="float: right;margin-right: 10px;margin-bottom: 10px;">添加</button>
         </a>
         <table class="layui-table" id="carriage-config-table" lay-filter="carriage-config-table"></table>
         <div id="carriage_manage_model" hidden >
@@ -38,7 +42,7 @@
                                 <td>价格(元/个)</td>
                                 <td>操作</td>
                             </tr>
-                            <a class="layui-btn layui-btn-xs" onclick="addPrice()" style="float:right;margin-bottom: 10px;">添加</a>
+                            <a class="layui-btn layui-btn-xs" onclick="addPrice()" style="float:right;margin-bottom: 10px;">添加价格区间</a>
                             </thead>
                             <tbody>
                             <tr>
@@ -56,31 +60,31 @@
             </div>
             <div id="square_choose">
                 <div class="layui-row" style="margin-bottom: 10px;margin-top: 10px">
-                    <div class="layui-col-xs6">
+                    <div class="layui-col-xs6" style="text-align:center">
                         <div id="square_transfer1" class="demo-transfer layui-inline"></div>
                     </div>
-                    <div class="layui-col-xs6">
+                    <div class="layui-col-xs6" style="text-align:center">
                         <div id="square_transfer2" class="demo-transfer layui-inline"></div>
                     </div>
                 </div>
                 <div class="layui-row" style="margin-bottom: 10px;margin-top: 10px">
-                    <div class="layui-col-xs6">
+                    <div class="layui-col-xs6" style="text-align:center">
                         <div id="square_transfer3" class="demo-transfer layui-inline"></div>
                     </div>
-                    <div class="layui-col-xs6">
+                    <div class="layui-col-xs6" style="text-align:center">
                         <div id="square_transfer4" class="demo-transfer layui-inline"></div>
                     </div>
                 </div>
                 <div class="layui-row" style="margin-bottom: 10px;margin-top: 10px">
-                    <div class="layui-col-xs6">
+                    <div class="layui-col-xs6" style="text-align:center">
                         <div id="square_transfer5" class="demo-transfer layui-inline"></div>
                     </div>
-                    <div class="layui-col-xs6">
+                    <div class="layui-col-xs6" style="text-align:center">
                         <div id="square_transfer6" class="demo-transfer layui-inline"></div>
                     </div>
                 </div>
                 <div class="layui-row" style="margin-bottom: 10px;margin-top: 10px">
-                    <div class="layui-col-xs6">
+                    <div class="layui-col-xs6" style="text-align:center">
                         <div id="square_transfer7" class="demo-transfer layui-inline"></div>
                     </div>
                 </div>
@@ -99,17 +103,20 @@
 </form>
 <!-- 表格操作列 -->
 <script type="text/html" id="carriage-config-table-bar">
-    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-primary layui-btn-xs"  href="#carriage_manage_model" lay-event="edit">编辑</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
 <script>
     var cid;
+    var form;
+    var carriageTable;
+    var crown;
     layui.use(['layer','transfer', 'crown', 'table', 'form'], function () {
         var layer = layui.layer;
         var $ = layui.$
             ,transfer = layui.transfer
-        var crown = layui.crown;
-        var form = layui.form;
+        crown = layui.crown;
+        form = layui.form;
         var table = layui.table;
         var config = layui.config;
         //回显运费策略数据
@@ -117,6 +124,7 @@
         if(carriage){
             form.val('manage-form', carriage);
         }
+        //回显运费策略可选区域
         crown.get('/carriageConfig/areas', {async:false}, function (data) {
             var areas = data.result;
             for(var i=0;i< areas.length;i++){
@@ -156,7 +164,7 @@
         });
 
         // 渲染表格
-        var carriageTable = table.render({
+         carriageTable = table.render({
             elem: '#carriage-config-table',
             toolbar: null,
             url: config.serverUrl + '/carriageConfig/'+carriage.id,
@@ -189,6 +197,9 @@
             var data = obj.data;
             var layEvent = obj.event;
             if (layEvent === 'edit') {
+                showCrriageManageModel('edit');
+                var size=$("#price_degree_model tr").length;
+                $("#price_degree_model tr").slice(2,size).remove();
                 cid = data.cid;
                 // 修改
                 var carrigeConfigPricesData = data.carrigeConfigPrices;
@@ -209,67 +220,100 @@
                         '</tr>';
                     $(html).appendTo($('#price_degree_model tbody:last'));
                 }
-
+                //获取相关地区关联信息
+                var keys = [];
+                crown.get('/carriageConfig/areas/'+cid, {async:false}, function (data) {
+                    keys = data.result;
+                });
+                crown.get('/carriageConfig/areas', {async:false}, function (data) {
+                    var areas = data.result;
+                    for(var i=0;i< areas.length;i++){
+                        transfer.render({
+                            elem: '#square_transfer'+areas[i].id
+                            ,data:areas[i].citys
+                            ,value:keys
+                            ,title: [areas[i].name+"候选地",areas[i].name+"已选地"]
+                            ,id: 'squareTransfer'+areas[i].id
+                            ,showSearch: true
+                        })
+                    }
+                });
             }else if (layEvent === 'del') {
                 // 删除
-                alert("delete");
+                doDelete(obj);
             }
         });
+        // 删除
+        var doDelete = function (obj) {
+            layer.confirm('确定要删除吗？', function (i) {
+                layer.close(i);
+                layer.load(2);
+                crown.delete('/carriageConfig/' + obj.data.cid, {}, function () {
+                    layer.closeAll('loading');
+                    layer.msg('删除成功', {icon: 1});
+                    obj.del();
+                });
+            });
+        };
         // 表单提交事件
         form.on('submit(carriage-config-form-submit)', function (data) {
-            debugger;
             layer.load(2);
+            var bnums = [];
+            var onums = [];
+            var price = [];
+            $("input[name='b_number']").each(function(b,item){
+                // 你要实现的业务逻辑
+                bnums.push(item.value)
+            });
+            $("input[name='e_number']").each(function(o,item){
+                // 你要实现的业务逻辑
+                onums.push(item.value)
+            });
+            $("input[name='price']").each(function(p,item){
+                // 你要实现的业务逻辑
+                price.push(item.value)
+            });
+            data.field.bnums = bnums;
+            data.field.onums = onums;
+            data.field.price = price;
+            data.field.bnums = bnums;
+            data.field.onums = onums;
+            data.field.price = price;
+            var squareTransfer1Data = transfer.getData('squareTransfer1'); //获取右侧数据
+            var squareTransfer2Data = transfer.getData('squareTransfer2'); //获取右侧数据
+            var squareTransfer3Data = transfer.getData('squareTransfer3'); //获取右侧数据
+            var squareTransfer4Data = transfer.getData('squareTransfer4'); //获取右侧数据
+            var squareTransfer5Data = transfer.getData('squareTransfer5'); //获取右侧数据
+            var squareTransfer6Data = transfer.getData('squareTransfer6'); //获取右侧数据
+            var squareTransfer7Data = transfer.getData('squareTransfer7'); //获取右侧数据
+            var squareTransferData = squareTransfer1Data.concat(squareTransfer2Data,squareTransfer3Data,squareTransfer4Data,squareTransfer5Data,squareTransfer6Data,squareTransfer7Data);
+            var cityIds = [];
+            for(var i=0;i<squareTransferData.length;i++){
+                cityIds.push(squareTransferData[i].value);
+            }
+            data.field.cityIds = cityIds;
             if (cid) {
-                alert("这是修改");
-               /* crown.put('/carriage/' + data.field.id, {data: data.field}, function () {
+                crown.put('/carriageConfig/' + cid, {data: data.field}, function () {
                     layer.closeAll('loading');
                     layer.msg('修改成功', {icon: 1});
                     crown.finishPopupCenter();
-                });*/
+                });
             } else {
-                alert("这是新增");
-                /*var squareTransfer1Data = transfer.getData('squareTransfer1'); //获取右侧数据
-                var squareTransfer2Data = transfer.getData('squareTransfer2'); //获取右侧数据
-                var squareTransfer3Data = transfer.getData('squareTransfer3'); //获取右侧数据
-                var squareTransfer4Data = transfer.getData('squareTransfer4'); //获取右侧数据
-                var squareTransfer5Data = transfer.getData('squareTransfer5'); //获取右侧数据
-                var squareTransfer6Data = transfer.getData('squareTransfer6'); //获取右侧数据
-                var squareTransfer7Data = transfer.getData('squareTransfer7'); //获取右侧数据
-                var squareTransferData = squareTransfer1Data.concat(squareTransfer2Data,squareTransfer3Data,squareTransfer4Data,squareTransfer5Data,squareTransfer6Data,squareTransfer7Data);
-                var cityIds = [];
-                for(var i=0;i<squareTransferData.length;i++){
-                    cityIds.push(squareTransferData[i].value);
-                }
-                var bnums = [];
-                var onums = [];
-                var price = [];
-                $("input[name='b_number']").each(function(b,item){
-                    // 你要实现的业务逻辑
-                    bnums.push(item.value)
-                });
-                $("input[name='e_number']").each(function(o,item){
-                    // 你要实现的业务逻辑
-                    onums.push(item.value)
-                });
-                $("input[name='price']").each(function(p,item){
-                    // 你要实现的业务逻辑
-                    price.push(item.value)
-                });
-                data.field.bnums = bnums;
-                data.field.onums = onums;
-                data.field.price = price;
-                data.field.cityIds = cityIds;
                 crown.post('/carriageConfig', {data:data.field}, function () {
                     layer.closeAll('loading');
                     layer.msg('添加成功', {icon: 1});
                     crown.finishPopupCenter();
-                });*/
+                });
             }
             return false;
         });
     })
-    function showCrriageManageModel(){
+    function showCrriageManageModel(type){
+        if(type == 'add'){
+            cid = null;
+        }
         $("#carriage_manage_model").show();
+        carriageTable.reload('carriage-config-table', {});
     }
     function closeCrriageManageModel(){
         $("#carriage_manage_model").hide();

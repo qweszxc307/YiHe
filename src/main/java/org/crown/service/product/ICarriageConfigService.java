@@ -51,9 +51,17 @@ public interface ICarriageConfigService extends BaseService<CarriageConfig> {
          * @param carriageConfigPARM
          */
         ApiResponses<Void>  saveCarriageConfig(CarriageConfigPARM carriageConfigPARM);
+
         /**
          * 获取运费策略配置区域信息
          *
          */
         List<AreaDTO> getAreas();
+
+        /**
+         * 获取运费策略配置区域信息
+         *
+         */
+        List<String>getAreasByConfigId(Integer id);
+
 }

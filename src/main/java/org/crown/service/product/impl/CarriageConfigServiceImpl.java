@@ -103,4 +103,10 @@ public class CarriageConfigServiceImpl extends BaseServiceImpl<CarriageConfigMap
                 List<AreaDTO> list = baseMapper.getAreas();
                 return list;
         }
+
+        @Override
+        public List<String> getAreasByConfigId(Integer id) {
+                List<String> list = baseMapper.getAreasByConfigId(id);
+                return list;
+        }
 }

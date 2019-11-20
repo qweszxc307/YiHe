@@ -31,7 +31,13 @@ import org.crown.framework.controller.SuperController;
 import org.crown.framework.responses.ApiResponses;
 import org.crown.model.product.dto.CarriageDTO;
 import org.crown.model.product.entity.Carriage;
+import org.crown.model.product.entity.CarriageAreaCity;
+import org.crown.model.product.entity.CarriageConfig;
+import org.crown.model.product.entity.CarriageConfigPrice;
 import org.crown.model.product.parm.CarriagePARM;
+import org.crown.service.product.ICarriageAreaCityService;
+import org.crown.service.product.ICarriageConfigPriceService;
+import org.crown.service.product.ICarriageConfigService;
 import org.crown.service.product.ICarriageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -56,6 +62,12 @@ public class CarriageRestController extends SuperController {
 
         @Autowired
         private ICarriageService carriageService;
+        @Autowired
+        private ICarriageConfigService carriageConfigService;
+        @Autowired
+        private ICarriageConfigPriceService carriageConfigPriceService;
+        @Autowired
+        private ICarriageAreaCityService carriageAreaCityService;
 
         @Resources(auth = AuthTypeEnum.AUTH)
         @ApiOperation("查询所有运费模板")
@@ -68,7 +80,7 @@ public class CarriageRestController extends SuperController {
         }
 
         @Resources(auth = AuthTypeEnum.AUTH)
-        @ApiOperation("查询所有运费策略")
+        @ApiOperation("查询所有运费模板")
         @GetMapping(value = "/carriages")
         public ApiResponses<List<Carriage>> list() {
                 return success(carriageService.list());
@@ -76,7 +88,7 @@ public class CarriageRestController extends SuperController {
 
 
         @Resources(auth = AuthTypeEnum.AUTH)
-        @ApiOperation("添加产品运费策略")
+        @ApiOperation("添加产品运费运费模板")
         @PostMapping
         public ApiResponses<Void> create(@RequestBody @Validated(CarriagePARM.Create.class) CarriagePARM carriagePARM) {
                 carriageService.save(carriagePARM.convert(Carriage.class));
@@ -84,20 +96,21 @@ public class CarriageRestController extends SuperController {
         }
 
         @Resources(auth = AuthTypeEnum.AUTH)
-        @ApiOperation(value = "删除产品运费策略")
+        @ApiOperation(value = "删除产品运费运费模板")
         @ApiImplicitParams({
-                @ApiImplicitParam(name = "id", value = "产品运费策略ID", required = true, paramType = "path")
+                @ApiImplicitParam(name = "id", value = "产品运费模板ID", required = true, paramType = "path")
         })
 
         @DeleteMapping("/{id}")
         public ApiResponses<Void> delete(@PathVariable("id") Integer id) {
+                carriageService.delete().eq(Carriage::getId,id).execute();
                 return success(HttpStatus.NO_CONTENT);
         }
 
         @Resources(auth = AuthTypeEnum.AUTH)
-        @ApiOperation(value = "查询产品运费策略")
+        @ApiOperation(value = "查询产品运费模板")
         @ApiImplicitParams({
-                @ApiImplicitParam(name = "id", value = "产品运费策略ID", required = true, paramType = "path")
+                @ApiImplicitParam(name = "id", value = "产品运费模板ID", required = true, paramType = "path")
         })
 
         @GetMapping("/{id}")
@@ -108,9 +121,9 @@ public class CarriageRestController extends SuperController {
         }
 
         @Resources(auth = AuthTypeEnum.AUTH)
-        @ApiOperation(value = "修改产品运费策略")
+        @ApiOperation(value = "修改产品运费模板")
         @ApiImplicitParams({
-                @ApiImplicitParam(name = "id", value = "产品运费策略ID", required = true, paramType = "path")
+                @ApiImplicitParam(name = "id", value = "产品运费模板ID", required = true, paramType = "path")
         })
         @PutMapping("/{id}")
         public ApiResponses<Void> update(@PathVariable("id") Integer id,@RequestBody @Validated(CarriagePARM.Create.class) CarriagePARM carriagePARM) {

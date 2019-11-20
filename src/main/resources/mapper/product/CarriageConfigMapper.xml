@@ -34,4 +34,9 @@
     <select id="getAreas" resultMap="CarriageConfigAreaResultMap">
         select * from area
     </select>
+
+    <select id="getAreasByConfigId" parameterType="Integer" resultType="java.lang.String">
+        select city_id from carriage_area_city where config_id = #{id}
+    </select>
+
 </mapper>
