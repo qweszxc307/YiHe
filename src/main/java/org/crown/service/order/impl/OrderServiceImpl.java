@@ -20,25 +20,23 @@
  */
 package org.crown.service.order.impl;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.extern.slf4j.Slf4j;
-import org.crown.common.mybatisplus.LambdaQueryWrapperChain;
 import org.crown.framework.service.impl.BaseServiceImpl;
 import org.crown.mapper.customer.CustomerMapper;
 import org.crown.mapper.order.OrderMapper;
 import org.crown.model.order.dto.OrderDAO;
 import org.crown.model.order.dto.OrderDTO;
 import org.crown.model.order.dto.OrderDetailDTO;
+import org.crown.model.order.dto.OrderUploadDTO;
 import org.crown.model.order.entity.Order;
 import org.crown.model.order.entity.OrderDetail;
-import org.crown.model.order.parm.OrderPARM;
 import org.crown.service.order.IOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -103,5 +101,26 @@ public class OrderServiceImpl extends BaseServiceImpl<OrderMapper, Order> implem
             log.error("修改订单失败！传入参数：{ id:" + id + " },{ totalFee:" + totalFee + " }");
             throw new RuntimeException("修改订单失败：传入参数有误：{ id:" + id + " },{ totalFee:" + totalFee + " }");
         }
+    }
+
+    @Transactional(readOnly = false)
+    @Override
+    public Integer upload(List<OrderUploadDTO> upload ,String logisticsCompany) {
+        int count = 0;
+        for (OrderUploadDTO orderUploadDTO : upload) {
+            String orderNum = orderUploadDTO.getOrderNum();//订单号
+            String logisticsNumber = orderUploadDTO.getLogisticsNumber();//物流单号
+            /**
+             * 根据订单号查询订单，根据订单id找到物流表   设置物流表的物流单号和物流公司名称   订单状态改成 已发货
+             */
+            Order order = baseMapper.queryOrderByOrderNum(orderNum);
+            order.setStatus(3);
+            order.setConsignTime(LocalDateTime.now());
+            updateById(order);
+            baseMapper.updateLogisticsByOrderId(order.getId(), logisticsNumber, logisticsCompany);
+            count++;
+        }
+
+        return count;
     }
 }

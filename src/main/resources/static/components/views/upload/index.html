@@ -1,0 +1,134 @@
+<div class="layui-card">
+    <div class="layui-card-header">
+        <h2 class="header-title">批量下单</h2>
+        <span class="layui-breadcrumb pull-right">
+          <a href="#!console">首页</a>
+          <a><cite>批量下单</cite></a>
+        </span>
+    </div>
+
+    <table class="layui-table" lay-skin="row">
+        <colgroup>
+            <col width="150">
+            <col width="200">
+            <col>
+        </colgroup>
+
+        <tr>
+            <td>
+                下单规则：
+            </td>
+        </tr>
+
+        <tr>
+            <td>功能介绍: 使用excel快速导入进行订单发货</td>
+        </tr>
+        <tr>
+            <td> 如重复导入数据将以最新导入数据为准，请谨慎使用</td>
+        </tr>
+
+        <tr>
+            <td>数据导入订单状态自动修改为已发货</td>
+        </tr>
+
+        <tr>
+            <td>一次导入的数据不要太多,大量数据请分批导入,建议在服务器负载低的时候进行</td>
+        </tr>
+
+        <tr>
+            <td>使用方法:</td>
+        </tr>
+        <tr>
+            <td>1. 下载Excel模板文件并录入信息</td>
+        </tr>
+
+        <tr>
+            <td>2. 选择快递公司</td>
+        </tr>
+
+        <tr>
+            <td>3. 上传Excel导入</td>
+        </tr>
+
+        <tr>
+            <td>格式要求： Excel第一列必须为订单编号，第二列必须为快递单号，请确认订单编号与快递单号的备注</td>
+        </tr>
+    </table>
+    <form class="layui-form" action="">
+        <div class="layui-form-item">
+            <label class="layui-form-label">选择快递：</label>
+            <div class="layui-input-block">
+                <select name="logisticsCompany" lay-verify="" lay-search id="logisticsCompany">
+                    <option value="">其他快递</option>
+                    <option value="申通快递">申通快递</option>
+                    <option value="顺丰速运">顺丰速运</option>
+                    <option value="韵达快运">韵达快运</option>
+                    <option value="天天快递">天天快递</option>
+                    <option value="圆通速递">圆通速递</option>
+                    <option value="中通快递">中通快递</option>
+                    <option value="ems快递">ems快递</option>
+                    <option value="百世快递">百世快递</option>
+                    <option value="全峰快递">全峰快递</option>
+                    <option value="宅急送">宅急送</option>
+                    <option value="中国东方（COE）">中国东方（COE）</option>
+                    <option value="长宇物流">长宇物流</option>
+                    <option value="飞康达物流">飞康达物流</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-upload-drag" id="uploadDemo">
+            <i class="layui-icon"></i>
+            <p>点击上传，或将文件拖拽到此处</p>
+        </div>
+
+    </form>
+    <div class="layui-row layui-col-space10">
+        <div class="layui-col-md4">
+
+        </div>
+        <div class="layui-col-md4">
+            <button type="button" class="layui-btn layui-btn-radius layui-btn-normal" id="download">
+                <a href="./" download="批量发货数据模板.xls">模板下载</a></button>
+        </div>
+
+        <div class="layui-col-md4">
+            <button type="button" class="layui-btn layui-btn-radius layui-btn-normal" id="upload">确认上传
+            </button>
+        </div>
+    </div>
+</div>
+<script>
+    layui.use(['form', 'table', 'upload', 'config', 'crown', 'laydate'], function () {
+        var form = layui.form;
+        var table = layui.table;
+        var config = layui.config;
+        var layer = layui.layer;
+        var crown = layui.crown;
+        var $ = layui.jquery;
+        var laydate = layui.laydate;
+        var upload = layui.upload;
+
+
+        var uploadInst = upload.render({
+            elem: '#uploadDemo' //绑定元素
+            , url: '/order/upload' //上传接口
+            ,accept:'file'
+            , exts: 'xls|xlsx'
+            , auto: false
+            ,bindAction:'#upload'
+            ,data: {logisticsCompany : function () {
+                    return $("#logisticsCompany").val();
+                }}
+            , done: function (res) {
+                layer.alert("共完成："+res.result   +"条订单");
+            }
+            , error: function () {
+                //请求异常回调
+
+            }
+        });
+
+
+    });
+</script>

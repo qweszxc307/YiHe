@@ -58,4 +58,12 @@ public interface OrderMapper extends BaseMapper<Order> {
      */
     Integer updateTotalFeeByOrderId(@Param("id") Integer id, @Param("totalFee") BigDecimal totalFee);
 
+    /**
+     * 根据订单号查订单
+     * @param orderNum
+     * @return
+     */
+    Order queryOrderByOrderNum(@Param("orderNum") String orderNum);
+
+    Integer updateLogisticsByOrderId(@Param("id") Integer id, @Param("logisticsNumber") String logisticsNumber,@Param("logisticsCompany") String logisticsCompany);
 }

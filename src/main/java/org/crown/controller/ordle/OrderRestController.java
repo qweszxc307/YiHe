@@ -25,12 +25,15 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import io.swagger.annotations.*;
 
+import lombok.extern.slf4j.Slf4j;
 import org.crown.common.annotations.Resources;
+import org.crown.common.utils.POIUtils;
 import org.crown.enums.AuthTypeEnum;
 import org.crown.framework.controller.SuperController;
 import org.crown.framework.responses.ApiResponses;
 import org.crown.model.order.dto.OrderDTO;
 import org.crown.model.order.dto.OrderDetailDTO;
+import org.crown.model.order.dto.OrderUploadDTO;
 import org.crown.model.order.entity.Order;
 import org.crown.model.order.parm.OrderPARM;
 import org.crown.service.order.IOrderService;
@@ -39,8 +42,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -50,6 +57,7 @@ import java.util.Objects;
  *
  * @author ykMa
  */
+@Slf4j
 @Api(tags = {"Order"}, description = "订单相关接口")
 @RestController
 @RequestMapping(value = "/order", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -162,9 +170,29 @@ public class OrderRestController extends SuperController {
         3.遍历集合查询商品，获取商品信息 ，存入订单详情表
         * */
         return null;
-
     }
 
+    @Resources(auth = AuthTypeEnum.OPEN)
+    @ApiOperation("订单批量发货")
+    @PostMapping("/upload")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "logisticsCompany", value = "快递公司名称", required = true, paramType = "path"),
+    })
+    public ApiResponses<Integer> upload(MultipartFile file, @RequestParam(value = "logisticsCompany") String logisticsCompany) {
+        Integer count = 0;
+        try {
+            List<String[]> list = POIUtils.readExcel(file);
+            List<OrderUploadDTO> upload = new ArrayList<>();
+            for (String[] strings : list) {
+                OrderUploadDTO orderUploadDTO = new OrderUploadDTO(strings[0], strings[1]);
+                upload.add(orderUploadDTO);
+            }
+            count = orderService.upload(upload, logisticsCompany);
+        } catch (IOException e) {
+            log.error("批量发货出现异常:", e);
+        }
+        return success(count);
+    }
 }
 
 

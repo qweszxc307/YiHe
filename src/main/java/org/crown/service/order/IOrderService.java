@@ -24,6 +24,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.crown.framework.service.BaseService;
 import org.crown.model.order.dto.OrderDTO;
 import org.crown.model.order.dto.OrderDetailDTO;
+import org.crown.model.order.dto.OrderUploadDTO;
 import org.crown.model.order.entity.Order;
 import org.crown.model.order.entity.OrderDetail;
 import org.crown.model.order.parm.OrderPARM;
@@ -59,4 +60,12 @@ public interface IOrderService extends BaseService<Order> {
      * @param totalFee
      */
     void updateTotalFeeByOrderId(Integer id, BigDecimal totalFee);
+
+    /**
+     * 上传批量发货文件
+     *
+     * @param upload
+     * @return
+     */
+    Integer upload(List<OrderUploadDTO> upload, String logistics_company);
 }
