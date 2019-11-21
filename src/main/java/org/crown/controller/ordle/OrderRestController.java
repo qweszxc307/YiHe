@@ -115,7 +115,9 @@ public class OrderRestController extends SuperController {
     })
     @DeleteMapping("/{id}")
     public ApiResponses<Void> delete(@PathVariable("id") Integer id) {
-        orderService.getById(id).setStatus(delete);
+        Order order = orderService.getById(id);
+        order.setStatus(delete);
+        orderService.updateById(order);
         return success(HttpStatus.NO_CONTENT);
     }
 

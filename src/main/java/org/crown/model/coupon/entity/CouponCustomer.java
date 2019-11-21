@@ -18,7 +18,7 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package org.crown.model.customer.entity;
+package org.crown.model.coupon.entity;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -35,42 +35,30 @@ import lombok.NoArgsConstructor;
 
 /**
  * <p>
- * 客户详情表
+ *
  * </p>
  *
  * @author ykMa
  */
-@TableName("customer_details")
+@TableName("coupon_customer")
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class CustomerDetails extends BaseModel {
+public class CouponCustomer extends BaseModel {
 
     private static final long serialVersionUID = 1L;
-    @ApiModelProperty(notes = "id")
-    private Integer id;
-    @ApiModelProperty(notes = "微信名称")
-    private String nickName;
-    @ApiModelProperty(notes = "会员表id")
-    private Integer cId;
-    @ApiModelProperty(notes = "真实姓名")
-    private String name;
-    @ApiModelProperty(notes = "手机号")
-    private String phone;
-    @ApiModelProperty(notes = "性别")
-    private Integer sex;
-    @ApiModelProperty(notes = "地址")
-    private String address;
+
+    @ApiModelProperty(notes = "客户id")
+    private Integer customerId;
+    @ApiModelProperty(notes = "优惠卷id")
+    private Integer couponId;
+    @ApiModelProperty(notes = "创建时间，领取时间")
     /*
      * 创建时间
      */
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
-    /**
-     * 修改时间
-     */
-    @TableField(fill = FieldFill.INSERT_UPDATE)
-    private LocalDateTime updateTime;
+
 
 
 }

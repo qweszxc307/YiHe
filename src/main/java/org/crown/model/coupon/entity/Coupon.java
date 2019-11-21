@@ -18,7 +18,9 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package org.crown.model.customer.entity;
+package org.crown.model.coupon.entity;
+
+import java.math.BigDecimal;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -35,32 +37,46 @@ import lombok.NoArgsConstructor;
 
 /**
  * <p>
- * 客户详情表
+ *
  * </p>
  *
  * @author ykMa
  */
-@TableName("customer_details")
+@TableName("coupon")
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class CustomerDetails extends BaseModel {
+public class Coupon extends BaseModel {
 
     private static final long serialVersionUID = 1L;
     @ApiModelProperty(notes = "id")
     private Integer id;
-    @ApiModelProperty(notes = "微信名称")
-    private String nickName;
-    @ApiModelProperty(notes = "会员表id")
-    private Integer cId;
-    @ApiModelProperty(notes = "真实姓名")
+    @ApiModelProperty(notes = "优惠券描述")
+    private String details;
+    @ApiModelProperty(notes = "优惠卷名称")
     private String name;
-    @ApiModelProperty(notes = "手机号")
-    private String phone;
-    @ApiModelProperty(notes = "性别")
-    private Integer sex;
-    @ApiModelProperty(notes = "地址")
-    private String address;
+    @ApiModelProperty(notes = "类型{1：满减，2：直减，3折扣}")
+    private Integer type;
+    @ApiModelProperty(notes = "折扣条件")
+    private BigDecimal discount;
+    @ApiModelProperty(notes = "优惠价格")
+    private BigDecimal discountPoint;
+    @ApiModelProperty(notes = "开始时间")
+    private LocalDateTime startTime;
+    @ApiModelProperty(notes = "结束时间")
+    private LocalDateTime endTime;
+    @ApiModelProperty(notes = "状态{1：禁用，0：启用}")
+    private Integer status;
+    @ApiModelProperty(notes = "发放数量")
+    private Integer total;
+    @ApiModelProperty(notes = "已发数量")
+    private Integer provide;
+    @ApiModelProperty(notes = "已用数量")
+    private Integer used;
+    @ApiModelProperty(notes = "分发规则{1：主动分发，2：下单分发，3：用户领取，4：中奖分发}")
+    private Integer rule;
+    @ApiModelProperty(notes = "品牌id")
+    private Integer brandId;
     /*
      * 创建时间
      */

@@ -22,6 +22,8 @@ package org.crown.model.customer.entity;
 
 import java.math.BigDecimal;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import org.crown.framework.model.BaseModel;
 
@@ -62,10 +64,17 @@ public class Customer extends BaseModel {
     private Integer orderNum;
     @ApiModelProperty(notes = "成交总金额")
     private BigDecimal sum;
-    @ApiModelProperty(notes = "创建时间")
+    /*
+     * 创建时间
+     */
+    @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
-    @ApiModelProperty(notes = "修改时间")
+    /**
+     * 修改时间
+     */
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updateTime;
+
     @ApiModelProperty(notes = "最后一次交易时间")
     private LocalDateTime lastTime;
 
