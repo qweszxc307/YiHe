@@ -26,7 +26,10 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.crown.common.annotations.Resources;
 import org.crown.enums.AuthTypeEnum;
+import org.crown.enums.StatusEnum;
+import org.crown.framework.enums.ErrorCodeEnum;
 import org.crown.framework.responses.ApiResponses;
+import org.crown.framework.utils.ApiAssert;
 import org.crown.model.activity.dto.MarketRecommendDTO;
 import org.crown.model.activity.entity.MarketRecommend;
 import org.crown.model.activity.param.MarketRecommendPARM;
@@ -34,8 +37,10 @@ import org.crown.model.brand.dto.BrandDTO;
 import org.crown.model.brand.dto.BrandImgDTO;
 import org.crown.model.brand.entity.Brand;
 import org.crown.model.brand.parm.BrandPARM;
+import org.crown.model.product.entity.ProductPrice;
 import org.crown.service.activity.IMarketRecommendService;
 import org.crown.service.brand.IBrandService;
+import org.crown.service.product.IProductPriceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -63,14 +68,16 @@ import java.util.List;
 public class MarketRecommendRestController extends SuperController {
         @Autowired
         private IMarketRecommendService marketRecommendService;
+        @Autowired
+        private IProductPriceService productPriceService;
 
         @Resources(auth = AuthTypeEnum.AUTH)
         @ApiOperation("查询所有推荐返礼活动(分页)")
         @GetMapping
         public ApiResponses<IPage<MarketRecommendDTO>> page() {
-                return success(marketRecommendService.page(this.getPage()).convert(e->e.convert(MarketRecommendDTO.class))
-                       /* marketRecommendService.selectMarketRecommendPage(this.<MarketRecommendDTO>getPage())
-                                .convert(e -> e.convert(MarketRecommendDTO.class))*/
+                return success(
+                        marketRecommendService.selectMarketRecommendPage(this.<MarketRecommendDTO>getPage())
+                                .convert(e -> e.convert(MarketRecommendDTO.class))
                 );
         }
 
@@ -81,8 +88,25 @@ public class MarketRecommendRestController extends SuperController {
         })
         @GetMapping("/{id}")
         public ApiResponses<MarketRecommendDTO> get(@PathVariable("id") Integer id) {
-                MarketRecommendDTO marketRecommendDTO = new MarketRecommendDTO();
+                MarketRecommend marketRecommend = marketRecommendService.getById(id);
+                MarketRecommendDTO marketRecommendDTO = marketRecommend.convert(MarketRecommendDTO.class);
                 return success(marketRecommendDTO);
+        }
+
+        @Resources(auth = AuthTypeEnum.AUTH)
+        @ApiOperation("查询推荐返礼商品价格")
+        @ApiImplicitParams({
+                @ApiImplicitParam(name = "id", value = "产品Id", required = true, paramType = "path")
+        })
+        @GetMapping("/productPrice/{id}")
+        public ApiResponses<String> getProductPriceById(@PathVariable("id") Integer id) {
+                String price = productPriceService.query()
+                        .eq(ProductPrice::getPid,id)
+                        .eq(ProductPrice::getSNum,1)
+                        .getOne()
+                        .getPrice()
+                        .toString();
+                return success(price);
         }
 
         @Resources(auth = AuthTypeEnum.AUTH)
@@ -90,6 +114,7 @@ public class MarketRecommendRestController extends SuperController {
         @PostMapping
         public ApiResponses<Void> create(@RequestBody @Validated(MarketRecommendPARM.Create.class) MarketRecommendPARM marketRecommendPARM) {
                 MarketRecommend marketRecommend = marketRecommendPARM.convert(MarketRecommend.class);
+                marketRecommend.setStatus(StatusEnum.NORMAL);
                 marketRecommendService.save(marketRecommend);
                 return success(HttpStatus.CREATED);
         }
@@ -126,6 +151,9 @@ public class MarketRecommendRestController extends SuperController {
         })
         @PutMapping("/{id}/status")
         public ApiResponses<Void> updateStatus(@PathVariable("id") Integer id, @RequestBody @Validated(MarketRecommendPARM.Status.class) MarketRecommendPARM marketRecommendPARM) {
-                return success();
+            MarketRecommend marketRecommend = marketRecommendService.getById(id);
+            marketRecommend.setStatus(marketRecommendPARM.getStatus());
+            marketRecommendService.updateById(marketRecommend);
+            return success();
         }
 }

@@ -21,11 +21,15 @@
 package org.crown.model.activity.dto;
 
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.apache.ibatis.annotations.Result;
+import org.crown.enums.StatusEnum;
 import org.crown.framework.model.BaseModel;
+import org.crown.framework.model.convert.Convert;
 
 import java.math.BigDecimal;
 
@@ -41,20 +45,28 @@ import java.math.BigDecimal;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class MarketRecommendDTO extends BaseModel {
+public class MarketRecommendDTO extends Convert {
 
 private static final long serialVersionUID=1L;
 
+    @ApiModelProperty(notes = "id")
+    private Integer id;
     @ApiModelProperty(notes = "会员等级Id")
-private Integer mId;
+    private Integer memberId;
+    @ApiModelProperty(notes = "会员等级名称")
+    private String memberName;
     @ApiModelProperty(notes = "参加活动商品id")
-private Integer aPid;
+private Integer activePid;
+    @ApiModelProperty(notes = "参加活动商品名称")
+    private String activeName;
     @ApiModelProperty(notes = "参加活动商品价格")
-private BigDecimal pPrice;
+private BigDecimal activeProductPrice;
     @ApiModelProperty(notes = "领取商品id")
-private Integer sPid;
+private Integer sendPid;
+    @ApiModelProperty(notes = "领取商品名称")
+    private String sendName;
     @ApiModelProperty(notes = "领取商品价格")
-private BigDecimal sPrice;
+private BigDecimal sendPrice;
     @ApiModelProperty(notes = "运费")
 private BigDecimal carriagePrice;
     @ApiModelProperty(notes = "可领取人数")
@@ -64,6 +76,6 @@ private BigDecimal payReturnMoney;
     @ApiModelProperty(notes = "购买指定商品后返现价格")
 private BigDecimal buyReturnMoney;
     @ApiModelProperty(notes = "状态")
-private Integer status;
+private StatusEnum status;
 
 }

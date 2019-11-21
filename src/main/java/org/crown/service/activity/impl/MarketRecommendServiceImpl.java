@@ -20,6 +20,8 @@
  */
 package org.crown.service.activity.impl;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import org.crown.model.activity.dto.MarketRecommendDTO;
 import org.crown.model.activity.entity.MarketRecommend;
 import org.crown.mapper.activity.MarketRecommendMapper;
 import org.crown.service.activity.IMarketRecommendService;
@@ -36,4 +38,8 @@ import org.springframework.stereotype.Service;
 @Service
         public class MarketRecommendServiceImpl extends BaseServiceImpl<MarketRecommendMapper, MarketRecommend>implements IMarketRecommendService {
 
+        @Override
+        public IPage<MarketRecommendDTO> selectMarketRecommendPage(IPage<MarketRecommendDTO> page) {
+                return baseMapper.selectMarketRecommendPage(page);
         }
+}

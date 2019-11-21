@@ -12,13 +12,14 @@
 <!-- user表单弹窗 -->
 <form id="recommend-form" lay-filter="recommend-form" class="layui-form model-form" style="padding-right:0px;height:100%">
     <div style=" height:80%;overflow: auto;padding-right:10px;padding-left:10px">
+        <input name="id" type="hidden"/>
         <fieldset class="layui-elem-field layui-field-title" style="margin-left: 30px;margin-right: 30px;">
             <legend>会员设置</legend>
         </fieldset>
         <div class="layui-form-item">
             <label class="layui-form-label">会员等级</label>
             <div class="layui-input-inline">
-                <select name="mId" xm-select-radio="" xm-select-search="" xm-select="memberIds"  lay-verify="required">
+                <select name="memberId" xm-select-radio="" xm-select-search="" xm-select="memberIds"  lay-verify="required">
                 </select>
             </div>
         </div>
@@ -28,23 +29,27 @@
         <div class="layui-form-item">
             <label class="layui-form-label">指定商品</label>
             <div class="layui-input-inline">
-                <select name="aPid" xm-select-radio="" xm-select-search="" xm-select="aProductIds"  lay-verify="required">
+                <select name="activePid" id="aProductIds" lay-search lay-filter="activePid" lay-verify="required">
+                    <option value="">请选择</option>
+                    <option p-for="activeProductIds" p-bind="value:{{id}}">{{name}}</option>
                 </select>
             </div>
-            <label class="layui-form-label">指定商品价格</label>
+            <label class="layui-form-label">指定商品价格(元)</label>
             <div class="layui-input-inline">
-                <input name="pPrice" placeholder="指定商品价格" type="text" class="layui-input" lay-verify="required|number" />
+                <input name="activeProductPrice" id="activeProductPrice" placeholder="指定商品价格" type="text" disabled="disabled" class="layui-input" lay-verify="required|number" />
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">领取商品</label>
             <div class="layui-input-inline">
-                <select name="sPid" xm-select-radio="" xm-select-search="" xm-select="sProductIds"  lay-verify="required">
+                <select name="sendPid" id="sProductIds" lay-search lay-filter="sendPid" lay-verify="required">
+                    <option value="">请选择</option>
+                    <option p-for="sendProductIds" p-bind="value:{{id}}">{{name}}</option>
                 </select>
             </div>
-            <label class="layui-form-label">领取商品价格</label>
+            <label class="layui-form-label">领取商品价格(元)</label>
             <div class="layui-input-inline">
-                <input name="sPrice" placeholder="领取商品价格" type="text" class="layui-input" lay-verify="required|number" />
+                <input name="sendPrice" id="sendPrice" placeholder="领取商品价格" type="text" disabled="disabled" class="layui-input" lay-verify="required|number" />
             </div>
         </div>
         <div class="layui-form-item">
@@ -75,16 +80,19 @@
 </form>
 
 <script>
-    layui.use(['layer', 'crown','form','formSelects'], function() {
-        var $ = layui.jquery
-            ,upload = layui.upload;
+    layui.use(['layer', 'crown','form','formSelects','element'], function() {
+        var $ = layui.jquery;
         var crown = layui.crown;
         var form = layui.form;
         var formSelects = layui.formSelects;
-        var config = layui.config;
         var recommendData = crown.getTempData("t_recommend");
-        var imgId;
         if(recommendData){
+            crown.get('/marketRecommend/productPrice/'+recommendData.activePid, {async:false}, function (data) {
+                recommendData.activeProductPrice = data.result;
+            });
+            crown.get('/marketRecommend/productPrice/'+recommendData.sendPid, {async:false}, function (data) {
+                recommendData.sendPrice = data.result;
+            });
             crown.fromVal('recommend-form', recommendData);
         }
         $('#recommend').vm({
@@ -99,38 +107,78 @@
             }
             formSelects.data('memberIds', 'local', {arr: memberSelectData});
             members = memberSelectData;
+            formSelects.btns('memberIds', []);
+            // 回显会员数据
+            if(recommendData){
+                var rds = new Array();
+                rds.push(recommendData.memberId);
+                formSelects.value('memberIds', rds);
+            }
+            form.render('select');
         });
 
-        var products = new Array();
-        crown.get('/product/products', {}, function (data) {
-            var productsSelectData = new Array();
-            for (var i = 0; i < data.result.length; i++) {
-                productsSelectData.push({name: data.result[i].name, value: data.result[i].id})
+        crown.get('/product/products', {async:false}, function (data) {
+            var productIds = data.result;
+            $('#aProductIds').vm({activeProductIds: productIds});
+            if(recommendData){
+                $('#aProductIds').val(recommendData.activePid);
             }
-            formSelects.data('aProductIds', 'local', {arr: productsSelectData});
-            formSelects.data('sProductIds', 'local', {arr: productsSelectData});
-            products = productsSelectData;
+            form.render('select', 'activePid');
         });
+        crown.get('/product/products', {async:false}, function (data) {
+            var productIds = data.result;
+            $('#sProductIds').vm({sendProductIds: productIds});
+            if(recommendData){
+                $('#sProductIds').val(recommendData.sendPid);
+            }
+            form.render('select', 'sendPid');
+        });
+
+        form.on('select(activePid)',function(data){
+            if(data.value) {
+                crown.get('/marketRecommend/productPrice/' + data.value, {async: false}, function (data) {
+                    $("#activeProductPrice").val(data.result);
+                });
+            }else{
+                $("#activeProductPrice").val("");
+            }
+            form.render('select', 'activePid');
+        })
+        form.on('select(sendPid)',function(data){
+            if(data.value){
+                crown.get('/marketRecommend/productPrice/'+data.value, {async:false}, function (data) {
+                    $("#sendPrice").val(data.result);
+                });
+            }else {
+                $("#sendPrice").val("");
+            }
+            form.render('select', 'sendPid');
+        })
 
         // 表单提交事件
         form.on('submit(recommend-form-submit)', function (data) {
             layer.load(2);
-            if (recommendData) {
-                crown.put('/marketRecommend/' + data.field.id, {data: data.field}, function () {
-                    layer.closeAll('loading');
-                    layer.msg('修改成功', {icon: 1});
-                    crown.finishPopupCenter();
-                });
+            if(data.field.activePid == data.field.sendPid){
+                layer.closeAll('loading');
+                layer.msg('领取商品不可为指定商品!', {icon: 0});
+            }else{
+                if (recommendData) {
+                    debugger;
+                    crown.put('/marketRecommend/' + data.field.id, {data: data.field}, function () {
+                        layer.closeAll('loading');
+                        layer.msg('修改成功', {icon: 1});
+                        crown.finishPopupCenter();
+                    });
+                }
+                else{
+                    crown.post('/marketRecommend', {data:data.field}, function () {
+                        layer.closeAll('loading');
+                        layer.msg('添加成功', {icon: 1});
+                        crown.finishPopupCenter();
+                    });
+                }
             }
-            else{
-                var i = data.field;
-                debugger;
-                crown.post('/marketRecommend', {data:data.field}, function () {
-                    layer.closeAll('loading');
-                    layer.msg('添加成功', {icon: 1});
-                    crown.finishPopupCenter();
-                });
-            }
+
             return false;
         });
     });

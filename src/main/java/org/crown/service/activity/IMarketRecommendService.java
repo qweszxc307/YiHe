@@ -20,8 +20,11 @@
  */
 package org.crown.service.activity;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import org.crown.model.activity.dto.MarketRecommendDTO;
 import org.crown.model.activity.entity.MarketRecommend;
 import org.crown.framework.service.BaseService;
+import org.crown.model.product.dto.ProductDTO;
 
 /**
  * <p>
@@ -31,5 +34,10 @@ import org.crown.framework.service.BaseService;
  * @author whZhang
  */
 public interface IMarketRecommendService extends BaseService<MarketRecommend> {
-
-        }
+        /**
+         * 推荐返礼列表
+         *
+         * @param page
+         */
+        IPage<MarketRecommendDTO> selectMarketRecommendPage(IPage<MarketRecommendDTO> page);
+}

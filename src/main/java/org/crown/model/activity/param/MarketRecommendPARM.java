@@ -57,24 +57,19 @@ public class MarketRecommendPARM extends BaseModel {
 
     @ApiModelProperty(notes = "会员等级")
     @NotNull(groups = {MarketRecommendPARM.Create.class,MarketRecommendPARM.Update.class}, message = "会员等级不能为空")
-    @JsonProperty(value = "mId")
-    private Integer mId;
+    private Integer memberId;
     @ApiModelProperty(notes = "参加活动商品id")
     @NotNull(groups = {MarketRecommendPARM.Create.class,MarketRecommendPARM.Update.class}, message = "指定商品不能为空")
-    @JsonProperty(value = "aPid")
-    private Integer aPid;
+    private Integer activePid;
     @ApiModelProperty(notes = "参加活动商品价格")
     @NotNull(groups = {MarketRecommendPARM.Create.class,MarketRecommendPARM.Update.class}, message = "商品价格不能为空")
-    @JsonProperty(value = "pPrice")
-    private BigDecimal pPrice;
+    private BigDecimal activeProductPrice;
     @ApiModelProperty(notes = "领取商品id")
     @NotNull(groups = {MarketRecommendPARM.Create.class,MarketRecommendPARM.Update.class}, message = "领取商品不能为空")
-    @JsonProperty(value = "sPid")
-    private Integer sPid;
+    private Integer sendPid;
     @ApiModelProperty(notes = "领取商品价格")
     @NotNull(groups = {MarketRecommendPARM.Create.class,MarketRecommendPARM.Update.class}, message = "领取商品价格不能为空")
-    @JsonProperty(value = "sPrice")
-    private BigDecimal sPrice;
+    private BigDecimal sendPrice;
     @ApiModelProperty(notes = "运费")
     @NotNull(groups = {MarketRecommendPARM.Create.class,MarketRecommendPARM.Update.class}, message = "运费不能为空")
     private BigDecimal carriagePrice;

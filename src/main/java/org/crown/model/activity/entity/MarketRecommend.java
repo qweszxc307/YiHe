@@ -26,6 +26,7 @@ import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import org.crown.enums.StatusEnum;
 import org.crown.framework.model.BaseModel;
 
 import io.swagger.annotations.ApiModelProperty;
@@ -50,15 +51,11 @@ public class MarketRecommend extends BaseModel {
 private static final long serialVersionUID=1L;
 
     @ApiModelProperty(notes = "会员等级")
-private Integer mId;
+private Integer memberId;
     @ApiModelProperty(notes = "参加活动商品id")
-private Integer aPid;
-    @ApiModelProperty(notes = "参加活动商品价格")
-private BigDecimal pPrice;
+private Integer activePid;
     @ApiModelProperty(notes = "领取商品id")
-private Integer sPid;
-    @ApiModelProperty(notes = "领取商品价格")
-private BigDecimal sPrice;
+private Integer sendPid;
     @ApiModelProperty(notes = "运费")
 private BigDecimal carriagePrice;
     @ApiModelProperty(notes = "可领取人数")
@@ -80,6 +77,6 @@ private BigDecimal buyReturnMoney;
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private Integer updateUid;
     @ApiModelProperty(notes = "状态")
-private Integer status;
+    private StatusEnum status;
 
 }

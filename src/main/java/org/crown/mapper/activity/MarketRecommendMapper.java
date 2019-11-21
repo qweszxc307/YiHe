@@ -1,7 +1,9 @@
 package org.crown.mapper.activity;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.apache.ibatis.annotations.Mapper;
 
+import org.crown.model.activity.dto.MarketRecommendDTO;
 import org.crown.model.activity.entity.MarketRecommend;
 import org.crown.framework.mapper.BaseMapper;
 
@@ -14,5 +16,5 @@ import org.crown.framework.mapper.BaseMapper;
  */
 @Mapper
 public interface MarketRecommendMapper extends BaseMapper<MarketRecommend> {
-
+        IPage<MarketRecommendDTO> selectMarketRecommendPage(IPage<MarketRecommendDTO> page);
         }
