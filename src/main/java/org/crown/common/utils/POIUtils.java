@@ -8,10 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -113,27 +110,27 @@ public class POIUtils {
             return cellValue;
         }
         //把数字当成String来读，避免出现1读成1.0的情况
-        if(cell.getCellType() == Cell.CELL_TYPE_NUMERIC){
-            cell.setCellType(Cell.CELL_TYPE_STRING);
+        if(cell.getCellTypeEnum() == CellType.NUMERIC){
+            cell.setCellType(CellType.STRING);
         }
         //判断数据的类型
-        switch (cell.getCellType()){
-            case Cell.CELL_TYPE_NUMERIC: //数字
+        switch (cell.getCellTypeEnum()){
+            case NUMERIC: //数字
                 cellValue = String.valueOf(cell.getNumericCellValue());
                 break;
-            case Cell.CELL_TYPE_STRING: //字符串
+            case STRING: //字符串
                 cellValue = String.valueOf(cell.getStringCellValue());
                 break;
-            case Cell.CELL_TYPE_BOOLEAN: //Boolean
+            case BOOLEAN: //Boolean
                 cellValue = String.valueOf(cell.getBooleanCellValue());
                 break;
-            case Cell.CELL_TYPE_FORMULA: //公式
+            case FORMULA: //公式
                 cellValue = String.valueOf(cell.getCellFormula());
                 break;
-            case Cell.CELL_TYPE_BLANK: //空值
+            case BLANK: //空值
                 cellValue = "";
                 break;
-            case Cell.CELL_TYPE_ERROR: //故障
+            case ERROR: //故障
                 cellValue = "非法字符";
                 break;
             default:
