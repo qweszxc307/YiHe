@@ -61,10 +61,10 @@
             <div id="square_choose">
                 <div class="layui-row" style="margin-bottom: 10px;margin-top: 10px">
                     <div class="layui-col-xs6" style="text-align:center">
-                        <div id="square_transfer1" class="demo-transfer layui-inline"></div>
+                        <div id="square_transfer1" class="demo-transfer"></div>
                     </div>
                     <div class="layui-col-xs6" style="text-align:center">
-                        <div id="square_transfer2" class="demo-transfer layui-inline"></div>
+                        <div id="square_transfer2" class="demo-transfer"></div>
                     </div>
                 </div>
                 <div class="layui-row" style="margin-bottom: 10px;margin-top: 10px">
@@ -111,10 +111,11 @@
     var form;
     var carriageTable;
     var crown;
+    var transfer;
     layui.use(['layer','transfer', 'crown', 'table', 'form'], function () {
         var layer = layui.layer;
-        var $ = layui.$
-            ,transfer = layui.transfer
+        var $ = layui.$;
+        transfer = layui.transfer
         crown = layui.crown;
         form = layui.form;
         var table = layui.table;
@@ -313,6 +314,26 @@
     function showCrriageManageModel(type){
         if(type == 'add'){
             cid = null;
+            $("#carriageConfigName").val("");
+            $("#carriageConfigFreePrice").val("");
+            $(" input[ name='b_number' ] ").val("");
+            $(" input[ name='e_number' ] ").val("");
+            $(" input[ name='price' ] ").val("");
+            var size=$("#price_degree_model tr").length;
+            $("#price_degree_model tr").slice(2,size).remove();
+            debugger;
+            crown.get('/carriageConfig/areas', {async:false}, function (data) {
+                var areas = data.result;
+                for(var i=0;i< areas.length;i++){
+                    transfer.render({
+                        elem: '#square_transfer'+areas[i].id
+                        ,data:areas[i].citys
+                        ,title: [areas[i].name+"候选地",areas[i].name+"已选地"]
+                        ,id: 'squareTransfer'+areas[i].id
+                        ,showSearch: true
+                    })
+                }
+            });
         }
         $("#carriage_manage_model").show();
         carriageTable.reload('carriage-config-table', {});
