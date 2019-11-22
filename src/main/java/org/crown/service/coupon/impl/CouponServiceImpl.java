@@ -44,8 +44,9 @@ public class CouponServiceImpl extends BaseServiceImpl<CouponMapper, Coupon> imp
      * @param id
      * @param status
      */
+    @Transactional(readOnly = false)
     public void updateStatus(Integer id, Integer status) {
-        if (baseMapper.updateStatus(id, status)==0) {
+        if (baseMapper.updateStatus(id, status) == 0) {
             throw new RuntimeException("修改优惠券状态失败：{优惠券输出的值是： “0” ");
         }
     }

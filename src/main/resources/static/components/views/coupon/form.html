@@ -1,0 +1,253 @@
+<!-- coupon 表单弹窗 -->
+<form id="coupon-form" lay-filter="coupon-form" class="layui-form model-form">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>优惠券</legend>
+    </fieldset>
+    <div class="layui-row layui-col-space5">
+        <div class="layui-col-lg12">
+            <input name="id" type="hidden"/>
+            <div class="layui-form-item">
+                <label class="layui-form-label">名称：</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="name" lay-verify="required" autocomplete="off"
+                           class="layui-input" placeholder="请输入">
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-lg12">
+            <div class="layui-col-lg6">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">类型：</label>
+                    <div class="layui-input-block">
+                        <select name="type" lay-verify="required" lay-filter="test" id="type">
+                            <option value="">请选择</option>
+                            <option value="1">满减</option>
+                            <option value="2">直减</option>
+                            <option value="3">折扣</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-lg12" id="demo">
+
+        </div>
+        <div class="layui-col-lg12">
+            <div class="layui-col-lg6">
+                <div class="layui-inline">
+                    <label class="layui-form-label">起始日期：</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="startTime" id="date1" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-lg6">
+                <div class="layui-inline">
+                    <label class="layui-form-label">结束日期：</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="endTime" id="date2" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-lg12">
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">优惠券描述：</label>
+                <div class="layui-input-block">
+                    <textarea placeholder="请输入内容" class="layui-textarea" name="details"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-lg12">
+            <div class="layui-col-lg6">
+                <div class="layui-inline">
+                    <label class="layui-form-label">适用商品：</label>
+                    <div class="layui-input-inline">
+                        <select name="brand" xm-select-radio="" xm-select-search="" xm-select="brand"  lay-verify="required">
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-lg12">
+            <div class="layui-col-lg6">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">分发规则：</label>
+                    <div class="layui-input-block">
+                        <select name="rule" lay-verify="required" id="rule">
+                            <option value="1">主动分发</option>
+                            <option value="2">下单分发</option>
+                            <option value="3">用户领取</option>
+                            <option value="4">中奖分发</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-lg12">
+            <div class="layui-form-item">
+                <label class="layui-form-label">总数：</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="total" lay-verify="required" autocomplete="off"
+                           class="layui-input" placeholder="发行的优惠券总数">
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-lg12">
+            <div class="layui-form-item model-form-footer" style="margin-top:10px">
+                <button class="layui-btn layui-btn-primary close" type="button">取消</button>
+                <button class="layui-btn" lay-filter="coupon-form-submit" lay-submit>保存</button>
+            </div>
+        </div>
+    </div>
+
+
+</form>
+
+<script>
+    layui.use(['form', 'table', 'upload', 'config', 'crown', 'laydate', 'formSelects'], function () {
+        var form = layui.form;
+        var table = layui.table;
+        var config = layui.config;
+        var layer = layui.layer;
+        var crown = layui.crown;
+        var $ = layui.jquery;
+        var laydate = layui.laydate;
+        var upload = layui.upload;
+        var formSelects = layui.formSelects;
+        var coupon = crown.getTempData('t_coupon');
+
+        if (coupon) {
+            crown.fromVal('coupon-form', coupon);
+            if ($("#type").val() == 1) {
+                $("#demo").append("<div class=\"layui-col-lg6\">\n" +
+                    "    <div class=\"layui-form-item\">\n" +
+                    "        <label class=\"layui-form-label\">单笔满：</label>\n" +
+                    "        <div class=\"layui-input-inline\">\n" +
+                    "            <input type=\"text\" name=\"discountPoint\" lay-verify=\"required\" autocomplete=\"off\"\n" +
+                    "                   class=\"layui-input\" placeholder=\"￥\">\n" +
+                    "        </div>\n" +
+                    "    </div>\n" +
+                    "</div>\n" +
+                    "<div class=\"layui-col-lg6\">\n" +
+                    "    <div class=\"layui-form-item\">\n" +
+                    "        <label class=\"layui-form-label\">立减：</label>\n" +
+                    "        <div class=\"layui-input-inline\">\n" +
+                    "            <input type=\"text\" name=\"discount\" lay-verify=\"required\" autocomplete=\"off\"\n" +
+                    "                   class=\"layui-input\" placeholder=\"￥\">\n" +
+                    "        </div>\n" +
+                    "    </div>\n" +
+                    "</div>")
+            }
+            if ($("#type").val() == 2) {
+                $("#demo").append("<div class=\"layui-col-lg6\">\n" +
+                    "    <div class=\"layui-form-item\">\n" +
+                    "        <label class=\"layui-form-label\">订单立减：</label>\n" +
+                    "        <div class=\"layui-input-inline\">\n" +
+                    "            <input type=\"text\" name=\"discount\" lay-verify=\"required\" autocomplete=\"off\"\n" +
+                    "                   class=\"layui-input\" placeholder=\"￥\">\n" +
+                    "        </div>\n" +
+                    "    </div>\n" +
+                    "</div>")
+            }
+            if ($("#type").val() == 3) {
+                $("#demo").append("<div class=\"layui-col-lg6\">\n" +
+                    "    <div class=\"layui-form-item\">\n" +
+                    "        <label class=\"layui-form-label\">享受折扣：</label>\n" +
+                    "        <div class=\"layui-input-inline\">\n" +
+                    "            <input type=\"text\" name=\"discount\" lay-verify=\"required\" autocomplete=\"off\"\n" +
+                    "                   class=\"layui-input\" placeholder=\"列：85折则输入： 0.85\">\n" +
+                    "        </div>\n" +
+                    "    </div>\n" +
+                    "</div>")
+            }
+            crown.fromVal('coupon-form', coupon);
+        } else {
+
+        }
+        // 表单提交事件
+        form.on('submit(coupon-form-submit)', function (data) {
+            layer.load(2);
+            if (data.field.id) {
+                crown.put('/coupon/' + data.field.id, {data: data.field}, function () {
+                    layer.closeAll('loading');
+                    layer.msg('修改成功', {icon: 1});
+                    crown.finishPopupCenter();
+                });
+            } else {
+                data.field.status = 0;
+                crown.post('/coupon', {data: data.field}, function () {
+                    layer.closeAll('loading');
+                    layer.msg('添加成功', {icon: 1});
+                    crown.finishPopupCenter();
+                });
+            }
+            return false;
+        });
+
+        crown.get('/brand/brands', {}, function (data) {
+            var brandSelectData = new Array();
+            for (var i = 0; i < data.result.length; i++) {
+                brandSelectData.push({name: data.result[i].name, value: data.result[i].id})
+            }
+            formSelects.data('brand', 'local', {arr: brandSelectData});
+        });
+        form.render('select');
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#date1' //指定元素
+            , format: 'yyyy-MM-dd HH:mm:ss' //可任意组合
+        });
+        laydate.render({
+            elem: '#date2' //指定元素
+            , format: 'yyyy-MM-dd HH:mm:ss' //可任意组合
+        });
+        form.on('select(test)', function (data) {
+            $("#demo").empty();
+            if (data.value == 1) {
+                $("#demo").append("<div class=\"layui-col-lg6\">\n" +
+                    "    <div class=\"layui-form-item\">\n" +
+                    "        <label class=\"layui-form-label\">单笔满：</label>\n" +
+                    "        <div class=\"layui-input-inline\">\n" +
+                    "            <input type=\"text\" name=\"discountPoint\" lay-verify=\"required\" autocomplete=\"off\"\n" +
+                    "                   class=\"layui-input\" placeholder=\"￥\">\n" +
+                    "        </div>\n" +
+                    "    </div>\n" +
+                    "</div>\n" +
+                    "<div class=\"layui-col-lg6\">\n" +
+                    "    <div class=\"layui-form-item\">\n" +
+                    "        <label class=\"layui-form-label\">立减：</label>\n" +
+                    "        <div class=\"layui-input-inline\">\n" +
+                    "            <input type=\"text\" name=\"discount\" lay-verify=\"required\" autocomplete=\"off\"\n" +
+                    "                   class=\"layui-input\" placeholder=\"￥\">\n" +
+                    "        </div>\n" +
+                    "    </div>\n" +
+                    "</div>")
+            }
+            if (data.value == 2) {
+                $("#demo").append("<div class=\"layui-col-lg6\">\n" +
+                    "    <div class=\"layui-form-item\">\n" +
+                    "        <label class=\"layui-form-label\">订单立减：</label>\n" +
+                    "        <div class=\"layui-input-inline\">\n" +
+                    "            <input type=\"text\" name=\"discount\" lay-verify=\"required\" autocomplete=\"off\"\n" +
+                    "                   class=\"layui-input\" placeholder=\"￥\">\n" +
+                    "        </div>\n" +
+                    "    </div>\n" +
+                    "</div>")
+            }
+            if (data.value == 3) {
+                $("#demo").append("<div class=\"layui-col-lg6\">\n" +
+                    "    <div class=\"layui-form-item\">\n" +
+                    "        <label class=\"layui-form-label\">享受折扣：</label>\n" +
+                    "        <div class=\"layui-input-inline\">\n" +
+                    "            <input type=\"text\" name=\"discount\" lay-verify=\"required\" autocomplete=\"off\"\n" +
+                    "                   class=\"layui-input\" placeholder=\"列：85折则输入： 0.85\">\n" +
+                    "        </div>\n" +
+                    "    </div>\n" +
+                    "</div>")
+            }
+        })
+    })
+</script>
+
+

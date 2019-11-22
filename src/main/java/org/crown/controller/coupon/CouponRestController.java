@@ -88,7 +88,7 @@ public class CouponRestController extends SuperController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "产品ID", required = true, paramType = "path")
     })
-    @PostMapping("/{id}")
+    @PostMapping
     public ApiResponses<Void> create(@PathVariable("id") Integer id, @RequestBody @Validated(CouponPARM.Update.class) CouponPARM couponPARM) {
         couponService.updateById(couponPARM.convert(Coupon.class));
         return success();
@@ -117,7 +117,7 @@ public class CouponRestController extends SuperController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "产品ID", required = true, paramType = "path")
     })
-    @DeleteMapping("/{id}/status")
+    @PutMapping("/{id}/status")
     public ApiResponses<Void> status(@PathVariable("id") Integer id, @RequestBody @Validated(CouponPARM.Update.class) CouponPARM couponPARM) {
         couponService.updateStatus(id, couponPARM.getStatus());
         return success();
