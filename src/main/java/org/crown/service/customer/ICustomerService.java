@@ -60,4 +60,11 @@ public interface ICustomerService extends BaseService<Customer> {
      */
 
     void updateCustomerByMember(Integer id, CustomerPARM customerPARM);
+
+    /**
+     * 根据id查询微信名称
+     * @param id
+     * @return
+     */
+    String queryNikeNameById(Integer id);
 }

@@ -27,6 +27,7 @@ import org.crown.mapper.customer.CustomerMapper;
 import org.crown.mapper.member.MemberMapper;
 import org.crown.model.customer.dto.CustomerDetailsDTO;
 import org.crown.model.customer.entity.Customer;
+import org.crown.model.customer.entity.CustomerDetails;
 import org.crown.model.customer.parm.CustomerPARM;
 import org.crown.model.member.entity.Member;
 import org.crown.service.customer.ICustomerService;
@@ -98,4 +99,10 @@ public class CustomerServiceImpl extends BaseServiceImpl<CustomerMapper, Custome
     }
 
 
+    @Override
+    public String queryNikeNameById(Integer id) {
+        CustomerDetails customerDetails= customerDetailsMapper.queryByCid(id);
+        String nickName = customerDetails.getNickName();
+        return nickName;
+    }
 }

@@ -59,6 +59,7 @@ import java.util.Objects;
 public class CustomerRestController extends SuperController {
     @Autowired
     private ICustomerService customerService;
+
     @Autowired
     private IMemberService memberService;
 
@@ -81,7 +82,10 @@ public class CustomerRestController extends SuperController {
                 .eq(Objects.nonNull(member.getId()), Customer::getMId, member.getId())
                 .page(this.<Customer>getPage())
                 .convert(e -> e.convert(CustomerDTO.class));
-        convert.getRecords().forEach(e -> e.setMemberName(customerService.queryLevelBycId(e.getId())));
+        convert.getRecords().forEach(e -> {
+            e.setMemberName(customerService.queryLevelBycId(e.getId()));
+            e.setNickName(customerService.queryNikeNameById(e.getId()));
+        });
         return success(convert);
 
 
@@ -101,21 +105,6 @@ public class CustomerRestController extends SuperController {
     }
 
 
-    @Resources(auth = AuthTypeEnum.OPEN)
-    @ApiOperation(value = "添加客户")
-    @PostMapping
-    public ApiResponses<Void> create(@RequestBody @Validated(CustomerPARM.Create.class) CustomerPARM customerPARM) {
-        /**
-         * 1.获取微信信息
-         * 传递到service 操作
-         * 1.创建微信用户实体类接受用户信息
-         * 2.创建会员号，获取微信名保存到用户表，再查询得到id
-         * 3.获取微信名，地址 手机号，性别，会员等级默认为0 保存到会员详情表
-         * 4.设置会员等级中间表， 查询用户id，获取用户等级id，赋值
-         * 
-         */
-        return null;
-    }
 
     @Resources(auth = AuthTypeEnum.AUTH)
     @ApiOperation("修改客户等级")
