@@ -124,8 +124,8 @@
         if (customer) {
             form.val('customer-form', customer);
             var rds = new Array();
-            for (var i = 0; i < customer.brands.length; i++) {
-                rds.push(customer.brands[i]);
+            for (var i = 0; i < customer.labelBrands.length; i++) {
+                rds.push(customer.labelBrands[i]);
             }
             $("#brand1").val(rds[0].name);
             $("#brand2").val(rds[1].name);

@@ -107,7 +107,9 @@ public class MemberRestController extends SuperController {
     })
     @DeleteMapping("/{id}")
     public ApiResponses<Void> delete(@PathVariable("id") Integer id) {
-        memberService.deleteMember(id);
+        if (id != 1) {
+            memberService.deleteMember(id);
+        }
         return success();
     }
 

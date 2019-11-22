@@ -24,7 +24,6 @@ package org.crown.service.member.impl;
 import org.crown.common.utils.QiNiuUtils;
 import org.crown.enums.ImagesEnum;
 import org.crown.framework.responses.ApiResponses;
-import org.crown.mapper.customer.CustomerDetailsMapper;
 import org.crown.mapper.customer.CustomerMapper;
 import org.crown.model.image.entity.Image;
 import org.crown.model.member.dto.MemberImgDTO;

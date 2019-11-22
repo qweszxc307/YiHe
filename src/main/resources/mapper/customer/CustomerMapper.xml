@@ -78,4 +78,6 @@ select id from `member` where `level` = #{level};
     <select id="queryMemberNumById" parameterType="Integer" resultType="String">
         select member_num from customer where id =#{id};
     </select>
+
+
 </mapper>

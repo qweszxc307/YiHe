@@ -22,12 +22,9 @@ package org.crown.service.customer.impl;
 
 import lombok.extern.log4j.Log4j2;
 import org.crown.framework.service.impl.BaseServiceImpl;
-import org.crown.mapper.customer.CustomerDetailsMapper;
 import org.crown.mapper.customer.CustomerMapper;
 import org.crown.mapper.member.MemberMapper;
-import org.crown.model.customer.dto.CustomerDetailsDTO;
 import org.crown.model.customer.entity.Customer;
-import org.crown.model.customer.entity.CustomerDetails;
 import org.crown.model.customer.parm.CustomerPARM;
 import org.crown.model.member.entity.Member;
 import org.crown.service.customer.ICustomerService;
@@ -47,10 +44,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Log4j2
 @Service
 public class CustomerServiceImpl extends BaseServiceImpl<CustomerMapper, Customer> implements ICustomerService {
-    @Autowired
-    private CustomerDetailsMapper customerDetailsMapper;
-    @Autowired
-    private ILabelBrandService labelBrandService;
+
+
     @Autowired
     private MemberMapper memberMapper;
 
@@ -58,24 +53,6 @@ public class CustomerServiceImpl extends BaseServiceImpl<CustomerMapper, Custome
 
 
 
-    /**
-     * 查询客户详情
-     *
-     * @param id 客户详情
-     * @return CustomerDetailsDTO
-     */
-    @Override
-    public CustomerDetailsDTO queryByMid(Integer id) {
-        //查询详情表信息
-        CustomerDetailsDTO detailsDTO = customerDetailsMapper.queryByCid(id).convert(CustomerDetailsDTO.class);
-        Customer customer = getById(id);
-        detailsDTO.setLastTime(customer.getLastTime());
-        detailsDTO.setOrderNum(customer.getOrderNum());
-        detailsDTO.setMemberName(baseMapper.queryLevelBycId(id));
-        detailsDTO.setMemberNum(customer.getMemberNum());
-        detailsDTO.setBrands(labelBrandService.queryLabelBrandDTOByCustomerId(id));
-        return detailsDTO;
-    }
 
     @Override
     public String queryLevelBycId(Integer cId) {
@@ -99,10 +76,5 @@ public class CustomerServiceImpl extends BaseServiceImpl<CustomerMapper, Custome
     }
 
 
-    @Override
-    public String queryNikeNameById(Integer id) {
-        CustomerDetails customerDetails= customerDetailsMapper.queryByCid(id);
-        String nickName = customerDetails.getNickName();
-        return nickName;
-    }
+
 }

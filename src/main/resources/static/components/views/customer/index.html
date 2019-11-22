@@ -106,11 +106,8 @@
 
         //
         var showDetailModel = function (data) {
-            if (data) {
-                crown.get('/customer/' + data.id, {async: false}, function (data) {
-                    crown.putTempData('t_customer', data.result);
-                });
-            }
+                    crown.putTempData('t_customer', data);
+
             crown.popupCenter({
                 type: 1,
                 resize: true,

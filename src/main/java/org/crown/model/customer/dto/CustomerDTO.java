@@ -20,14 +20,20 @@
  */
 package org.crown.model.customer.dto;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.crown.framework.model.BaseModel;
+import org.crown.model.label.dto.LabelBrandDTO;
+import org.crown.model.label.entity.LabelBrand;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 /**
@@ -44,22 +50,43 @@ import java.time.LocalDateTime;
 public class CustomerDTO extends BaseModel {
 
     private static final long serialVersionUID = 1L;
-    /**
-     * id
-     */
+
     @ApiModelProperty(notes = "id")
     private Integer id;
-    @ApiModelProperty(notes = "会员名称")
-    private String nickName;
+
     @ApiModelProperty(notes = "会员号")
     private String memberNum;
-    @ApiModelProperty(notes = "会员等级名称")
-    private String memberName;
+    @ApiModelProperty(notes = "会员名称")
+    private String  memberName;
     @ApiModelProperty(notes = "佣金余额")
     private Double bonus;
     @ApiModelProperty(notes = "成交订单数")
     private Integer orderNum;
-    @ApiModelProperty(notes = "成交金额")
-    private Double sum;
+    @ApiModelProperty(notes = "成交总金额")
+    private BigDecimal sum;
+    @ApiModelProperty(notes = "微信名称")
+    private String nickName;
+    @ApiModelProperty(notes = "真实姓名")
+    private String name;
+    @ApiModelProperty(notes = "手机号")
+    private String phone;
+    @ApiModelProperty(notes = "性别")
+    private Integer sex;
+    @ApiModelProperty(notes = "地址")
+    private String address;
+    @ApiModelProperty(notes = "最后一次交易时间")
+    private LocalDateTime lastTime;
+    @ApiModelProperty(notes = "用户标签")
+    private List<LabelBrandDTO> labelBrands;
+    /*
+     * 创建时间
+     */
+    @TableField(fill = FieldFill.INSERT)
+    private LocalDateTime createTime;
+    /**
+     * 修改时间
+     */
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    private LocalDateTime updateTime;
 
 }

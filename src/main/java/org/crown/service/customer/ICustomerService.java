@@ -20,15 +20,9 @@
  */
 package org.crown.service.customer;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.crown.framework.service.BaseService;
-import org.crown.model.customer.dto.CustomerDTO;
-import org.crown.model.customer.dto.CustomerDetailsDTO;
 import org.crown.model.customer.entity.Customer;
 import org.crown.model.customer.parm.CustomerPARM;
-import org.springframework.http.HttpStatus;
-
-import java.util.List;
 
 /**
  * <p>
@@ -39,32 +33,27 @@ import java.util.List;
  */
 public interface ICustomerService extends BaseService<Customer> {
 
-    /**
-     * 根据客户id查询客户详情
-     * @param id
-     * @return
-     */
-    CustomerDetailsDTO queryByMid(Integer id);
+
 
     /**
      * 根据id查询用户等级
      * @param cId 用户id
      * @return 客户等级
      */
-    String queryLevelBycId(Integer cId);
+    String  queryLevelBycId(Integer cId);
 
     /**
      * 修改 会员状态
      * @param id
      * @param customerPARM
      */
-
+    /**
+     * 修改客户等级
+     * @param id
+     * @param customerPARM
+     */
     void updateCustomerByMember(Integer id, CustomerPARM customerPARM);
 
-    /**
-     * 根据id查询微信名称
-     * @param id
-     * @return
-     */
-    String queryNikeNameById(Integer id);
+
+
 }

@@ -31,11 +31,11 @@ import org.crown.enums.AuthTypeEnum;
 import org.crown.framework.controller.SuperController;
 import org.crown.framework.responses.ApiResponses;
 import org.crown.model.customer.dto.CustomerDTO;
-import org.crown.model.customer.dto.CustomerDetailsDTO;
 import org.crown.model.customer.entity.Customer;
 import org.crown.model.customer.parm.CustomerPARM;
 import org.crown.model.member.entity.Member;
 import org.crown.service.customer.ICustomerService;
+import org.crown.service.label.ILabelBrandService;
 import org.crown.service.member.IMemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -59,7 +59,8 @@ import java.util.Objects;
 public class CustomerRestController extends SuperController {
     @Autowired
     private ICustomerService customerService;
-
+    @Autowired
+    private ILabelBrandService labelBrandService;
     @Autowired
     private IMemberService memberService;
 
@@ -84,26 +85,10 @@ public class CustomerRestController extends SuperController {
                 .convert(e -> e.convert(CustomerDTO.class));
         convert.getRecords().forEach(e -> {
             e.setMemberName(customerService.queryLevelBycId(e.getId()));
-            e.setNickName(customerService.queryNikeNameById(e.getId()));
+            e.setLabelBrands(labelBrandService.queryLabelBrandDTOByCustomerId(e.getId()));
         });
         return success(convert);
-
-
     }
-
-
-    @Resources(auth = AuthTypeEnum.OPEN)
-    @ApiOperation("查询会员详情")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "客户ID", required = true, paramType = "path")
-    })
-    @GetMapping("/{id}")
-    public ApiResponses<CustomerDetailsDTO> get(@PathVariable("id") Integer id) {
-        CustomerDetailsDTO customerDetailsDTO = customerService.queryByMid(id);
-        System.out.println("customerDetailsDTO = " + customerDetailsDTO);
-        return success(customerDetailsDTO);
-    }
-
 
 
     @Resources(auth = AuthTypeEnum.AUTH)
