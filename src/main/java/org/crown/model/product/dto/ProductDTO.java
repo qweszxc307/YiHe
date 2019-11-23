@@ -36,6 +36,8 @@ public class ProductDTO extends Convert {
     private Integer modelId;
     @ApiModelProperty(notes = "运费策略模板id")
     private Integer carriageId;
+    @ApiModelProperty(notes = "库存")
+    private Integer stock;
     @ApiModelProperty(notes = "产品相关图片")
     private List<ProductImgDTO> productImgList;
     @ApiModelProperty(notes = "产品相关图片")

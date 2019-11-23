@@ -61,6 +61,10 @@ public class ProductPARM extends Convert {
     @NotBlank(groups = {ProductPARM.Create.class, ProductPARM.Update.class}, message = "品牌不能为空")
     private String brandId;
 
+    @ApiModelProperty(notes = "库存")
+    @NotBlank(groups = {ProductPARM.Create.class, ProductPARM.Update.class}, message = "库存不能为空")
+    private String stock;
+
     @ApiModelProperty(notes = "运费策略ID")
     @NotBlank(groups = {ProductPARM.Create.class, ProductPARM.Update.class}, message = "运费策略不能为空")
     private String carriageId;

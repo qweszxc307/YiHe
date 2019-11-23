@@ -59,6 +59,8 @@ public class Product extends BaseModel {
     private StatusEnum status;
     @ApiModelProperty(notes = "序号")
     private Integer orderNum;
+    @ApiModelProperty(notes = "库存")
+    private Integer stock;
     @ApiModelProperty(notes = "创建时间")
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
