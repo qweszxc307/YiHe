@@ -5,6 +5,7 @@
     <resultMap type="org.crown.model.product.dto.ProductDTO" id="ProductPageResultMap">
         <id column="id" property="id" />
         <result column="name" property="name" />
+        <result column="stock" property="stock" />
         <result column="brand_id" property="brandId" />
         <result column="model_id" property="modelId" />
         <result column="status" property="status" />
@@ -22,7 +23,7 @@
     </select>
 
     <select id="selectProductPage" resultMap="ProductPageResultMap">
-        select p.id,p.name,p.brand_id,p.model_id,p.status,p.order_num from product p order by p.order_num
+        select p.id,p.name,p.brand_id,p.model_id,p.status,p.order_num,p.stock from product p order by p.order_num
     </select>
 
     <select id="selectProducts" resultType="java.util.Map">

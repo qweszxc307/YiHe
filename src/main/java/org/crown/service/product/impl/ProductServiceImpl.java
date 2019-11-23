@@ -133,6 +133,7 @@ public class ProductServiceImpl extends BaseServiceImpl<ProductMapper, Product>i
         product.setBrandId(productPARM.getBrandId());
         product.setName(productPARM.getName());
         product.setOrderNum(Integer.parseInt(productPARM.getOrderNum()));
+        product.setStock(Integer.parseInt(productPARM.getStock()));
         productService.updateById(product);
         /*产品价格区间*/
         List<ProductPrice> productPriceList = new ArrayList<>();
