@@ -49,7 +49,6 @@ public class LabelBrandPARM extends BaseModel {
     @NotNull(groups = {LabelBrandPARM.Create.class, LabelBrandPARM.Update.class},message = "标签内容不能为空")
     @ApiModelProperty(notes = "标签内容")
     private String name;
-    @NotNull(groups = {LabelBrandPARM.Create.class, LabelBrandPARM.Update.class, LabelBrandPARM.Status.class},message = "状态不能为空")
     @ApiModelProperty(notes = "（状态：0：开启，1：禁用）")
     private Integer status;
     public interface Create {

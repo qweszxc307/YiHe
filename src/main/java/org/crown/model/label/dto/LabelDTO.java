@@ -18,33 +18,44 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package org.crown.service.label.impl;
+package org.crown.model.label.dto;
 
-import org.crown.framework.enums.ErrorCodeEnum;
-import org.crown.framework.service.impl.BaseServiceImpl;
-import org.crown.framework.utils.ApiAssert;
-import org.crown.mapper.label.LabelProductMapper;
-import org.crown.model.label.entity.LabelProduct;
-import org.crown.service.label.ILabelProductService;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import com.baomidou.mybatisplus.annotation.TableName;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import org.crown.framework.model.BaseModel;
+
+import java.time.LocalDateTime;
+
 
 /**
  * <p>
- * 产品标签表 服务实现类
+ * 标签表
  * </p>
  *
  * @author ykMa
  */
-@Service
-        public class LabelProductServiceImpl extends BaseServiceImpl<LabelProductMapper, LabelProduct> implements ILabelProductService {
+@ApiModel
 
-        @Override
-        @Transactional(readOnly = false)
-        public void updateStatus(Integer id, Integer status) {
-                LabelProduct labelProduct = getById(id);
-                ApiAssert.notNull(ErrorCodeEnum.SERVICE_UNAVAILABLE, labelProduct);
-                labelProduct.setStatus(status);
-                updateById(labelProduct);
-        }
+@Data
+@NoArgsConstructor
+@EqualsAndHashCode(callSuper = false)
+public class LabelDTO extends BaseModel {
+
+    private static final long serialVersionUID = 1L;
+
+    @ApiModelProperty(notes = "标签类型id")
+    private LabelBrandDTO brand;
+    @ApiModelProperty(notes = "标签名")
+    private String name;
+    @ApiModelProperty(notes = "状态：0禁用，1启用")
+    private Integer status;
+    @ApiModelProperty(notes = "创建时间")
+    private LocalDateTime createTime;
+    @ApiModelProperty(notes = "修改时间")
+    private LocalDateTime updateTime;
+
 }

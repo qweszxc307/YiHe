@@ -80,7 +80,7 @@ public class LabelBrandRestController extends SuperController {
     })
     @DeleteMapping("/{id}")
     public ApiResponses<Void> delete(@PathVariable("id") Long id) {
-        labelBrandService.removeById(id);
+        labelBrandService.removeLabelBrandById(id);
         return success(HttpStatus.NO_CONTENT);
     }
 

@@ -1,0 +1,215 @@
+<div class="layui-card">
+    <div class="layui-card-header">
+        <h2 class="header-title">标签管理</h2>
+        <span class="layui-breadcrumb pull-right">
+          <a href="#!console">首页</a>
+          <a><cite>标签管理</cite></a>
+        </span>
+    </div>
+    <div class="layui-card-body">
+        <!-- 搜索条件 -->
+        <div class="layui-form toolbar">
+            <form id="searchForm" onsubmit="return false;">
+                标签名：<input name="name" class="layui-input search-input" type="text" placeholder="标签名"/>&emsp;
+                <div class="layui-inline">
+                    <label class="layui-form-label">上级标签</label>
+                    <div class="layui-input-inline">
+                        <select name="brandId" xm-select-radio="" xm-select-search="" xm-select="brandIds"
+                                lay-verify="required">
+                        </select>
+                    </div>
+                </div>
+                <button id="label-btn-search" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索</button>
+            </form>
+        </div>
+        <!-- 表格顶部操作列 -->
+        <script type="text/html" id="label-toolbar">
+            <div class="layui-btn-container">
+                {{# if({{addShow}} == true){ }}
+                <button class="layui-btn layui-btn-normal layui-btn-sm" lay-event="add"><i
+                        class="layui-icon"></i>添加
+                </button>
+                {{# } }}
+            </div>
+        </script>
+        <!-- 数据表格 -->
+        <table class="layui-table" id="label-table" lay-filter="label-table"></table>
+    </div>
+</div>
+<!-- 表单弹窗 -->
+<script type="text/html" id="label-model">
+    <form id="label-form" lay-filter="label-form" class="layui-form model-form">
+        <input name="id" type="hidden"/>
+        <div class="layui-form-item">
+            <label class="layui-form-label">标签名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="name" lay-verify="required" placeholder="请输入" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">上级标签</label>
+            <div class="layui-input-inline">
+                <select name="brandId" xm-select-radio="" xm-select-search="" xm-select="brandId" lay-verify="required">
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item model-form-footer">
+            <button class="layui-btn layui-btn-primary close" type="button">取消</button>
+            <button class="layui-btn" lay-filter="label-form-submit" lay-submit>保存</button>
+        </div>
+    </form>
+</script>
+
+<!-- 表格操作列 -->
+<script type="text/html" id="label-table-bar">
+    {{#  if({{updateShow}} == true){ }}
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="update">修改</a>
+    {{#  } }}
+    {{#  if({{deleteShow}} == true){ }}
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>
+    {{#  } }}
+</script>
+<script type="text/html" id="menu-tpl-status">
+    <input type="checkbox" lay-filter="menu-tpl-status" value="{{d.id}}" lay-skin="switch"
+           lay-text="正常|禁用" {{d.status==0?'checked':''}}/>
+</script>
+<script>
+    layui.use(['form', 'table', 'config', 'crown', 'formSelects'], function () {
+        var form = layui.form;
+        var table = layui.table;
+        var config = layui.config;
+        var layer = layui.layer;
+        var crown = layui.crown;
+        var formSelects = layui.formSelects;
+        var $ = layui.jquery;
+
+        $('#label-toolbar').vm({
+            addShow: crown.hasPerm("label:add")
+        });
+        $('#label-table-bar').vm({
+            deleteShow: crown.hasPerm("label:delete"),
+            updateShow: crown.hasPerm("label:update")
+        });
+        //渲染表格
+        var labelTable = table.render({
+            elem: '#label-table',
+            toolbar: '#label-toolbar',
+            url: config.serverUrl + '/label',
+            request: config.request,
+            parseData: config.parseData,
+            response: config.response,
+            headers: {Authorization: config.getToken()},
+            page: true,
+            cols: [[
+                {field: 'id', width: 60, title: 'ID'},
+                {field: 'name', align: 'center', sort: true, title: '标签'},
+                {field: 'status', align: 'center', templet: '#menu-tpl-status', title: '状态', width: 100},
+                {
+                    field: 'brandId', align: 'center', sort: true, templet: function (d) {
+                        return d.brand.name;
+                    }, title: '上级标签'
+                },
+                {field: 'createTime', align: 'center', sort: true, title: '创建时间'},
+                {align: 'center', toolbar: '#label-table-bar', title: '操作'}
+            ]]
+        });
+
+        //下拉框
+        var brands = new Array();
+        crown.get('/labelBrand', {}, function (data) {
+            var brandSelectData = new Array();
+            for (var i = 0; i < data.result.records.length; i++) {
+                brandSelectData.push({name: data.result.records[i].name, value: data.result.records[i].id})
+            }
+            formSelects.data('brandIds', 'local', {arr: brandSelectData});
+            brands = brandSelectData;
+
+        });
+        // 工具条点击事件
+        // 添加
+        table.on('toolbar(label-table)', function (obj) {
+            if (obj.event === 'add') {
+                showUpdateModel();
+            }
+        });
+        table.on('tool(label-table)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'update') { //修改   查看详情
+                showUpdateModel(data);
+            } else if (obj.event === 'delete') { //
+                showDeleteModel(data);
+            }
+        });
+
+        //
+        var showUpdateModel = function (data) {
+            layer.open({
+                type: 1,
+                title: data ? '修改标签' : '添加标签',
+                area: '450px',
+                offset: '120px',
+                content: $('#label-model').html(),
+                success: function () {
+                    formSelects.data('brandId', 'local', {arr: brands});
+                    $('#label-form')[0].reset();
+                    if (data) {
+                        form.val('label-form', data);
+                        var rds = [data.brand.id];
+                        formSelects.value("brandId", rds);
+                    }
+                    $('#label-form .close').click(function () {
+                        layer.closeAll('page');
+                    });
+                }
+            });
+        };
+
+        // 编辑客户等级显示编辑弹窗
+        // 显示编辑弹窗
+
+        // 删除
+        var showDeleteModel = function (obj) {
+            layer.confirm('确定要删除吗？', function (i) {
+                layer.close(i);
+                layer.load(2);
+                crown.delete('/label/' + obj.id, {}, function () {
+                    layer.closeAll('loading');
+                    layer.msg('删除成功', {icon: 1});
+                    labelTable.reload('brand-table');
+                    obj.del();
+                });
+            });
+        };
+
+        // 表单提交事件
+        form.on('submit(label-form-submit)', function (data) {
+            debugger;
+            layer.load(2);
+            if (data.field.id) {
+                crown.put('/label/' + data.field.id, {data: data.field}, function () {
+                    debugger;
+                    layer.closeAll('loading');
+                    layer.msg('修改成功', {icon: 1});
+                    labelTable.reload('brand-table');
+                    layer.closeAll('page');
+                });
+            } else {
+                crown.post('/label', {data: data.field}, function () {
+                    debugger;
+                    layer.closeAll('loading');
+                    layer.msg('添加成功', {icon: 1});
+                    labelTable.reload('brand-table');
+                    layer.closeAll('page');
+                });
+            }
+            return false;
+        });
+
+        // 搜索按钮点击事件
+        $('#label-btn-search').click(function () {
+            labelTable.reload({where: crown.getSearchForm()});
+        });
+    });
+
+</script>

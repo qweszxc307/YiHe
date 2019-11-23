@@ -85,7 +85,7 @@ public class CustomerRestController extends SuperController {
                 .convert(e -> e.convert(CustomerDTO.class));
         convert.getRecords().forEach(e -> {
             e.setMemberName(customerService.queryLevelBycId(e.getId()));
-            e.setLabelBrands(labelBrandService.queryLabelBrandDTOByCustomerId(e.getId()));
+            e.setLabelBrands(labelBrandService.queryLabelDTOByCustomerId(e.getId()));
         });
         return success(convert);
     }

@@ -18,48 +18,51 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package org.crown.model.label.parm;
+package org.crown.model.label.entity;
 
-import io.swagger.annotations.ApiModel;
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
+import org.crown.framework.model.BaseModel;
+
+import java.time.LocalDateTime;
+
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.crown.framework.model.BaseModel;
-
-import javax.validation.constraints.NotNull;
 
 
 /**
  * <p>
- * 产品标签表
+ * 标签表
  * </p>
  *
  * @author ykMa
  */
-@ApiModel
+@TableName("label")
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class LabelProductPARM extends BaseModel {
+public class Label extends BaseModel {
 
     private static final long serialVersionUID = 1L;
-    @NotNull(groups = {LabelBrandPARM.Create.class, LabelBrandPARM.Update.class},message = "标签内容不能为空")
-    @ApiModelProperty(notes = "标签内容")
+
+    @ApiModelProperty(notes = "标签类型id")
+    private Integer brandId;
+    @ApiModelProperty(notes = "标签名")
     private String name;
-    @NotNull(groups = {LabelBrandPARM.Create.class, LabelBrandPARM.Update.class, LabelBrandPARM.Status.class},message = "状态不能为空")
-    @ApiModelProperty(notes = "（状态：0：开启，1：禁用）")
+    @ApiModelProperty(notes = "状态：0禁用，1启用")
     private Integer status;
-    public interface Create {
-
-    }
-
-    public interface Update {
-
-    }
-
-    public interface Status {
-
-    }
+    /**
+     * 更新时间
+     */
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    private LocalDateTime updateTime;
+    /**
+     * 创建时间
+     */
+    @TableField(fill = FieldFill.INSERT)
+    private LocalDateTime createTime;
 
 }

@@ -20,11 +20,14 @@
  */
 package org.crown.service.label.impl;
 
+import lombok.extern.slf4j.Slf4j;
 import org.crown.framework.enums.ErrorCodeEnum;
 import org.crown.framework.service.impl.BaseServiceImpl;
 import org.crown.framework.utils.ApiAssert;
 import org.crown.mapper.label.LabelBrandMapper;
+import org.crown.mapper.label.LabelMapper;
 import org.crown.model.label.dto.LabelBrandDTO;
+import org.crown.model.label.dto.LabelDTO;
 import org.crown.model.label.entity.LabelBrand;
 import org.crown.service.label.ILabelBrandService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,10 +45,12 @@ import java.util.List;
  *
  * @author ykMa
  */
+@Slf4j
 @Service
 public class LabelBrandServiceImpl extends BaseServiceImpl<LabelBrandMapper, LabelBrand> implements ILabelBrandService {
         @Autowired
-        private LabelBrandMapper labelBrandMapper;
+        private LabelMapper labelMapper;
+
 
 
         /**
@@ -69,12 +74,24 @@ public class LabelBrandServiceImpl extends BaseServiceImpl<LabelBrandMapper, Lab
          * @return
          */
         @Override
-        public List<LabelBrandDTO> queryLabelBrandDTOByCustomerId(Integer id) {
-                List<Integer> labels =labelBrandMapper.queryLabelIdsByCustomerId(id);
-                List<LabelBrandDTO> labelBrandDTOS = new ArrayList<>();
+        public List<LabelDTO> queryLabelDTOByCustomerId(Integer id) {
+                List<Integer> labels =labelMapper.queryLabelIdsByCustomerId(id);
+                List<LabelDTO> labelDTOS = new ArrayList<>();
                 for (Integer label : labels) {
-                        labelBrandDTOS.add(labelBrandMapper.selectById(label).convert(LabelBrandDTO.class));
+                        labelDTOS.add(labelMapper.selectById(label).convert(LabelDTO.class));
                 }
-                return labelBrandDTOS;
+                return labelDTOS;
+        }
+
+        @Transactional(readOnly = false)
+        @Override
+        public void removeLabelBrandById(Long id) {
+                try {
+                        removeById(id);
+                        labelMapper.deleteByBrandId(id);
+                        baseMapper.deleteLabelCustomerByBrandId(id);
+                } catch (Exception e) {
+                        log.error("删除标签类型失败，原因是：" + e);
+                }
         }
 }

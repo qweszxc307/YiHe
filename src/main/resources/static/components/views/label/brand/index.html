@@ -1,9 +1,9 @@
 <div class="layui-card">
     <div class="layui-card-header">
-        <h2 class="header-title">品牌标签管理</h2>
+        <h2 class="header-title">标签类型</h2>
         <span class="layui-breadcrumb pull-right">
           <a href="#!console">首页</a>
-          <a><cite>品牌标签</cite></a>
+          <a><cite>标签类型</cite></a>
         </span>
     </div>
     <div class="layui-card-body">
@@ -31,20 +31,13 @@
 
 <!-- 表单弹窗 -->
 <script type="text/html" id="brand-model">
-    <form id="brand-form" lay-filter="brand-form" class="layui-form model-form">
+    <form id="label-form" lay-filter="label-form" class="layui-form model-form">
         <input name="id" type="hidden"/>
         <div class="layui-form-item">
-            <label class="layui-form-label">标签名</label>
+            <label class="layui-form-label">类型名称</label>
             <div class="layui-input-block">
                 <input type="text" name="name" lay-verify="required" placeholder="请输入" autocomplete="off"
                        class="layui-input">
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">是否禁用</label>
-            <div class="layui-input-block">
-                <input type="radio" name="status" value="0" title="开启" checked>
-                <input type="radio" name="status" value="1" title="禁用">
             </div>
         </div>
         <div class="layui-form-item model-form-footer">
@@ -83,7 +76,6 @@
         });
         $('#brand-table-bar').vm({
             editShow: crown.hasPerm("labelBrand:edit"),
-            permShow: crown.hasPerm("labelBrand:perm"),
             deleteShow: crown.hasPerm("labelBrand:delete")
         });
         //渲染表格

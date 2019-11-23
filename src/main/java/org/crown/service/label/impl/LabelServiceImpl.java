@@ -18,53 +18,36 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package org.crown.model.label.entity;
+package org.crown.service.label.impl;
 
-import com.baomidou.mybatisplus.annotation.*;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import org.crown.framework.model.BaseModel;
-
-import java.time.LocalDateTime;
-
+import lombok.extern.slf4j.Slf4j;
+import org.crown.model.label.entity.Label;
+import org.crown.mapper.label.LabelMapper;
+import org.crown.service.label.ILabelService;
+import org.crown.framework.service.impl.BaseServiceImpl;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * <p>
- * 产品标签表
+ * 标签表 服务实现类
  * </p>
  *
  * @author ykMa
  */
-@TableName("label_product")
-@Data
-@NoArgsConstructor
-@EqualsAndHashCode(callSuper = false)
-public class LabelProduct extends BaseModel {
+@Slf4j
+@Service
+public class LabelServiceImpl extends BaseServiceImpl<LabelMapper, Label> implements ILabelService {
 
-    private static final long serialVersionUID = 1L;
-    /**
-     * 主键id
-     */
-    @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
-    /**
-     * 产品标签内容
-     */
-    private String name;
-    /**
-     * 更新时间
-     */
-    @TableField(fill = FieldFill.INSERT_UPDATE)
-    private LocalDateTime updateTime;
-    /**
-     * 创建时间
-     */
-    @TableField(fill = FieldFill.INSERT)
-    private LocalDateTime createTime;
-    /**
-     * 标签状态 （0代表禁用，1代表开启）
-     */
-    private Integer status;
 
+    @Transactional(readOnly = false)
+    @Override
+    public void removeLabelById(Integer id) {
+        try {
+            removeById(id);
+            baseMapper.deleteLabelCustomerByLabelId(id);
+        } catch (Exception e) {
+            log.error("删除中间表失败，原因是：" + e);
+        }
+    }
 }

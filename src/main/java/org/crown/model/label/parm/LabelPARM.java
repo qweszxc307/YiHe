@@ -18,24 +18,55 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package org.crown.service.label;
+package org.crown.model.label.parm;
 
-import org.crown.framework.service.BaseService;
-import org.crown.model.label.entity.LabelProduct;
+import com.baomidou.mybatisplus.annotation.TableName;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import org.crown.framework.model.BaseModel;
+
+import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
+
 
 /**
  * <p>
- * 产品标签表 服务类
+ * 标签表
  * </p>
  *
  * @author ykMa
  */
-public interface ILabelProductService extends BaseService<LabelProduct> {
+@ApiModel
 
-    /**
-     * 修改标签状态
-     * @param id
-     * @param status
-     */
-    void updateStatus(Integer id, Integer status);
+@Data
+@NoArgsConstructor
+@EqualsAndHashCode(callSuper = false)
+public class LabelPARM extends BaseModel {
+
+    private static final long serialVersionUID = 1L;
+
+
+    @NotNull(groups = {LabelBrandPARM.Create.class, LabelBrandPARM.Update.class},message = "标签内容不能为空")
+    @ApiModelProperty(notes = "标签内容")
+    private String name;
+    @NotNull(groups = {LabelBrandPARM.Create.class, LabelBrandPARM.Update.class},message = "标签类型id不能为空")
+    @ApiModelProperty(notes = "标签类型id")
+    private String brandId;
+    @ApiModelProperty(notes = "（状态：0：开启，1：禁用）")
+    private Integer status;
+
+    public interface Create {
+
+    }
+
+    public interface Update {
+
+    }
+
+    public interface Status {
+
+    }
 }

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.crown.mapper.label.LabelBrandMapper">
+<delete id="deleteLabelCustomerByBrandId" parameterType="Integer">
+    DELETE FROM label_customer  WHERE label_brand_id = #{id}
+</delete>
 
 
-    <select id="queryLabelIdsByCustomerId" resultType="Integer">
-        select b_id from customer_label_brand where c_id = #{id};
-    </select>
 </mapper>

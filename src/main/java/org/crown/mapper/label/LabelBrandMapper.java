@@ -1,6 +1,7 @@
 package org.crown.mapper.label;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.crown.framework.mapper.BaseMapper;
 import org.crown.model.label.dto.LabelBrandDTO;
 import org.crown.model.label.entity.LabelBrand;
@@ -17,5 +18,9 @@ import java.util.List;
  */
 @Mapper
 public interface LabelBrandMapper extends BaseMapper<LabelBrand> {
-    List<Integer> queryLabelIdsByCustomerId(Integer id);
+    /**
+     * 根据标签类型id删除用户标签中间表
+     * @param id
+     */
+    void deleteLabelCustomerByBrandId(@Param("id") Long id);
 }

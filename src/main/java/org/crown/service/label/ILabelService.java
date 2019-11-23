@@ -18,39 +18,22 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package org.crown.model.label.dto;
+package org.crown.service.label;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import org.crown.framework.model.BaseModel;
-
-import java.time.LocalDateTime;
-
+import org.crown.model.label.entity.Label;
+import org.crown.framework.service.BaseService;
 
 /**
  * <p>
- * 产品标签表
+ * 标签表 服务类
  * </p>
  *
  * @author ykMa
  */
-@ApiModel
-@Data
-@NoArgsConstructor
-@EqualsAndHashCode(callSuper = false)
-public class LabelProductDTO extends BaseModel {
-
-    private static final long serialVersionUID = 1L;
-    @ApiModelProperty(notes = "主键id")
-    private Integer id;
-    @ApiModelProperty(notes = "产品标签内容")
-    private String name;
-    @ApiModelProperty(notes = "创建时间")
-    private LocalDateTime createTime;
-    @ApiModelProperty(notes = "（状态：0：开启，1：禁用）")
-    private Integer status;
-
+public interface ILabelService extends BaseService<Label> {
+    /**
+     * 删除
+     * @param id
+     */
+    void removeLabelById(Integer id);
 }

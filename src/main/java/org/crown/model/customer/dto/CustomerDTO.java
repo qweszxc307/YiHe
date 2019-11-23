@@ -29,6 +29,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.crown.framework.model.BaseModel;
 import org.crown.model.label.dto.LabelBrandDTO;
+import org.crown.model.label.dto.LabelDTO;
 import org.crown.model.label.entity.LabelBrand;
 
 import java.math.BigDecimal;
@@ -77,7 +78,7 @@ public class CustomerDTO extends BaseModel {
     @ApiModelProperty(notes = "最后一次交易时间")
     private LocalDateTime lastTime;
     @ApiModelProperty(notes = "用户标签")
-    private List<LabelBrandDTO> labelBrands;
+    private List<LabelDTO> labelBrands;
     /*
      * 创建时间
      */
