@@ -89,10 +89,14 @@ public class CarriageConfigServiceImpl extends BaseServiceImpl<CarriageConfigMap
                 /*保存运费策略适用区域*/
                 List<CarriageAreaCity> areaCityList = new ArrayList<>();
                 for(int i = 0;i<carriageConfigPARM.getCityIds().size();i++){
-                        CarriageAreaCity carriageAreaCity = new CarriageAreaCity();
-                        carriageAreaCity.setCityId(carriageConfigPARM.getCityIds().get(i));
-                        carriageAreaCity.setConfigId(carriageConfig.getId());
-                        areaCityList.add(carriageAreaCity);
+                        int count = carriageAreaCityService.query().eq(CarriageAreaCity::getCarriageId,carriageConfigPARM.getId()).eq(CarriageAreaCity::getCityId,carriageConfigPARM.getCityIds().get(i)).count();
+                        if(count==0){
+                                CarriageAreaCity carriageAreaCity = new CarriageAreaCity();
+                                carriageAreaCity.setCityId(carriageConfigPARM.getCityIds().get(i));
+                                carriageAreaCity.setConfigId(carriageConfig.getId());
+                                carriageAreaCity.setCarriageId(carriageConfigPARM.getId());
+                                areaCityList.add(carriageAreaCity);
+                        }
                 }
                 carriageAreaCityService.saveBatch(areaCityList);
                 return null;

@@ -48,5 +48,7 @@ private static final long serialVersionUID=1L;
 private String cityId;
     @ApiModelProperty(notes = "运费策略配置id")
 private Integer configId;
+    @ApiModelProperty(notes = "运费策略模板id")
+    private Integer carriageId;
 
 }

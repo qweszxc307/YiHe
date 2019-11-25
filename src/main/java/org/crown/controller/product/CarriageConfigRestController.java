@@ -115,10 +115,14 @@ public class CarriageConfigRestController extends SuperController {
                 carriageAreaCityService.delete().eq(CarriageAreaCity::getConfigId,id).execute();
                 List<CarriageAreaCity> areaCityList = new ArrayList<>();
                 for(int i = 0;i<carriageConfigPARM.getCityIds().size();i++){
-                        CarriageAreaCity carriageAreaCity = new CarriageAreaCity();
-                        carriageAreaCity.setCityId(carriageConfigPARM.getCityIds().get(i));
-                        carriageAreaCity.setConfigId(carriageConfig.getId());
-                        areaCityList.add(carriageAreaCity);
+                        int count = carriageAreaCityService.query().eq(CarriageAreaCity::getCarriageId,carriageConfigPARM.getId()).eq(CarriageAreaCity::getCityId,carriageConfigPARM.getCityIds().get(i)).count();
+                        if(count==0){
+                                CarriageAreaCity carriageAreaCity = new CarriageAreaCity();
+                                carriageAreaCity.setCityId(carriageConfigPARM.getCityIds().get(i));
+                                carriageAreaCity.setConfigId(carriageConfig.getId());
+                                carriageAreaCity.setCarriageId(carriageConfigPARM.getId());
+                                areaCityList.add(carriageAreaCity);
+                        }
                 }
                 carriageAreaCityService.saveBatch(areaCityList);
                 return success();
