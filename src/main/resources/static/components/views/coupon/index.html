@@ -85,7 +85,23 @@
                 {field: 'total', align: 'center', sort: true, title: '总数'},
                 {field: 'provide', align: 'center', sort: true, title: '已发数量'},
                 {field: 'used', align: 'center', sort: true, title: '已用数量'},
-                {field: 'rule', align: 'center', sort: true, title: '分发规则'},
+                {
+
+                    field: 'rule', align: 'center', sort: true, templet: function (d) {
+                        if (d.rule == 1) {
+                            return '<div style="color: #0C0C0C">主动分发</div>';
+                        }
+                        if (d.rule == 2) {
+                            return '<div style="color: #0C0C0C">下单分发</div>';
+                        }
+                        if (d.rule == 3) {
+                            return '<div style="color: #0C0C0C">用户领取</div>';
+                        }
+                        if (d.rule == 4) {
+                            return '<div style="color: #0C0C0C">中奖分发</div>';
+                        }
+                    }, title: '分发规则'
+                },
                 {
                     field: 'brand', align: 'center', sort: true, templet: function (e) {
                         return e.brand.name;
