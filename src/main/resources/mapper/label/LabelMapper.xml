@@ -3,7 +3,7 @@
 <mapper namespace="org.crown.mapper.label.LabelMapper">
 
     <select id="queryLabelIdsByCustomerId" resultType="Integer" parameterType="Integer">
-        select label_id from label_customer where customer_id = #{id} and label_brand_id = 1;
+        select label_id from label_customer where customer_id = #{id} and brand_id = 1;
     </select>
     <delete id="deleteLabelCustomerByLabelId" parameterType="Integer">
         DELETE FROM label_customer  WHERE label_id = #{id}
