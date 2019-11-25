@@ -63,7 +63,7 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">适用商品：</label>
                     <div class="layui-input-inline">
-                        <select name="brand" xm-select-radio="" xm-select-search="" xm-select="brand"  lay-verify="required">
+                        <select name="brandId" xm-select-radio="" xm-select-search="" xm-select="brandId"  lay-verify="required">
                         </select>
                     </div>
                 </div>
@@ -190,7 +190,7 @@
             for (var i = 0; i < data.result.length; i++) {
                 brandSelectData.push({name: data.result[i].name, value: data.result[i].id})
             }
-            formSelects.data('brand', 'local', {arr: brandSelectData});
+            formSelects.data('brandId', 'local', {arr: brandSelectData});
         });
         form.render('select');
         //执行一个laydate实例
