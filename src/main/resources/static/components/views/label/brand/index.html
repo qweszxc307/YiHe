@@ -31,7 +31,7 @@
 
 <!-- 表单弹窗 -->
 <script type="text/html" id="brand-model">
-    <form id="label-form" lay-filter="label-form" class="layui-form model-form">
+    <form id="brand-form" lay-filter="brand-form" class="layui-form model-form">
         <input name="id" type="hidden"/>
         <div class="layui-form-item">
             <label class="layui-form-label">类型名称</label>
@@ -41,7 +41,6 @@
             </div>
         </div>
         <div class="layui-form-item model-form-footer">
-            <button class="layui-btn layui-btn-primary close" type="button">取消</button>
             <button class="layui-btn" lay-filter="brand-form-submit" lay-submit>保存</button>
         </div>
     </form>
@@ -63,7 +62,7 @@
 </script>
 
 <script>
-    layui.use(['form', 'table', 'config', 'crown'], function () {
+    layui.use(['form', 'table', 'config', 'crown', 'layer'], function () {
         var form = layui.form;
         var table = layui.table;
         var config = layui.config;
@@ -128,7 +127,7 @@
                     if (data) {
                         form.val('brand-form', data);
                     }
-                    $('#brand-form .close').click(function () {
+                    $('#brand-form.close').click(function () {
                         layer.closeAll('page');
                     });
                 }
