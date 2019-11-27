@@ -28,10 +28,13 @@ import org.crown.common.annotations.Resources;
 import org.crown.enums.AuthTypeEnum;
 import org.crown.framework.responses.ApiResponses;
 import org.crown.model.brand.dto.BrandDTO;
+import org.crown.model.brand.entity.Brand;
 import org.crown.model.coupon.dto.CouponDTO;
 import org.crown.model.coupon.entity.Coupon;
+import org.crown.model.coupon.entity.CouponBrand;
 import org.crown.model.coupon.parm.CouponPARM;
 import org.crown.service.brand.impl.BrandServiceImpl;
+import org.crown.service.coupon.ICouponBrandService;
 import org.crown.service.coupon.ICouponService;
 import org.crown.service.coupon.impl.CouponServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +44,9 @@ import org.springframework.validation.annotation.Validated;
 
 import io.swagger.annotations.Api;
 import org.crown.framework.controller.SuperController;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <p>
@@ -58,14 +64,27 @@ public class CouponRestController extends SuperController {
     private ICouponService couponService;
     @Autowired
     private BrandServiceImpl brandService;
+    @Autowired
+    private ICouponBrandService couponBrandService;
+    //查询出所有的coupon 关联的品牌id     对应的实体类是    品牌的id，品牌的名称
+
+    /**
+     * 实体类，优惠券的实体类中有 关联的数量，品牌的集合，集合的字段是 品牌的id，品牌的
+     * @return
+     */
 
     @Resources(auth = AuthTypeEnum.OPEN)
     @ApiOperation("查询所有优惠券")
     @GetMapping
     public ApiResponses<IPage<CouponDTO>> page() {
         return success(couponService.query().page(this.getPage()).convert(e -> {
-            CouponDTO convert = e.convert(CouponDTO.class);
-            convert.setBrand(brandService.getBrandById(e.getBrandId()));
+            CouponDTO convert =  e.convert(CouponDTO.class);
+            List<CouponBrand> list = couponBrandService.query().eq(CouponBrand::getCouponId, convert.getId()).list();
+            List<BrandDTO> brands = new ArrayList<>();
+            list.forEach(f -> {
+                brands.add(brandService.query().eq(Brand::getId, f.getBrandId()).eq(Brand::getStatus, 0).entity(b -> b.convert(BrandDTO.class)));
+            });
+            convert.setBrands(brands);
             return convert;
         }));
     }
@@ -77,7 +96,8 @@ public class CouponRestController extends SuperController {
     })
     @PutMapping("/{id}")
     public ApiResponses<Void> update(@PathVariable("id") Integer id, @RequestBody @Validated(CouponPARM.Update.class) CouponPARM couponPARM) {
-        couponService.updateById(couponPARM.convert(Coupon.class));
+        couponService.updateCoupon(couponPARM);
+
         return success();
     }
 
@@ -89,8 +109,8 @@ public class CouponRestController extends SuperController {
             @ApiImplicitParam(name = "id", value = "产品ID", required = true, paramType = "path")
     })
     @PostMapping
-    public ApiResponses<Void> create(@PathVariable("id") Integer id, @RequestBody @Validated(CouponPARM.Update.class) CouponPARM couponPARM) {
-        couponService.updateById(couponPARM.convert(Coupon.class));
+    public ApiResponses<Void> create(@RequestBody @Validated(CouponPARM.Update.class) CouponPARM couponPARM) {
+        couponService.createCoupon(couponPARM);
         return success();
     }
 
@@ -104,7 +124,7 @@ public class CouponRestController extends SuperController {
     })
     @DeleteMapping("/{id}")
     public ApiResponses<Void> delete(@PathVariable("id") Integer id) {
-        couponService.removeById(id);
+        couponService.deleteCoupon(id);
         return success();
     }
 

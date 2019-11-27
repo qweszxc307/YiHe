@@ -26,58 +26,29 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.crown.framework.model.BaseModel;
-import org.crown.model.brand.dto.BrandDTO;
-import org.crown.service.brand.impl.BrandServiceImpl;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
 
 
 /**
  * <p>
- *
+ * 优惠券和品牌关联表
  * </p>
  *
  * @author ykMa
  */
-@TableName("coupon")
+@TableName("coupon_brand")
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class CouponDTO extends BaseModel {
+public class CouponBrandDTO extends BaseModel {
 
     private static final long serialVersionUID = 1L;
-    @ApiModelProperty(notes = "id")
-    private Integer id;
-    @ApiModelProperty(notes = "优惠卷名称")
-    private String name;
-    @ApiModelProperty(notes = "优惠券描述")
-    private String details;
-    @ApiModelProperty(notes = "类型{1：满减，2：直减，3折扣}")
-    private Integer type;
-    @ApiModelProperty(notes = "折扣条件")
-    private BigDecimal discountPoint;
-    @ApiModelProperty(notes = "优惠价格")
-    private BigDecimal discount;
-    @ApiModelProperty(notes = "开始时间")
-    private LocalDateTime startTime;
-    @ApiModelProperty(notes = "结束时间")
-    private LocalDateTime endTime;
-    @ApiModelProperty(notes = "状态{1：禁用，0：启用}")
-    private Integer status;
-    @ApiModelProperty(notes = "发放数量")
-    private Integer total;
-    @ApiModelProperty(notes = "已发数量")
-    private Integer provide;
-    @ApiModelProperty(notes = "已用数量")
-    private Integer used;
-    @ApiModelProperty(notes = "分发规则{1：主动分发，2：下单分发，3：用户领取，4：中奖分发}")
-    private Integer rule;
-    @ApiModelProperty(notes = "关联的品牌集合")
-    private List<BrandDTO> brands;
 
-
-
-
+    @ApiModelProperty(notes = "优惠券id")
+    private Integer couponId;
+    @ApiModelProperty(notes = "品牌id")
+    private Integer brandId;
+    @ApiModelProperty(notes = "品牌名称")
+    private Integer brandName;
 }

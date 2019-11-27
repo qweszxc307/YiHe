@@ -60,10 +60,11 @@
         </div>
         <div class="layui-col-lg12">
             <div class="layui-col-lg6">
-                <div class="layui-inline">
+
+                <div class="layui-form-item">
                     <label class="layui-form-label">适用商品：</label>
-                    <div class="layui-input-inline">
-                        <select name="brandId" xm-select-radio="" xm-select-search="" xm-select="brandId"  lay-verify="required">
+                    <div class="layui-input-block">
+                        <select name="brands" xm-select="brands" lay-verify="required">
                         </select>
                     </div>
                 </div>
@@ -79,6 +80,7 @@
                             <option value="2">下单分发</option>
                             <option value="3">用户领取</option>
                             <option value="4">中奖分发</option>
+                            <option value="5">一元三张</option>
                         </select>
                     </div>
                 </div>
@@ -169,6 +171,10 @@
         form.on('submit(coupon-form-submit)', function (data) {
             layer.load(2);
             if (data.field.id) {
+                debugger;
+                var brandStr = data.field.brands;
+                data.field.brands = brandStr.split(",");
+                debugger;
                 crown.put('/coupon/' + data.field.id, {data: data.field}, function () {
                     layer.closeAll('loading');
                     layer.msg('修改成功', {icon: 1});
@@ -184,14 +190,20 @@
             }
             return false;
         });
-
         crown.get('/brand/brands', {}, function (data) {
             var brandSelectData = new Array();
             for (var i = 0; i < data.result.length; i++) {
                 brandSelectData.push({name: data.result[i].name, value: data.result[i].id})
             }
-            formSelects.data('brandId', 'local', {arr: brandSelectData});
+            formSelects.data('brands', 'local', {arr: brandSelectData});
+            var rds = new Array();
+            for (var i = 0; i < coupon.brands.length; i++) {
+                rds.push(coupon.brands[i].id);
+            }
+            // 回显user数据
+            formSelects.value('brands', rds);
         });
+
         form.render('select');
         //执行一个laydate实例
         laydate.render({

@@ -20,10 +20,13 @@
  */
 package org.crown.service.coupon.impl;
 
-import org.crown.model.coupon.entity.Coupon;
-import org.crown.mapper.coupon.CouponMapper;
-import org.crown.service.coupon.ICouponService;
 import org.crown.framework.service.impl.BaseServiceImpl;
+import org.crown.mapper.coupon.CouponMapper;
+import org.crown.model.coupon.entity.Coupon;
+import org.crown.model.coupon.entity.CouponBrand;
+import org.crown.model.coupon.parm.CouponPARM;
+import org.crown.service.coupon.ICouponBrandService;
+import org.crown.service.coupon.ICouponService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,6 +40,8 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 public class CouponServiceImpl extends BaseServiceImpl<CouponMapper, Coupon> implements ICouponService {
+    @Autowired
+    private ICouponBrandService couponBrandService;
 
     /**
      * 修改状态
@@ -49,5 +54,49 @@ public class CouponServiceImpl extends BaseServiceImpl<CouponMapper, Coupon> imp
         if (baseMapper.updateStatus(id, status) == 0) {
             throw new RuntimeException("修改优惠券状态失败：{优惠券输出的值是： “0” ");
         }
+    }
+
+    /**
+     * 修改优惠券
+     * @param couponPARM 传入的优惠券
+     */
+    @Transactional(readOnly = false)
+    @Override
+    public void updateCoupon(CouponPARM couponPARM) {
+        System.out.println("couponPARM = " + couponPARM);
+        updateById(couponPARM.convert(Coupon.class));
+        couponBrandService.delete().eq(CouponBrand::getCouponId, couponPARM.getId()).execute();
+        CouponBrand couponBrand = new CouponBrand();
+        couponBrand.setCouponId(couponPARM.getId());
+        couponPARM.getBrands().forEach(e->{
+            couponBrand.setBrandId(e);
+            couponBrandService.save(couponBrand);
+        });
+    }
+
+    /**
+     * @param id
+     */
+    @Transactional(readOnly = false)
+    @Override
+    public void deleteCoupon(Integer id) {
+        removeById(id);
+        couponBrandService.delete().eq(CouponBrand::getCouponId, id).execute();
+    }
+
+    /**
+     * 新增
+     * @param couponPARM
+     */
+    @Override
+    public void createCoupon(CouponPARM couponPARM) {
+        Coupon convert = couponPARM.convert(Coupon.class);
+        save(convert);
+        CouponBrand couponBrand = new CouponBrand();
+        couponBrand.setCouponId(couponPARM.getId());
+        couponPARM.getBrands().forEach(e -> {
+            couponBrand.setBrandId(e);
+            couponBrandService.save(couponBrand);
+        });
     }
 }

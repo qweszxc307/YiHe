@@ -29,6 +29,7 @@ import org.crown.framework.model.BaseModel;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 /**
@@ -67,7 +68,7 @@ public class CouponPARM extends BaseModel {
     @ApiModelProperty(notes = "分发规则{1：主动分发，2：下单分发，3：用户领取，4：中奖分发}")
     private Integer rule;
     @ApiModelProperty(notes = "品牌id")
-    private Integer brandId;
+    private List<Integer> brands;
     public interface Create {
     }
 

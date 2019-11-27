@@ -3,7 +3,7 @@
         <h2 class="header-title">优惠券管理</h2>
         <span class="layui-breadcrumb pull-right">
           <a href="#!console">首页</a>
-          <a><cite>批量下单</cite></a>
+          <a><cite>优惠券</cite></a>
         </span>
     </div>
     <div class="layui-card-body">
@@ -100,12 +100,10 @@
                         if (d.rule == 4) {
                             return '<div style="color: #0C0C0C">中奖分发</div>';
                         }
+                        if (d.rule == 5) {
+                            return '<div style="color: #0C0C0C">一元三张</div>';
+                        }
                     }, title: '分发规则'
-                },
-                {
-                    field: 'brand', align: 'center', sort: true, templet: function (e) {
-                        return e.brand.name;
-                    }, title: '适用商品'
                 },
                 {align: 'center', toolbar: '#coupon-table-bar', title: '操作'}
             ]]

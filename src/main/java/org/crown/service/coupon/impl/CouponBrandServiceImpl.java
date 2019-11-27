@@ -18,44 +18,22 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package org.crown.service.coupon;
+package org.crown.service.coupon.impl;
 
-import org.crown.model.coupon.entity.Coupon;
-import org.crown.framework.service.BaseService;
-import org.crown.model.coupon.parm.CouponPARM;
+import org.crown.framework.service.impl.BaseServiceImpl;
+import org.crown.mapper.coupon.CouponBrandMapper;
+import org.crown.model.coupon.entity.CouponBrand;
+import org.crown.service.coupon.ICouponBrandService;
+import org.springframework.stereotype.Service;
 
 /**
  * <p>
- * 服务类
+ * 优惠券和品牌关联表 服务实现类
  * </p>
  *
  * @author ykMa
  */
-public interface ICouponService extends BaseService<Coupon> {
-    /**
-     * 修改状态
-     *
-     * @param id
-     * @param status
-     */
-    void updateStatus(Integer id, Integer status);
+@Service
+        public class CouponBrandServiceImpl extends BaseServiceImpl<CouponBrandMapper, CouponBrand>implements ICouponBrandService {
 
-    /**
-     * 修改优惠券
-     *
-     * @param couponPARM   传入的优惠券
-     */
-    void updateCoupon(CouponPARM couponPARM);
-
-    /**
-     * 删除
-     * @param id
-     */
-    void deleteCoupon(Integer id);
-
-    /**
-     * 新增
-     * @param couponPARM
-     */
-    void createCoupon(CouponPARM couponPARM);
-}
+        }

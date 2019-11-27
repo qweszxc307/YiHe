@@ -20,42 +20,16 @@
  */
 package org.crown.service.coupon;
 
-import org.crown.model.coupon.entity.Coupon;
+import org.crown.model.coupon.entity.CouponBrand;
 import org.crown.framework.service.BaseService;
-import org.crown.model.coupon.parm.CouponPARM;
 
 /**
  * <p>
- * 服务类
+ * 优惠券和品牌关联表 服务类
  * </p>
  *
  * @author ykMa
  */
-public interface ICouponService extends BaseService<Coupon> {
-    /**
-     * 修改状态
-     *
-     * @param id
-     * @param status
-     */
-    void updateStatus(Integer id, Integer status);
+public interface ICouponBrandService extends BaseService<CouponBrand> {
 
-    /**
-     * 修改优惠券
-     *
-     * @param couponPARM   传入的优惠券
-     */
-    void updateCoupon(CouponPARM couponPARM);
-
-    /**
-     * 删除
-     * @param id
-     */
-    void deleteCoupon(Integer id);
-
-    /**
-     * 新增
-     * @param couponPARM
-     */
-    void createCoupon(CouponPARM couponPARM);
 }
