@@ -87,9 +87,9 @@
             page: true,
             cols: [[
                 {field: 'id', width: 60, title: 'ID', hide: true},
-                {field: 'orderNum', align: 'center', sort: true, title: '订单号'},
+                {field: 'orderNum', align: 'center', sort: true, width: 183, title: '订单号'},
                 {
-                    field: 'status', align: 'center', sort: true,
+                    field: 'status', align: 'center', sort: true, width: 102,
                     templet: function (d) {
                         if (d.status == 1) {
                             return '<div style="color: #11beff">待支付</div>'
@@ -110,31 +110,58 @@
                         }
                     }, title: '订单状态'
                 },
-                {field: 'addressee', align: 'center', sort: true, title: '收货人'},
-                {field: 'phone', align: 'center', sort: true, title: '收货电话'},
-                {field: 'address', align: 'center', sort: true, title: '地址'},
-                {field: 'logisticsNumber', align: 'center', sort: true, title: '快递单号'},
-                {field: 'logisticsCompany', align: 'center', sort: true, title: '快递公司'},
-                {field: 'postFee', align: 'center', sort: true, title: '运费'},
-                {field: 'totalFee', align: 'center', sort: true, title: '商品总价'},
-                {field: 'actualFee', align: 'center', sort: true, title: '实付金额'},
-                {field: 'createTime', align: 'center', sort: true, title: '创建时间'},
-                {field: 'payTime', align: 'center', sort: true, title: '支付时间'},
+                {
+                    field: 'addressee', align: 'center', sort: true, width: 88, templet: function (e) {
+                        return e.orderLogistics.addressee
+                    }, title: '收货人'
+                },
+                {
+                    field: 'phone', align: 'center', sort: true, width: 117, templet: function (e) {
+                        if (e.orderLogistics.phone != null) {
+                            return e.orderLogistics.phone;
+                        } else {
+                            return "";
+                        }
+                    }, title: '收货电话'
+                },
+                {
+                    field: 'address', align: 'center', sort: true, templet: function (e) {
+                        return e.orderLogistics.province + ' ' + e.orderLogistics.city + ' ' + e.orderLogistics.district + ' ' + e.orderLogistics.street;
+                    }, title: '地址', width: 116
+                },
+                {
+                    field: 'logisticsNumber', align: 'center', sort: true, templet: function (e) {
+                        if (e.orderLogistics.logisticsNumber != null) {
+                            return e.orderLogistics.logisticsNumber;
+                        } else {
+                            return "";
+                        }
+                    }, title: '快递单号', width: 113
+                },
+                {
+                    field: 'logisticsCompany', align: 'center', sort: true, templet: function (e) {
+                        if (e.orderLogistics.logisticsCompany != null) {
+                            return e.orderLogistics.logisticsCompany;
+                        } else {
+                            return "";
+                        }
+                    }, title: '快递公司', width: 113
+                },
+                {field: 'postFee', align: 'center', sort: true, title: '运费', width: 74},
+                {field: 'totalFee', align: 'center', sort: true, title: '商品总价', width: 113},
+                {field: 'actualFee', align: 'center', sort: true, title: '实付金额', width: 113},
+                {field: 'createTime', align: 'center', sort: true, title: '创建时间', width: 161},
+                {field: 'payTime', align: 'center', sort: true, width: 161, title: '支付时间'},
                 {align: 'center', toolbar: '#order-table-bar', title: '操作'}
             ]]
         });
 
         //显示表单弹窗detail
         var showDetailModel = function (data) {
-            if (data) {
-                crown.putTempData('t_order', data);
-                crown.get('/order/' + data.id, {async: false}, function (data) {
-                    crown.putTempData('t_orderDetail', data.result);
-                });
-            }
+            crown.putTempData('t_order', data);
             crown.popupCenter({
                 type: 1,
-                resize: true,
+                resize: false,
                 title: "订单详情",
                 area: ['89%', '100%'],
                 offset: 'r',

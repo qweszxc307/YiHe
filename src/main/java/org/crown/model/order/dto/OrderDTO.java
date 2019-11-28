@@ -26,6 +26,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.crown.framework.model.BaseModel;
+import org.crown.model.order.entity.OrderLogistics;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -46,31 +47,51 @@ public class OrderDTO extends BaseModel {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(notes = "订单id")
-    private Integer Id;
     @ApiModelProperty(notes = "订单号")
     private String orderNum;
-    @ApiModelProperty(notes = "订单状态")
-    private int status;
-    @ApiModelProperty(notes = "收货人")
-    private String addressee;
-    @ApiModelProperty(notes = "收货电话")
-    private String phone;
-    @ApiModelProperty(notes = "地址")
-    private String address;
-    @ApiModelProperty(notes = "快递单号")
-    private String logisticsNumber;
-    @ApiModelProperty(notes = "运费")
-    private BigDecimal postFee;
-    @ApiModelProperty(notes = "商品总价")
+    @ApiModelProperty(notes = "订单类型：0普通订单，1分享返礼订单")
+    private Integer orderType;
+    @ApiModelProperty(notes = "总金额")
     private BigDecimal totalFee;
     @ApiModelProperty(notes = "实付金额")
     private BigDecimal actualFee;
+    @ApiModelProperty(notes = "活动id")
+    private Integer couponId;
+    @ApiModelProperty(notes = "支付类型：1在线支付，2货到付款")
+    private Integer paymentType;
+    @ApiModelProperty(notes = "邮费")
+    private BigDecimal postFee;
+    @ApiModelProperty(notes = "客户id")
+    private String customerNum;
+    @ApiModelProperty(notes = "商品id")
+    private Integer productId;
+    @ApiModelProperty(notes = "购买数量")
+    private Integer num;
+    @ApiModelProperty(notes = "商品标题")
+    private String title;
+    @ApiModelProperty(notes = "价格,单位：分")
+    private BigDecimal price;
+    @ApiModelProperty(notes = "折扣价")
+    private BigDecimal discountPrice;
+    @ApiModelProperty(notes = "商品图片")
+    private String image;
+    @ApiModelProperty(notes = "发票类型：（0无发票，1普通发票，2电子发票，3增值税发票）")
+    private Integer invoiceType;
+    @ApiModelProperty(notes = "订单状态：（ 1：未付款， 2：已付款，未发货， 3：已发货，未收货 4：已收货，未确认 5：确认收货，未评价 6：已评价）")
+    private Integer status;
     @ApiModelProperty(notes = "下单时间")
     private LocalDateTime createTime;
     @ApiModelProperty(notes = "支付时间")
     private LocalDateTime payTime;
-    @ApiModelProperty(notes = "物流公司名称")
-    private String logisticsCompany;
+    @ApiModelProperty(notes = "发货时间")
+    private LocalDateTime consignTime;
+    @ApiModelProperty(notes = "订单结束时间")
+    private LocalDateTime endTime;
+    @ApiModelProperty(notes = "交易关闭时间")
+    private LocalDateTime closeTime;
+    @ApiModelProperty(notes = "评价时间")
+    private LocalDateTime commentTime;
+    @ApiModelProperty(notes = "订单物流信息")
+    private OrderLogistics orderLogistics;
 
 }

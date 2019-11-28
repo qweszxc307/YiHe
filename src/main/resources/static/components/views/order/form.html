@@ -26,7 +26,7 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">买家：</label>
                             <div class="layui-input-inline" aria-disabled="false">
-                                <input type="text" name="memberNum" lay-verify="required" placeholder="暂无"
+                                <input type="text" name="customerNum" lay-verify="required" placeholder="暂无"
                                        autocomplete="off" class="layui-input" disabled id="memberNum">
                             </div>
                         </div>
@@ -40,7 +40,7 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">收货地址：</label>
                             <div class="layui-input-inline" aria-disabled="false">
-                                <input type="text" name="address" lay-verify="required" placeholder="暂无"
+                                <input type="text" name="address" lay-verify="required" placeholder="暂无" id="address"
                                        autocomplete="off" class="layui-input" disabled>
                             </div>
                         </div>
@@ -100,7 +100,7 @@
 
             实际付款：
             <div class="layui-input-inline" aria-disabled="false">
-                <input type="text" name="actualFee" lay-verify="required" placeholder="无付款"
+                <input type="text" name="actualFee" lay-verify="required" placeholder="未付款"
                        autocomplete="off" class="layui-input" disabled id="actualFee">
             </div>
         </div>
@@ -118,23 +118,21 @@
         var formSelects = layui.formSelects;
         var $ = layui.jquery
             , element = layui.element;
-        var orderDetail = crown.getTempData('t_orderDetail');
         var order = crown.getTempData('t_order');
-        if (order && orderDetail) {
+
+        if (order) {
+            var orderLogistics = order.orderLogistics;
             form.val('order-form', order);
-            if (orderDetail.paymentType = 1) {
+            form.val('order-form', orderLogistics);
+
+            if (order.paymentType = 1) {
                 $("#paymentType").val("线上付款");
             } else {
                 $("#paymentType").val("货到付款");
             }
-            var produckPrice = 0;
-            for (var i = 0; i < orderDetail.products.length; i++) {
-                var price = orderDetail.products[i].discountPrice;//优惠价
-                var num = orderDetail.products[i].num;
-                produckPrice += price * num;
-            }
-            $("#memberNum").val(orderDetail.memberNum);
-            $("#produckPrice").val(produckPrice);
+            $("#address").val(orderLogistics.province + " " + orderLogistics.city + " " + orderLogistics.district + " " + orderLogistics.street);
+
+            $("#produckPrice").val(order.price);
             $("#postFee").val(order.postFee);
             $("#totalFee").val(order.totalFee);
             $("#actualFee").val(order.actualFee);
@@ -179,7 +177,7 @@
                 $("#button").click(function () {
                     layer.confirm('确定要改价吗？', function (i) {
                         layer.close(i);
-                        layer.prompt({title: '输入订单修改的价格', formType: 2}, function (text, index) {
+                        layer.prompt({title: '输入订单修改的价格', formType: 0, value: order.totalFee}, function (text, index) {
                             layer.close(index);
                             crown.put('/order/' + order.id, {data: text}, function () {
                                 layer.msg('成功修改价格为：' + text);
@@ -188,7 +186,6 @@
                                 }, 1000);
                             });
                         });
-
                     })
                 });
             }
@@ -196,15 +193,17 @@
 
 
         //渲染表格
-        var orderTable = table.render({
+
+        var orderDetailTable = table.render({
             elem: '#orderDetail-table',
-            data: orderDetail.products,
+            data: [order],
             toolbar: '#orderDetail-toolbar',
             cols: [[
                 {field: 'title', align: 'center', title: '商品名称'},
                 {
                     field: 'image', align: 'center',
                     templet: function (d) {
+
                         return "<img  width='100px' onclick='window.open(\"http://" + d.image + "\")' title='点击预览图片' style='cursor: pointer;' src='" + "http://" + d.image + "\'\>"
                     }, title: '商品图片'
                 },

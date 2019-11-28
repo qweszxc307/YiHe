@@ -18,47 +18,18 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package org.crown.model.order.dto;
+package org.crown.service.order;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableName;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import org.crown.framework.model.BaseModel;
-import org.crown.model.order.entity.OrderDetail;
-
-import java.time.LocalDateTime;
-import java.util.List;
-
+import org.crown.framework.service.BaseService;
+import org.crown.model.order.entity.OrderLogistics;
 
 /**
  * <p>
- * 订单详情表
+ * 订单物流表 服务类
  * </p>
  *
  * @author ykMa
  */
-@ApiModel
-@Data
-@NoArgsConstructor
-@EqualsAndHashCode(callSuper = false)
-public class OrderDetailDTO extends BaseModel {
+public interface IOrderLogisticsService extends BaseService<OrderLogistics> {
 
-    private static final long serialVersionUID = 1L;
-    @ApiModelProperty(notes = "发货时间")
-    private LocalDateTime consignTime;
-    @ApiModelProperty(notes = "订单完成时间")
-    private LocalDateTime endTime;
-    @ApiModelProperty(notes = "付款方式")
-    private Integer paymentType;
-    @ApiModelProperty(notes = "商品信息")
-    private List<OrderDetail> products;
-    @ApiModelProperty(notes = "会员号")
-    private String memberNum;
-
-
-}
+        }

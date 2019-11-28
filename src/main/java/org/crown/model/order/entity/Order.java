@@ -20,22 +20,24 @@
  */
 package org.crown.model.order.entity;
 
+import java.math.BigDecimal;
+
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import org.crown.framework.model.BaseModel;
+
+import java.time.LocalDateTime;
+
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.crown.framework.model.BaseModel;
-
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 
 /**
  * <p>
- *
+ * 订单主表
  * </p>
  *
  * @author ykMa
@@ -45,15 +47,13 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 public class Order extends BaseModel {
-
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(notes = "订单id")
-    private Integer id;
+
     @ApiModelProperty(notes = "订单号")
     private String orderNum;
-    @ApiModelProperty(notes = "订单类型：0普通订单，1活动订单")
-    private String orderType;
+    @ApiModelProperty(notes = "订单类型：0普通订单，1分享返礼订单")
+    private Integer orderType;
     @ApiModelProperty(notes = "总金额")
     private BigDecimal totalFee;
     @ApiModelProperty(notes = "实付金额")
@@ -64,11 +64,21 @@ public class Order extends BaseModel {
     private Integer paymentType;
     @ApiModelProperty(notes = "邮费")
     private BigDecimal postFee;
-    @ApiModelProperty(notes = " 客户id")
-    private Long customerId;
+    @ApiModelProperty(notes = "客户id")
+    private Integer customerId;
+    @ApiModelProperty(notes = "商品id")
+    private Integer productId;
+    @ApiModelProperty(notes = "购买数量")
+    private Integer num;
+    @ApiModelProperty(notes = "商品标题")
+    private String title;
+    @ApiModelProperty(notes = "价格,单位：分")
+    private BigDecimal price;
+    @ApiModelProperty(notes = "商品图片")
+    private String image;
     @ApiModelProperty(notes = "发票类型：（0无发票，1普通发票，2电子发票，3增值税发票）")
     private Integer invoiceType;
-    @ApiModelProperty(notes = "订单状态：（1：未付款，2：已付款 未发货，3：已发货 未收货，4：已收货 未确认，5：确认收货 未评价，6：已评价）")
+    @ApiModelProperty(notes = "订单状态：（ 1：未付款， 2：已付款，未发货， 3：已发货，未收货 4：已收货，未确认 5：确认收货，未评价 6：已评价）")
     private Integer status;
     @ApiModelProperty(notes = "下单时间")
     private LocalDateTime createTime;
@@ -76,15 +86,14 @@ public class Order extends BaseModel {
     private LocalDateTime payTime;
     @ApiModelProperty(notes = "发货时间")
     private LocalDateTime consignTime;
-    @ApiModelProperty(notes = "交易完成时间")
+    @ApiModelProperty(notes = "订单结束时间")
     private LocalDateTime endTime;
     @ApiModelProperty(notes = "交易关闭时间")
     private LocalDateTime closeTime;
     @ApiModelProperty(notes = "评价时间")
     private LocalDateTime commentTime;
-    @ApiModelProperty(notes = "更新时间")
-
     @TableField(fill = FieldFill.INSERT_UPDATE)
+    @ApiModelProperty(notes = "更新时间")
     private LocalDateTime updateTime;
 
 }

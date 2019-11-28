@@ -2,16 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.crown.mapper.order.OrderMapper">
 
-    <select id="queryLogisticsByOrderId" parameterType="Integer" resultType="OrderDAO">
-          SELECT logistics_company,logistics_number, addressee, province,city,district,street, phone FROM order_logistics WHERE order_id = #{id};
-</select>
-    <select id="queryOrderTimeByOrderId" parameterType="Integer" resultType="OrderDetailDTO">
-          SELECT payment_type,consign_time,end_time FROM `order` WHERE id = #{id};
-     </select>
 
-    <select id="queryOrderDetailByOrderId" parameterType="Integer" resultType="OrderDetail">
-          SELECT id,order_id,produck_id,num,title,discount_price,price,image,create_time,update_time FROM order_detail WHERE order_id = #{id}
-     </select>
+
+
     <select id="queryCustomerIdByOrderId" resultType="Integer" parameterType="Integer">
         select customer_id from `order` where id = #{id}
     </select>

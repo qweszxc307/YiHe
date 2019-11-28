@@ -20,15 +20,10 @@
  */
 package org.crown.service.order;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.crown.framework.service.BaseService;
 import org.crown.model.order.dto.OrderDTO;
-import org.crown.model.order.dto.OrderDetailDTO;
 import org.crown.model.order.dto.OrderUploadDTO;
 import org.crown.model.order.entity.Order;
-import org.crown.model.order.entity.OrderDetail;
-import org.crown.model.order.parm.OrderPARM;
-import org.springframework.http.HttpStatus;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -41,18 +36,8 @@ import java.util.List;
  * @author ykMa
  */
 public interface IOrderService extends BaseService<Order> {
-    /**
-     * 设置分页查询订单DTO的属性
-     * @param records
-     */
-    List<OrderDTO> setOrderDTO(List<OrderDTO> records);
 
-    /**
-     * 给OrderDetailDTO赋值
-     * @param id
-     * @return
-     */
-    OrderDetailDTO queryOrderDetail(Integer id);
+
 
     /**
      * 订单改价，根据订单id设置订单价格

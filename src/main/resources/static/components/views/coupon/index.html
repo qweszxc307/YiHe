@@ -63,7 +63,7 @@
             page: true,
             cols: [[
                 {field: 'id', width: 60, title: 'ID', hide: true},
-                {field: 'name', align: 'center', sort: true, title: '名称'},
+                {field: 'name', align: 'center', sort: true, title: '名称', width: 132},
                 {
                     field: 'type', align: 'center', sort: true, templet: function (d) {
                         if (d.type == 1) {
@@ -75,16 +75,16 @@
                         if (d.type == 3) {
                             return '<div style="color: #ac70ff">折扣</div>';
                         }
-                    }, title: '类型'
+                    }, title: '类型', width: 132
                 },
-                {field: 'discountPoint', align: 'center', sort: true, title: '折扣条件'},
-                {field: 'discount', align: 'center', sort: true, title: '优惠价格'},
-                {field: 'startTime', align: 'center', sort: true, title: '开始时间'},
-                {field: 'endTime', align: 'center', sort: true, title: '结束时间'},
+                {field: 'discountPoint', align: 'center', sort: true, title: '折扣条件', width: 132},
+                {field: 'discount', align: 'center', sort: true, title: '优惠价格', width: 132},
+                {field: 'startTime', align: 'center', sort: true, title: '开始时间', width: 170},
+                {field: 'endTime', align: 'center', sort: true, title: '结束时间', width: 170},
                 {field: 'status', align: 'center', templet: '#menu-tpl-status', title: '状态', width: 100},
-                {field: 'total', align: 'center', sort: true, title: '总数'},
-                {field: 'provide', align: 'center', sort: true, title: '已发数量'},
-                {field: 'used', align: 'center', sort: true, title: '已用数量'},
+                {field: 'total', align: 'center', sort: true, title: '总数', width: 132},
+                {field: 'provide', align: 'center', sort: true, title: '已发数量', width: 132},
+                {field: 'used', align: 'center', sort: true, title: '已用数量', width: 132},
                 {
 
                     field: 'rule', align: 'center', sort: true, templet: function (d) {
@@ -103,9 +103,9 @@
                         if (d.rule == 5) {
                             return '<div style="color: #0C0C0C">一元三张</div>';
                         }
-                    }, title: '分发规则'
+                    }, title: '分发规则', width: 132
                 },
-                {align: 'center', toolbar: '#coupon-table-bar', title: '操作'}
+                {align: 'center', toolbar: '#coupon-table-bar', title: '操作', width: 112}
             ]]
         });
         // 表格顶部操作列

@@ -9,7 +9,7 @@
     <div class="layui-card-body">
         <!-- 搜索条件 -->
         <div class="layui-form toolbar">
-            <form id="searchForm" onsubmit="return false;">
+            <form id="searchForm" onsubmit="return false;"  >
                 会员号查询：<input name="memberNum" class="layui-input search-input" type="text" placeholder="会员号"/>&emsp;
                 <div class="layui-inline">
                     <label class="layui-form-label">会员等级</label>
@@ -82,13 +82,13 @@
             page: true,
             cols: [[
                 {field: 'id', width: 80, sort: true, title: '序号'},
-                {field: 'nickName', align: 'center', title: '微信名称'},
-                {field: 'memberNum', align: 'center', title: '会员号'},
-                {field: 'memberName', align: 'center', sort: true, title: '会员等级'},
-                {field: 'bonus', align: 'center', sort: true, title: '佣金余额'},
-                {field: 'orderNum', align: 'center', sort: true, title: '成交订单数'},
-                {field: 'sum', align: 'center', sort: true, title: '成交金额'},
-                {align: 'center', toolbar: '#customer-table-bar', title: '操作'}
+                {field: 'nickName', align: 'center', title: '微信名称', width: 219},
+                {field: 'memberNum', align: 'center', title: '会员号', width: 219},
+                {field: 'memberName', align: 'center', sort: true, title: '会员等级', width: 219},
+                {field: 'bonus', align: 'center', sort: true, title: '佣金余额', width: 219},
+                {field: 'orderNum', align: 'center', sort: true, title: '成交订单数', width: 219},
+                {field: 'sum', align: 'center', sort: true, title: '成交金额', width: 219},
+                {align: 'center', toolbar: '#customer-table-bar', title: '操作', width: 219}
             ]]
         });
 
@@ -112,7 +112,7 @@
                 type: 1,
                 resize: true,
                 title: data ? '查看详情' : '未填写',
-                area: ['80%', '80%'],
+                area: ['30%', '70%'],
                 offset: 'auto',
                 path: 'components/views/customer/form.html',
                 finish: function () {

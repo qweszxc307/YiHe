@@ -31,11 +31,14 @@ import org.crown.common.utils.POIUtils;
 import org.crown.enums.AuthTypeEnum;
 import org.crown.framework.controller.SuperController;
 import org.crown.framework.responses.ApiResponses;
+import org.crown.model.customer.entity.Customer;
 import org.crown.model.order.dto.OrderDTO;
-import org.crown.model.order.dto.OrderDetailDTO;
 import org.crown.model.order.dto.OrderUploadDTO;
 import org.crown.model.order.entity.Order;
+import org.crown.model.order.entity.OrderLogistics;
 import org.crown.model.order.parm.OrderPARM;
+import org.crown.service.customer.ICustomerService;
+import org.crown.service.order.IOrderLogisticsService;
 import org.crown.service.order.IOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -63,9 +66,13 @@ import java.util.Objects;
 @RequestMapping(value = "/order", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 @Validated
 public class OrderRestController extends SuperController {
-    private Integer delete = 0;
+    private final Integer delete = 0;
+    @Autowired
+    private ICustomerService customerService;
     @Autowired
     private IOrderService orderService;
+    @Autowired
+    private IOrderLogisticsService orderLogisticsService;
 
 
     @Resources(auth = AuthTypeEnum.OPEN)
@@ -87,21 +94,16 @@ public class OrderRestController extends SuperController {
                 .ge(StringUtils.isNotEmpty(beforeTime), Order::getCreateTime, beforeTime)
                 .le(StringUtils.isNotEmpty(afterTime), Order::getCreateTime, afterTime)
                 .page(this.<Order>getPage())
-                .convert(e -> e.convert(OrderDTO.class));
-        if (convert.getRecords().size() != 0) {
-            convert.setRecords(orderService.setOrderDTO(convert.getRecords()));
-        }
+                .convert(e -> {
+                    OrderDTO order = e.convert(OrderDTO.class);
+                    Customer entity = customerService.query().eq(Customer::getId, e.getCustomerId()).entity(d -> d);
+                    order.setCustomerNum(entity.getMemberNum());
+                    order.setOrderLogistics(orderLogisticsService.query().eq(OrderLogistics::getOrderId, e.getId()).entity(o -> o));
+                    return order;
+                });
         return success(convert);
     }
-    @Resources(auth = AuthTypeEnum.AUTH)
-    @ApiOperation("查询订单详情")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "会员等级id", required = true, paramType = "path")
-    })
-    @GetMapping("/{id}")
-    public ApiResponses<OrderDetailDTO> get(@PathVariable("id") Integer id) {
-        return success(orderService.queryOrderDetail(id));
-    }
+
 
     /**
      * 退款之后也需要删除订单   删除订单之后要查询用户消费把消费回退到之前的状态
@@ -153,26 +155,6 @@ public class OrderRestController extends SuperController {
 
 
 
-    @Resources(auth = AuthTypeEnum.AUTH)
-    @ApiOperation("生成订单")
-    @PostMapping
-    public ApiResponses<Void> create() {
-        //TODO
-        /*
-    addressId：收货人地址信息的id，需要去用户中心查询收货人地址
-    carts：购物车中的商品数据，可以有多个对象
-    num：购物车中指定商品的购买数量
-    skuId：购物车中的某商品的id
-    paymentType：付款方式：1 在线支付，2 货到付款
-        数据类型：{ addressId：xxx ，carts：[skuId：xx，num：xx]，paymentType：xx}
-        * 先定义  orderDTO类 接受前端传输的数据，  包含字段   addressId，paymentType， List<cartDTO>
-        再定义   CartDTO 保存 skuId，num，
-        1.减库存
-        2.生成订单号
-        3.遍历集合查询商品，获取商品信息 ，存入订单详情表
-        * */
-        return null;
-    }
 
     @Resources(auth = AuthTypeEnum.OPEN)
     @ApiOperation("订单批量发货")
