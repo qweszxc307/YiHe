@@ -76,7 +76,6 @@
             <div class="layui-input-inline" aria-disabled="false">
                 <input type="text" name="produckPrice" lay-verify="required" placeholder="暂无"
                        autocomplete="off" class="layui-input" disabled id="produckPrice">
-
             </div>
         </div>
         <div class="layui-col-md3">
@@ -105,8 +104,9 @@
             </div>
         </div>
     </div>
+    <button type="button" class="layui-btn layui-btn-sm layui-btn-radius layui-btn-danger" id="button">订单改价</button>
+
 </div>
-<button type="button" class="layui-btn layui-btn-sm layui-btn-radius layui-btn-danger" id="button">订单改价</button>
 <script>
 
     layui.use(['layer', 'table', 'crown', 'form', 'element'], function () {
@@ -152,11 +152,12 @@
                     "                        </div>\n" +
                     "                    </li>")
             }
+            debugger;
             if (order.status >= 3) {
                 $("#timeline").append(" <li class=\"layui-timeline-item\">\n" +
                     "                        <i class=\"layui-icon layui-timeline-axis\"></i>\n" +
                     "                        <div class=\"layui-timeline-content layui-text\">\n" +
-                    "                            <div class=\"layui-timeline-title\">已发货，时间：" + orderDetail.consignTime + "</div>\n" +
+                    "                            <div class=\"layui-timeline-title\">已发货，时间：" + order.consignTime + "</div>\n" +
                     "                        </div>\n" +
                     "                    </li>")
             }
@@ -164,13 +165,18 @@
                 $("#timeline").append(" <li class=\"layui-timeline-item\">\n" +
                     "                        <i class=\"layui-icon layui-timeline-axis\"></i>\n" +
                     "                        <div class=\"layui-timeline-content layui-text\">\n" +
-                    "                            <div class=\"layui-timeline-title\">已收货，时间：" + orderDetail.endTime + "</div>\n" +
+                    "                            <div class=\"layui-timeline-title\">已收货，时间：" + order.endTime + "</div>\n" +
                     "                        </div>\n" +
                     "                    </li>")
             }
             $("#timeline").append(" <li class=\"layui-timeline-item\">\n" +
                 "                        <i class=\"layui-icon layui-anim layui-anim-rotate layui-anim-loop layui-timeline-axis\"></i>\n" +
                 "                    </li>");
+
+
+
+
+
             if (order.status != 1) {
                 $("#button").attr({"class": "layui-btn layui-btn-radius layui-btn-disabled"});
             } else {

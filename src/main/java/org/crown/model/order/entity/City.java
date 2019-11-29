@@ -18,46 +18,38 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package org.crown.service.order;
+package org.crown.model.order.entity;
 
-import org.crown.framework.service.BaseService;
-import org.crown.model.order.dto.OrderDTO;
-import org.crown.model.order.dto.OrderLogisticsDTO;
-import org.crown.model.order.dto.OrderUploadDTO;
-import org.crown.model.order.entity.Order;
+import com.baomidou.mybatisplus.annotation.TableName;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import org.crown.framework.model.convert.Convert;
 
-import java.math.BigDecimal;
-import java.util.List;
 
 /**
  * <p>
- *  服务类
+ * 省，市，区，联动表
  * </p>
  *
  * @author ykMa
  */
-public interface IOrderService extends BaseService<Order> {
+@TableName("city")
+@Data
+@NoArgsConstructor
+@EqualsAndHashCode(callSuper = false)
+public class City extends Convert {
 
-
-
-    /**
-     * 订单改价，根据订单id设置订单价格
-     * @param id
-     * @param totalFee
-     */
-    void updateTotalFeeByOrderId(Integer id, BigDecimal totalFee);
-
-    /**
-     * 上传批量发货文件
-     *
-     * @param upload
-     * @return
-     */
-    Integer upload(List<OrderUploadDTO> upload, String logistics_company);
-
-    /**
-     * 确认发货
-     * @param orderLogisticsDTO   订单快递地址
-     */
-    void updateLogistics(OrderLogisticsDTO orderLogisticsDTO);
+    private static final long serialVersionUID = 1L;
+    @ApiModelProperty(notes = "city_id")
+    private Integer id;
+    @ApiModelProperty(notes = "当前地名的编码")
+    private String areaCode;
+    @ApiModelProperty(notes = "地名")
+    private String areaName;
+    @ApiModelProperty(notes = "上级地名的编码")
+    private String parentCode;
+    @ApiModelProperty(notes = "区域id")
+    private Integer aid;
 }

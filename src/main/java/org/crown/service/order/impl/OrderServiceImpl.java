@@ -24,6 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.crown.framework.service.impl.BaseServiceImpl;
 import org.crown.mapper.customer.CustomerMapper;
 import org.crown.mapper.order.OrderMapper;
+import org.crown.model.order.dto.OrderLogisticsDTO;
 import org.crown.model.order.dto.OrderUploadDTO;
 import org.crown.model.order.entity.Order;
 import org.crown.service.order.IOrderService;
@@ -72,9 +73,6 @@ public class OrderServiceImpl extends BaseServiceImpl<OrderMapper, Order> implem
         for (OrderUploadDTO orderUploadDTO : upload) {
             String orderNum = orderUploadDTO.getOrderNum();//订单号
             String logisticsNumber = orderUploadDTO.getLogisticsNumber();//物流单号
-            /**
-             * 根据订单号查询订单，根据订单id找到物流表   设置物流表的物流单号和物流公司名称   订单状态改成 已发货
-             */
             Order order = baseMapper.queryOrderByOrderNum(orderNum);
             order.setStatus(3);
             order.setConsignTime(LocalDateTime.now());
@@ -84,5 +82,18 @@ public class OrderServiceImpl extends BaseServiceImpl<OrderMapper, Order> implem
         }
 
         return count;
+    }
+
+    /**
+     * @param orderLogisticsDTO 订单快递地址
+     */
+    @Transactional(readOnly = false)
+    @Override
+    public void updateLogistics( OrderLogisticsDTO orderLogisticsDTO) {
+        baseMapper.updateLogisticsByOrderId(orderLogisticsDTO.getId(), orderLogisticsDTO.getLogisticsNumber(), orderLogisticsDTO.getLogisticsCompany());
+        Order order = getById(orderLogisticsDTO.getId());
+        order.setStatus(3);
+        order.setConsignTime(LocalDateTime.now());
+        updateById(order);
     }
 }

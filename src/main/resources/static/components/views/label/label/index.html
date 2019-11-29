@@ -174,7 +174,7 @@
                 crown.delete('/label/' + obj.id, {}, function () {
                     layer.closeAll('loading');
                     layer.msg('删除成功', {icon: 1});
-                    labelTable.reload('brand-table');
+                    labelTable.reload('label-table');
                     obj.del();
                 });
             });
@@ -189,7 +189,7 @@
                     debugger;
                     layer.closeAll('loading');
                     layer.msg('修改成功', {icon: 1});
-                    labelTable.reload('brand-table');
+                    labelTable.reload('label-table');
                     layer.closeAll('page');
                 });
             } else {
@@ -197,7 +197,7 @@
                     debugger;
                     layer.closeAll('loading');
                     layer.msg('添加成功', {icon: 1});
-                    labelTable.reload('brand-table');
+                    labelTable.reload('label-table');
                     layer.closeAll('page');
                 });
             }

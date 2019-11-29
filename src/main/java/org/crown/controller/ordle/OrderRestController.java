@@ -33,6 +33,7 @@ import org.crown.framework.controller.SuperController;
 import org.crown.framework.responses.ApiResponses;
 import org.crown.model.customer.entity.Customer;
 import org.crown.model.order.dto.OrderDTO;
+import org.crown.model.order.dto.OrderLogisticsDTO;
 import org.crown.model.order.dto.OrderUploadDTO;
 import org.crown.model.order.entity.Order;
 import org.crown.model.order.entity.OrderLogistics;
@@ -177,6 +178,26 @@ public class OrderRestController extends SuperController {
         }
         return success(count);
     }
+
+    @Resources(auth = AuthTypeEnum.AUTH)
+    @ApiOperation("订单确认发货")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "订单ID", required = true, paramType = "path"),
+    })
+    @PutMapping("/logistics")
+    public ApiResponses<Void> updateLogistics(@RequestBody OrderLogisticsDTO orderLogisticsDTO) {
+        try {
+            orderService.updateLogistics( orderLogisticsDTO);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return success();
+    }
+
+
+
+
+
 }
 
 
