@@ -114,6 +114,14 @@ public class MarketRecommendRestController extends SuperController {
         @PostMapping
         public ApiResponses<Void> create(@RequestBody @Validated(MarketRecommendPARM.Create.class) MarketRecommendPARM marketRecommendPARM) {
                 MarketRecommend marketRecommend = marketRecommendPARM.convert(MarketRecommend.class);
+                int count1 = marketRecommendService.query().eq(MarketRecommend::getActivePid,marketRecommendPARM.getActivePid()).eq(MarketRecommend::getStatus,0).count();
+                int count2 = marketRecommendService.query().eq(MarketRecommend::getActivePid,marketRecommendPARM.getSendPid()).eq(MarketRecommend::getStatus,0).count();
+                int count3 = marketRecommendService.query().eq(MarketRecommend::getSendPid,marketRecommendPARM.getActivePid()).eq(MarketRecommend::getStatus,0).count();
+                int count4 = marketRecommendService.query().eq(MarketRecommend::getSendPid,marketRecommendPARM.getSendPid()).eq(MarketRecommend::getStatus,0).count();
+                ApiAssert.isTrue(ErrorCodeEnum.PRODUCT_ALREADY_EXISTS, count1 != 0);
+                ApiAssert.isTrue(ErrorCodeEnum.PRODUCT_ALREADY_EXISTS, count2 != 0);
+                ApiAssert.isTrue(ErrorCodeEnum.PRODUCT_ALREADY_EXISTS, count3 != 0);
+                ApiAssert.isTrue(ErrorCodeEnum.PRODUCT_ALREADY_EXISTS, count4 != 0);
                 marketRecommend.setStatus(StatusEnum.NORMAL);
                 marketRecommendService.save(marketRecommend);
                 return success(HttpStatus.CREATED);
