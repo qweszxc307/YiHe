@@ -22,11 +22,12 @@ package org.crown.service.order.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.crown.framework.service.impl.BaseServiceImpl;
-import org.crown.mapper.customer.CustomerMapper;
 import org.crown.mapper.order.OrderMapper;
 import org.crown.model.order.dto.OrderLogisticsDTO;
 import org.crown.model.order.dto.OrderUploadDTO;
 import org.crown.model.order.entity.Order;
+import org.crown.model.order.entity.OrderLogistics;
+import org.crown.service.order.IOrderLogisticsService;
 import org.crown.service.order.IOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -48,7 +49,7 @@ import java.util.Objects;
 @Service
 public class OrderServiceImpl extends BaseServiceImpl<OrderMapper, Order> implements IOrderService {
     @Autowired
-    private CustomerMapper customerMapper;
+    private IOrderLogisticsService orderLogisticsService;
 
 
     @Transactional(readOnly = false)
@@ -95,5 +96,18 @@ public class OrderServiceImpl extends BaseServiceImpl<OrderMapper, Order> implem
         order.setStatus(3);
         order.setConsignTime(LocalDateTime.now());
         updateById(order);
+    }
+
+    /**
+     * 删除订单
+     *
+     * @param id
+     */
+    @Transactional(readOnly = false)
+    @Override
+    public void deleteOrder(Integer id) {
+        removeById(id);
+        OrderLogistics entity = orderLogisticsService.query().eq(OrderLogistics::getOrderId, id).entity(e -> e);
+        orderLogisticsService.removeById(entity.getId());
     }
 }

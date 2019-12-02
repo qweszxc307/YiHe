@@ -1,6 +1,6 @@
 <div class="layui-container">
     <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
-        <legend>订单详情</legend>
+        <legend>订单地址修改</legend>
     </fieldset>
     <form id="address-form" lay-filter="address-form" class="layui-form layui-form-pane">
         <input name="id" type="hidden"/>
@@ -22,15 +22,18 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">地址：</label>
                 <div class="layui-input-inline">
-                    <select name="province" lay-verify="required" xm-select="province"  xm-select-radio="" xm-select-search="" id="province">
+                    <select name="province" lay-verify="required" lay-filter="province" id="province">
+                        <option value=""></option>
                     </select>
                 </div>
                 <div class="layui-input-inline">
-                    <select name="city" lay-verify="required" xm-select="city" xm-select-radio="" xm-select-search="" id="city">
+                    <select name="city" lay-verify="required" id="city" lay-filter="city">
+                        <option value=""></option>
                     </select>
                 </div>
                 <div class="layui-input-inline">
-                    <select name="district" lay-verify="required"xm-select="district" xm-select-radio="" xm-select-search="" id="district">
+                    <select name="district" lay-verify="required" id="district" lay-filter="district">
+                        <option value=""></option>
                     </select>
                 </div>
             </div>
@@ -42,62 +45,97 @@
                 </div>
             </div>
         </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-filter="form-submit" lay-submit>保存</button>
+            </div>
+        </div>
     </form>
 </div>
 
 
 <script>
 
-    layui.use(['layer', 'config', 'table', 'crown', 'form', 'element','formSelects'], function () {
+    layui.use(['layer', 'config', 'table', 'crown', 'form', 'element', 'formSelects'], function () {
         var layer = layui.layer;
         var table = layui.table;
         var crown = layui.crown;
         var config = layui.config;
         var form = layui.form;
         var formSelects = layui.formSelects;
-
         var $ = layui.jquery
             , element = layui.element;
+
         var order = crown.getTempData('t_order');
-        form.render();
         var orderLogistics = order.orderLogistics;
         form.val('address-form', order);
-        form.val('address-form', orderLogistics);
+        form.val('address-form', orderLogistics);//province
 
+        crown.get('/province', {data: {areaCode: "0"}, async: false}, function (obj) {
+            $.each(obj.result, function (index, item) {
+                if (item.areaName == orderLogistics.province) {
+                    $('#province').append(new Option(item.areaName, item.areaCode, null, true));// 下拉菜单里添加元素
+                    crown.get('/province', {data: {areaCode: item.areaCode}, async: false}, function (obj2) {
+                        $.each(obj2.result, function (index, item2) {//city
+                            if (item2.areaName == orderLogistics.city) {
+                                $('#city').append(new Option(item2.areaName, item2.areaCode, null, true));// 下拉菜单里添加元素
+                                crown.get('/province', {
+                                    data: {areaCode: item2.areaCode},
+                                    async: false
+                                }, function (obj3) {
+                                    $.each(obj3.result, function (index, item3) {//district
+                                        if (item3.areaName == orderLogistics.district) {
+                                            $('#district').append(new Option(item3.areaName, item3.areaCode, null, true));
+                                        } else {
+                                            $('#district').append(new Option(item3.areaName, item3.areaCode,));
+                                        }
+                                    });
 
-        crown.get('/city',{data:{areaCode:"0"} } ,function (obj) {
-            var province = new Array();
-            for (let i = 0; i < obj.result.length; i++) {
-                province.push({name: obj.result[i].areaName, value: obj.result[i].areaName} )
-            }
-            formSelects.data('province', 'local', {arr: province});
-            var pro = [orderLogistics.province];
-            formSelects.value("province", pro);
+                                });
+                            } else {
+                                $('#city').append(new Option(item2.areaName, item2.areaCode));// 下拉菜单里添加元素
+                            }
+                        });
+                    });
+                } else {
+                    $('#province').append(new Option(item.areaName, item.areaCode));// 下拉菜单里添加元素
+                }
+            });
+            form.render("select");
         });
-
-
-
-        var city = new Array();
-        city.push({name: orderLogistics.city, value: orderLogistics.city});
-        formSelects.data('city', 'local', {arr: city});
-        var cit = [city[0].value];
-        formSelects.value("city", cit);
-
-
-
-
-        var district = new Array();
-        district.push({name: orderLogistics.district, value: orderLogistics.district});
-        formSelects.data('district', 'local', {arr: district});
-        var dis = [district[0].value];
-        formSelects.value("district", dis);
-        form.on('select(city)', function (obj) {
+        form.render("select");
+        form.on('select(province)', function (data) {
+            $('#district').empty();
+            $('#city').empty();
+            crown.get('/province', {data: {areaCode: data.value}, async: false}, function (obj2) {
+                $.each(obj2.result, function (index, item2) {//city
+                    $('#city').append(new Option(item2.areaName, item2.areaCode));// 下拉菜单里添加元素
+                });
+            });
+            form.render("select");
+        });
+        form.on('select(city)', function (data) {
+            $('#district').empty();
+            crown.get('/province', {data: {areaCode: data.value}, async: false}, function (obj2) {
+                $.each(obj2.result, function (index, item2) {//city
+                    $('#district').append(new Option(item2.areaName, item2.areaCode));// 下拉菜单里添加元素
+                });
+            });
+            form.render("select");
+        });
+        // 表单提交事件
+        form.on('submit(form-submit)', function (data) {
             debugger;
-
+            layer.load(2);
+            data.field.province = $("#province option:selected").text();  //获取选中的项
+            data.field.city = $("#city option:selected").text();  //获取选中的项
+            data.field.district = $("#district option:selected").text();  //获取选中的项
+            crown.put('/order/' + data.field.id + '/address', {data: data.field}, function () {
+                layer.closeAll('loading');
+                layer.msg('修改成功', {icon: 1});
+                layer.closeAll('page');
+            });
         });
-
-
-
     });
 
 

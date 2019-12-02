@@ -118,23 +118,20 @@ public class OrderRestController extends SuperController {
     })
     @DeleteMapping("/{id}")
     public ApiResponses<Void> delete(@PathVariable("id") Integer id) {
-        Order order = orderService.getById(id);
-        order.setStatus(delete);
-        orderService.updateById(order);
+        orderService.deleteOrder(id);
         return success(HttpStatus.NO_CONTENT);
     }
 
 
     @Resources(auth = AuthTypeEnum.AUTH)
-    @ApiOperation("修改订单")
+    @ApiOperation("订单地址修改")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "订单ID", required = true, paramType = "path")
+            @ApiImplicitParam(name = "id", value = "地址", required = true, paramType = "path")
     })
     @PutMapping("/{id}/address")
     public ApiResponses<Void> update(@PathVariable("id") Integer id, @RequestBody @Validated(OrderPARM.Update.class) OrderPARM orderPARM) {
-        Order order = orderPARM.convert(Order.class);
-        order.setId(id);
-        orderService.updateById(order);
+        System.out.println("id = " + id);
+        orderLogisticsService.updateById(orderPARM.convert(OrderLogistics.class));
         return success();
     }
 

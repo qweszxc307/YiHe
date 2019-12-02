@@ -50,20 +50,24 @@ public class OrderPARM extends BaseModel {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(notes = "收货人")
-    @NotNull(groups = {Update.class},message = "收货人不能为空")
-    private String name;
+    @NotNull(groups = {Update.class}, message = "收货人不能为空")
+    private String addressee;
     @ApiModelProperty(notes = "收货电话")
     @Pattern(groups = {Create.class, Update.class}, regexp = Regex.PHONE, message = "手机号码格式不正确")
     private String phone;
-    @ApiModelProperty(notes = "地址")
+    @ApiModelProperty(notes = "省")
     @NotNull(groups = {Update.class},message = "地址人不能为空")
-    private String address;
-    @ApiModelProperty(notes = "运费")
+    private String province;
+    @ApiModelProperty(notes = "市")
+    @NotNull(groups = {Update.class},message = "地址人不能为空")
+    private String city;
+    @ApiModelProperty(notes = "区")
+    @NotNull(groups = {Update.class},message = "地址人不能为空")
+    private String district;
+    @ApiModelProperty(notes = "街道")
     @NotNull(groups = {Update.class},message = "运费不能为空")
-    private Double postFee;
-    @ApiModelProperty(notes = "商品总价")
-    @NotNull(groups = {Update.class},message = "商品总价不能为空")
-    private Double totalFee;
+    private String street;
+
 
 
 

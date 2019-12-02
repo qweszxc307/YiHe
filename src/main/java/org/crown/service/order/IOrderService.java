@@ -60,4 +60,10 @@ public interface IOrderService extends BaseService<Order> {
      * @param orderLogisticsDTO   订单快递地址
      */
     void updateLogistics(OrderLogisticsDTO orderLogisticsDTO);
+
+    /**
+     * 删除订单
+     * @param id
+     */
+    void deleteOrder(Integer id);
 }
