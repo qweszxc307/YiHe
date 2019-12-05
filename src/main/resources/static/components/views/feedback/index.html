@@ -1,0 +1,44 @@
+<style>
+    .layui-table-cell {
+        height: auto;
+        line-height: 28px;
+    }
+</style>
+<div class="layui-card">
+    <div class="layui-card-header">
+        <h2 class="header-title">反馈内容</h2>
+        <span class="layui-breadcrumb pull-right">
+          <a href="#!console">反馈内容</a>
+          <a><cite>反馈内容</cite></a>
+        </span>
+    </div>
+    <div class="layui-card-body">
+        <table class="layui-table" id="feedback-table" lay-filter="feedback-table" ></table>
+    </div>
+</div>
+
+<script>
+    layui.use(['form', 'table', 'config', 'crown'], function () {
+        var form = layui.form;
+        var table = layui.table;
+        var config = layui.config;
+        var layer = layui.layer;
+        var crown = layui.crown;
+        // 渲染表格
+        var feedbackTable = table.render({
+            elem: '#feedback-table',
+            toolbar: '#feedback-toolbar',
+            url: config.serverUrl + '/feedback',
+            request: config.request,
+            parseData: config.parseData,
+            response: config.response,
+            headers: {Authorization: config.getToken()},
+            page: true,
+            cols: [[
+                {field: 'id', width: 60, title: '序号'},
+                {field: 'detail', align: 'center', sort: true, title: '反馈内容'},
+                {field: 'createTime', align: 'center', sort: true, title: '反馈时间'},
+            ]]
+        });
+    });
+</script>
