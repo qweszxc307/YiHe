@@ -32,7 +32,6 @@ public class StaticScheduleTask {
         System.out.println("定时任务执行");
         List<Order> list = orderService.query().eq(Order::getStatus, 1).le(Order::getCloseTime, LocalDateTime.now()).list();
         if (list.size() > 0) {
-            System.out.println(list.size());
             list.forEach(e -> {
                 System.out.println("e = " + e);
                 orderService.deleteOrder(e.getId());
