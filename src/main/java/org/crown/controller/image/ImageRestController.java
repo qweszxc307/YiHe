@@ -103,6 +103,8 @@ public class ImageRestController extends SuperController {
         return success(HttpStatus.NO_CONTENT);
     }
 
+
+
     @Resources(auth = AuthTypeEnum.AUTH)
     @ApiOperation(value = "修改图片")
     @ApiImplicitParams({
@@ -117,6 +119,8 @@ public class ImageRestController extends SuperController {
         imageService.removeById(Integer.parseInt(imgId));
         return success();
     }
+
+
 
     @Resources(auth = AuthTypeEnum.AUTH)
     @ApiOperation(value = "修改图片启用状态")
