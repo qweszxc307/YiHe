@@ -1,5 +1,6 @@
 package org.crown.service.task;
 
+import org.crown.enums.OrderStatusEnum;
 import org.crown.model.order.entity.Order;
 import org.crown.service.order.IOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,10 +28,10 @@ import java.util.List;
 public class StaticScheduleTask {
     @Autowired
     private IOrderService orderService;
-    @Scheduled(cron = "0 0 3 1/1 * ? *")
+    @Scheduled(cron = "0 0 0 1/1 1/1 ? ")
     public void configureTasks() {
         System.out.println("定时任务执行");
-        List<Order> list = orderService.query().eq(Order::getStatus, 1).le(Order::getCloseTime, LocalDateTime.now()).list();
+        List<Order> list = orderService.query().eq(Order::getStatus, OrderStatusEnum.INIT).le(Order::getCloseTime, LocalDateTime.now()).list();
         if (list.size() > 0) {
             list.forEach(e -> {
                 System.out.println("e = " + e);
