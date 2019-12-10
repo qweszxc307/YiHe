@@ -9,12 +9,13 @@
     <div class="layui-card-body">
         <!-- 搜索条件 -->
         <div class="layui-form toolbar">
-            <form id="searchForm" onsubmit="return false;"  >
+            <form id="searchForm" onsubmit="return false;">
                 会员号查询：<input name="memberNum" class="layui-input search-input" type="text" placeholder="会员号"/>&emsp;
                 <div class="layui-inline">
                     <label class="layui-form-label">会员等级</label>
                     <div class="layui-input-inline">
-                        <select name="members" xm-select-radio="" xm-select-search="" xm-select="members"  lay-verify="required">
+                        <select name="members" xm-select-radio="" xm-select-search="" xm-select="members"
+                                lay-verify="required">
                         </select>
                     </div>
                 </div>
@@ -34,7 +35,7 @@
         <div class="layui-inline">
             <label class="layui-form-label">会员等级</label>
             <div class="layui-input-inline">
-                <select name="member" xm-select-radio="" xm-select-search="" xm-select="member"  lay-verify="required">
+                <select name="member" xm-select-radio="" xm-select-search="" xm-select="member" lay-verify="required">
                 </select>
             </div>
         </div>
@@ -93,7 +94,6 @@
         });
 
 
-
         // 工具条点击事件
         table.on('tool(customer-table)', function (obj) {
             var data = obj.data;
@@ -106,8 +106,7 @@
 
         //
         var showDetailModel = function (data) {
-                    crown.putTempData('t_customer', data);
-
+            crown.putTempData('t_customer', data);
             crown.popupCenter({
                 type: 1,
                 resize: true,
@@ -132,20 +131,20 @@
         });
         // 编辑客户等级显示编辑弹窗
         // 显示编辑弹窗
-                var showUpdateModel = function (data) {
-                    layer.open({
-                        type: 1,
-                        area: '450px',
-                        offset: '120px',
-                        content: $('#member-model').html(),
-                        success: function () {
+        var showUpdateModel = function (data) {
+            layer.open({
+                type: 1,
+                area: '450px',
+                offset: '120px',
+                content: $('#member-model').html(),
+                success: function () {
 
-                            form.val('member-form', data);
-                            formSelects.data('member', 'local', {arr: members});
-                        }
-                    });
+                    form.val('member-form', data);
+                    formSelects.data('member', 'local', {arr: members});
+                }
+            });
 
-                };
+        };
 
 
         // 表单提交事件

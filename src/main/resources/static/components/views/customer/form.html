@@ -36,15 +36,15 @@
                         </div>
                         <div class="layui-form-item">
                             <label class="layui-form-label">会员标签：</label>
-                            <div class="layui-col-xs1">
+                            <div class="layui-col-xs2">
                                 <input type="text" id="brand1" name="brand1" lay-verify="required" autocomplete="off"placeholder="暂无"
                                        class="layui-input" disabled>
                             </div>
-                            <div class="layui-col-xs1">
+                            <div class="layui-col-xs2">
                                 <input type="text" id="brand2" name="brand2" lay-verify="required" autocomplete="off"placeholder="暂无"
                                        class="layui-input" disabled>
                             </div>
-                            <div class="layui-col-xs1">
+                            <div class="layui-col-xs2">
                                 <input type="text" id="brand3"name="brand3" lay-verify="required" autocomplete="off"placeholder="暂无"
                                        class="layui-input" disabled>
                             </div>
@@ -117,19 +117,13 @@
         var config = layui.config;
         var form = layui.form;
         var formSelects = layui.formSelects;
-        var productImgs = [];
-        var detailImgId;
         var $ = layui.jquery, upload = layui.upload;
         var customer = crown.getTempData('t_customer');
         if (customer) {
             form.val('customer-form', customer);
-            var rds = new Array();
             for (var i = 0; i < customer.labelBrands.length; i++) {
-                rds.push(customer.labelBrands[i]);
+                $("#brand" + (i + 1)).val(customer.labelBrands[i].name);
             }
-            $("#brand1").val(rds[0].name);
-            $("#brand2").val(rds[1].name);
-            $("#brand3").val(rds[2].name);
         }
         layer.closeAll('loading');
     })
