@@ -18,39 +18,18 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package org.crown.model.coupon.entity;
+package org.crown.service.coupon;
 
-import com.baomidou.mybatisplus.annotation.TableName;
-import org.crown.framework.model.BaseModel;
-
-import java.time.LocalDateTime;
-
-import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-
+import org.crown.framework.service.BaseService;
+import org.crown.model.coupon.entity.CouponCustomer;
 
 /**
  * <p>
- *
+ *  服务类
  * </p>
  *
  * @author ykMa
  */
-@TableName("coupon_customer")
-@Data
-@NoArgsConstructor
-@EqualsAndHashCode(callSuper = false)
-public class CouponCustomer extends BaseModel {
+public interface ICouponCustomerService extends BaseService<CouponCustomer> {
 
-    private static final long serialVersionUID = 1L;
-
-    @ApiModelProperty(notes = "客户openId")
-    private String openId;
-    @ApiModelProperty(notes = "优惠卷id")
-    private Integer couponId;
-    @ApiModelProperty(notes = "创建时间，领取时间")
-    private LocalDateTime createTime;
-
-}
+        }

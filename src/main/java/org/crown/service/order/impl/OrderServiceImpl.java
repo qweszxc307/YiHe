@@ -23,10 +23,16 @@ package org.crown.service.order.impl;
 import lombok.extern.slf4j.Slf4j;
 import org.crown.framework.service.impl.BaseServiceImpl;
 import org.crown.mapper.order.OrderMapper;
+import org.crown.model.coupon.entity.Coupon;
+import org.crown.model.coupon.entity.CouponCustomer;
+import org.crown.model.customer.entity.Customer;
 import org.crown.model.order.dto.OrderLogisticsDTO;
 import org.crown.model.order.dto.OrderUploadDTO;
 import org.crown.model.order.entity.Order;
 import org.crown.model.order.entity.OrderLogistics;
+import org.crown.service.coupon.ICouponCustomerService;
+import org.crown.service.coupon.ICouponService;
+import org.crown.service.customer.ICustomerService;
 import org.crown.service.order.IOrderLogisticsService;
 import org.crown.service.order.IOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +56,12 @@ import java.util.Objects;
 public class OrderServiceImpl extends BaseServiceImpl<OrderMapper, Order> implements IOrderService {
     @Autowired
     private IOrderLogisticsService orderLogisticsService;
-
+    @Autowired
+    private ICouponService couponService;
+    @Autowired
+    private ICustomerService customerService;
+    @Autowired
+    private ICouponCustomerService couponCustomerService;
 
     @Transactional(readOnly = false)
     @Override
@@ -106,8 +117,20 @@ public class OrderServiceImpl extends BaseServiceImpl<OrderMapper, Order> implem
     @Transactional(readOnly = false)
     @Override
     public void deleteOrder(Integer id) {
+        Order order = getById(id);
+
+        if (Objects.nonNull(order.getCouponId())) {
+            CouponCustomer couponCustomer = new CouponCustomer();
+            Customer customer = customerService.query().eq(Customer::getId, order.getCustomerId()).entity(e -> e);
+            couponCustomer.setCouponId(order.getCouponId());
+            couponCustomer.setOpenId(customer.getOpenId());
+            couponCustomerService.save(couponCustomer);
+            Coupon coupon = couponService.getById(order.getCouponId());
+            coupon.setUsed(coupon.getUsed() - 1);
+            couponService.updateById(coupon);
+        }
         removeById(id);
         OrderLogistics entity = orderLogisticsService.query().eq(OrderLogistics::getOrderId, id).entity(e -> e);
-        orderLogisticsService.removeById(entity.getId());
+        orderLogisticsService.removeById(entity);
     }
 }
