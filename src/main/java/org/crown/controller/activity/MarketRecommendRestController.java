@@ -118,10 +118,10 @@ public class MarketRecommendRestController extends SuperController {
                 int count2 = marketRecommendService.query().eq(MarketRecommend::getActivePid,marketRecommendPARM.getSendPid()).eq(MarketRecommend::getStatus,0).count();
                 int count3 = marketRecommendService.query().eq(MarketRecommend::getSendPid,marketRecommendPARM.getActivePid()).eq(MarketRecommend::getStatus,0).count();
                 int count4 = marketRecommendService.query().eq(MarketRecommend::getSendPid,marketRecommendPARM.getSendPid()).eq(MarketRecommend::getStatus,0).count();
-                ApiAssert.isTrue(ErrorCodeEnum.PRODUCT_ALREADY_EXISTS, count1 != 0);
-                ApiAssert.isTrue(ErrorCodeEnum.PRODUCT_ALREADY_EXISTS, count2 != 0);
-                ApiAssert.isTrue(ErrorCodeEnum.PRODUCT_ALREADY_EXISTS, count3 != 0);
-                ApiAssert.isTrue(ErrorCodeEnum.PRODUCT_ALREADY_EXISTS, count4 != 0);
+                ApiAssert.isFalse(ErrorCodeEnum.PRODUCT_ALREADY_EXISTS, count1 != 0);
+                ApiAssert.isFalse(ErrorCodeEnum.PRODUCT_ALREADY_EXISTS, count2 != 0);
+                ApiAssert.isFalse(ErrorCodeEnum.PRODUCT_ALREADY_EXISTS, count3 != 0);
+                ApiAssert.isFalse(ErrorCodeEnum.PRODUCT_ALREADY_EXISTS, count4 != 0);
                 marketRecommend.setStatus(StatusEnum.NORMAL);
                 marketRecommendService.save(marketRecommend);
                 return success(HttpStatus.CREATED);
