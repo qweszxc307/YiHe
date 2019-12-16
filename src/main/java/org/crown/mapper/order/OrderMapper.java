@@ -22,13 +22,6 @@ public interface OrderMapper extends BaseMapper<Order> {
 
 
     /**
-     * 根据订单id查询用户id
-     * @param id
-     * @return
-     */
-    Integer queryCustomerIdByOrderId(Integer id);
-
-    /**
      * 修改订单价格
      *
      * @param id
@@ -43,5 +36,11 @@ public interface OrderMapper extends BaseMapper<Order> {
      */
     Order queryOrderByOrderNum(@Param("orderNum") String orderNum);
 
-    Integer updateLogisticsByOrderId(@Param("id") Integer id, @Param("logisticsNumber") String logisticsNumber,@Param("logisticsCompany") String logisticsCompany);
+    /**
+     *
+     * @param id
+     * @param logisticsNumber
+     * @param logisticsCompany
+     */
+    void updateLogisticsByOrderId(@Param("id") Integer id, @Param("logisticsNumber") String logisticsNumber, @Param("logisticsCompany") String logisticsCompany);
 }

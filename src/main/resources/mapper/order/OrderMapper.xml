@@ -11,9 +11,6 @@
     <update id="updateTotalFeeByOrderId">
         UPDATE `order` SET total_fee = #{totalFee} WHERE id = #{id};
     </update>
-    <select id="queryOrderByOrderNum" parameterType="String" resultType="Order">
-select id,order_num,order_type,total_fee,actual_fee,promotion_ids,payment_type,post_fee,post_fee,customer_id,invoice_type,status,create_time,pay_time,consign_time,end_time,close_time,comment_time,update_time FROM `order` where order_num = #{orderNum};
-</select>
     <update id="updateLogisticsByOrderId" >
         UPDATE order_logistics SET logistics_number = #{logisticsNumber},logistics_company =#{logisticsCompany} where order_id = #{id};
     </update>
