@@ -30,11 +30,13 @@ import org.crown.model.order.dto.OrderLogisticsDTO;
 import org.crown.model.order.dto.OrderUploadDTO;
 import org.crown.model.order.entity.Order;
 import org.crown.model.order.entity.OrderLogistics;
+import org.crown.model.product.entity.Product;
 import org.crown.service.coupon.ICouponCustomerService;
 import org.crown.service.coupon.ICouponService;
 import org.crown.service.customer.ICustomerService;
 import org.crown.service.order.IOrderLogisticsService;
 import org.crown.service.order.IOrderService;
+import org.crown.service.product.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -62,6 +64,8 @@ public class OrderServiceImpl extends BaseServiceImpl<OrderMapper, Order> implem
     private ICustomerService customerService;
     @Autowired
     private ICouponCustomerService couponCustomerService;
+    @Autowired
+    private IProductService productService;
 
     @Transactional(readOnly = false)
     @Override
@@ -129,6 +133,9 @@ public class OrderServiceImpl extends BaseServiceImpl<OrderMapper, Order> implem
             coupon.setUsed(coupon.getUsed() - 1);
             couponService.updateById(coupon);
         }
+        Product product = productService.getById(order.getProductId());
+        product.setStock(product.getStock() + order.getNum());
+        productService.updateById(product);
         removeById(id);
         OrderLogistics entity = orderLogisticsService.query().eq(OrderLogistics::getOrderId, id).entity(e -> e);
         orderLogisticsService.removeById(entity);
