@@ -31,7 +31,7 @@ public class StaticScheduleTask {
     @Scheduled(cron = "0 0 3 1/1 * ? ")
     public void configureTasks() {
         System.out.println("定时任务执行");
-        List<Order> list = orderService.query().eq(Order::getStatus, OrderStatusEnum.INIT).le(Order::getCloseTime, LocalDateTime.now()).list();
+        List<Order> list = orderService.query().eq(Order::getStatus, OrderStatusEnum.INIT.value()).le(Order::getCloseTime, LocalDateTime.now()).list();
         if (list.size() > 0) {
             list.forEach(e -> {
                 orderService.deleteOrder(e.getId());
