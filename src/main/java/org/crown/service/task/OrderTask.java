@@ -25,7 +25,7 @@ import java.util.List;
 @Component
 @Configuration
 @EnableScheduling
-public class StaticScheduleTask {
+public class OrderTask {
     @Autowired
     private IOrderService orderService;
     @Scheduled(cron = "0 0 3 1/1 * ? ")
