@@ -1,5 +1,7 @@
 logging:
   config: classpath:log4j2.xml
+  level:
+    org.springframework.boot.autoconfigure: ERROR
 mybatis-plus:
   mapper-locations: classpath:mapper/**/*Mapper.xml
   global-config:
@@ -16,6 +18,10 @@ server:
   servlet:
     context-path: /
 spring:
+  servlet:
+    multipart:
+      maxFileSize: "100MB"
+      maxRequestSize: "10MB"
   jackson:
     time-zone: GMT+8
     serialization:
@@ -31,7 +37,7 @@ spring:
   liquibase:
     enabled: false
   datasource:
-    url: jdbc:p6spy:mysql://192.168.1.112:3306/yihe?characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
+    url: jdbc:p6spy:mysql://127.0.0.1:3306/yihe?characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
     username: boostech
     password: admin
     type: com.zaxxer.hikari.HikariDataSource
@@ -64,4 +70,4 @@ qiniu:
   accessKey: 4Xgx3ORBO0oMGaOTe4qNZLE3R9yK_X1irnadwNEL
   secretKey: SGEQW42gGP09ecTgWEa65n1_H81XsXQ-EadDRh6z
   bucket: boostech
-  prefix: q0lhgg606.bkt.clouddn.com
+  prefix: q2r4oxbsd.bkt.clouddn.com
