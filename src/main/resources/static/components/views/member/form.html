@@ -8,7 +8,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label">会员等级:</label>
             <div class="layui-input-inline">
-                <input type="text" name="level" lay-verify="required" autocomplete="off"
+                <input type="text" name="level" lay-verify="required|number" autocomplete="off"
                        class="layui-input" placeholder="值越大等级越高">
             </div>
         </div>
@@ -25,7 +25,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label">消费满：</label>
             <div class="layui-input-inline">
-                <input type="text" name="upgrade" lay-verify="required" placeholder="￥" autocomplete="off"
+                <input type="text" name="upgrade" lay-verify="required|number" placeholder="￥" autocomplete="off"
                        class="layui-input">
             </div>
         </div>
@@ -34,7 +34,7 @@
             <legend>图片上传</legend>
         </fieldset>
         <div style="padding: 10px; background-color: #F1F1F1;">
-            <div class="layui-row layui-col-space15">
+            <div class="layui-row layui-col-space12">
                 <div class="layui-card layui-col-xs6">
                     <div class="layui-card-header">会员卡背景图片</div>
                     <div class="layui-card-body">
@@ -49,28 +49,27 @@
                         </div>
                     </div>
                 </div>
-                <div class="layui-col-xs6">
-                    <div class="layui-card">
-                        <div class="layui-card-header">会员特权图片</div>
-                        <div class="layui-card-body">
-                            <div class="layui-upload">
-                                <button type="button" class="layui-btn" id="special_img" style="margin-left: 20px;">上传图片
-                                </button>
-                                <div class="layui-upload-list" style="text-align: center">
-                                    <img class="layui-upload-img" id="special_img_preview"
-                                         style="max-width: 20%;max-height: 350px;vertical-align: middle;">
-                                    <p id="special_img_txt"></p>
-                                </div>
+                <div class="layui-card layui-col-xs6">
+                    <div class="layui-card-header">会员特权图片</div>
+                    <div class="layui-card-body">
+                        <div class="layui-upload">
+                            <button type="button" class="layui-btn" id="special_img" style="margin-left: 20px;">上传图片
+                            </button>
+                            <div class="layui-upload-list" style="text-align: center">
+                                <img class="layui-upload-img" id="special_img_preview"
+                                     style="max-width: 20%;max-height: 350px;vertical-align: middle;">
+                                <p id="special_img_txt"></p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="layui-form-item model-form-footer" style="margin-top:10px">
-            <button class="layui-btn layui-btn-primary close" type="button">取消</button>
-            <button class="layui-btn" lay-filter="member-form-submit" lay-submit>保存</button>
-        </div>
+
+    </div>
+    <div class="layui-form-item model-form-footer" style="margin-top:10px">
+        <button class="layui-btn layui-btn-primary close" type="button">取消</button>
+        <button class="layui-btn" lay-filter="member-form-submit" lay-submit>保存</button>
     </div>
 </form>
 

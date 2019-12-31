@@ -1,5 +1,6 @@
 package org.crown.service.task;
 
+import lombok.extern.log4j.Log4j2;
 import org.crown.enums.OrderStatusEnum;
 import org.crown.model.order.entity.Order;
 import org.crown.service.order.IOrderService;
@@ -25,17 +26,20 @@ import java.util.List;
 @Component
 @Configuration
 @EnableScheduling
+@Log4j2
 public class OrderTask {
     @Autowired
     private IOrderService orderService;
     @Scheduled(cron = "0 0 3 1/1 * ? ")
     public void configureTasks() {
-        System.out.println("定时任务执行");
+        int count = 0;
         List<Order> list = orderService.query().eq(Order::getStatus, OrderStatusEnum.INIT.value()).le(Order::getCloseTime, LocalDateTime.now()).list();
         if (list.size() > 0) {
+            count = list.size();
             list.forEach(e -> {
                 orderService.deleteOrder(e.getId());
             });
         }
+        log.info("定时任务执行，共删除【 " + count + " 】条订单");
     }
 }

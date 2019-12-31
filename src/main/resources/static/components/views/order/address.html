@@ -14,7 +14,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label">电话：</label>
             <div class="layui-input-inline" aria-disabled="false">
-                <input type="text" name="phone" lay-verify="required" placeholder="暂无"
+                <input type="text" name="phone" lay-verify="required|phone|number" placeholder="暂无"
                        autocomplete="off" class="layui-input">
             </div>
         </div>
@@ -56,15 +56,12 @@
 
 <script>
 
-    layui.use(['layer', 'config', 'table', 'crown', 'form', 'element', 'formSelects'], function () {
+    layui.use(['layer', 'crown', 'form'], function () {
         var layer = layui.layer;
-        var table = layui.table;
         var crown = layui.crown;
-        var config = layui.config;
         var form = layui.form;
-        var formSelects = layui.formSelects;
-        var $ = layui.jquery
-            , element = layui.element;
+
+        var $ = layui.jquery;
 
         var order = crown.getTempData('t_order');
         var orderLogistics = order.orderLogistics;
@@ -125,7 +122,6 @@
         });
         // 表单提交事件
         form.on('submit(form-submit)', function (data) {
-            debugger;
             layer.load(2);
             data.field.province = $("#province option:selected").text();  //获取选中的项
             data.field.city = $("#city option:selected").text();  //获取选中的项
@@ -133,8 +129,9 @@
             crown.put('/order/' + data.field.id + '/address', {data: data.field}, function () {
                 layer.closeAll('loading');
                 layer.msg('修改成功', {icon: 1});
-                layer.closeAll('page');
+                crown.finishPopupCenter();
             });
+            return false;
         });
     });
 

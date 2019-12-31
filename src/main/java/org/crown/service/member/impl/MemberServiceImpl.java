@@ -74,7 +74,6 @@ public class MemberServiceImpl extends BaseServiceImpl<MemberMapper, Member> imp
     @Override
     public void updateMember(Integer id, MemberPARM memberPARM) {
         Member member = memberPARM.convert(Member.class);
-        member.setId(id);
         updateCustomerLevel(member);
         memberMapper.updateById(member);
     }

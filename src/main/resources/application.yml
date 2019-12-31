@@ -37,7 +37,7 @@ spring:
   liquibase:
     enabled: false
   datasource:
-    url: jdbc:p6spy:mysql://127.0.0.1:3306/yihe?characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
+    url: jdbc:p6spy:mysql://192.168.1.112/yihe?characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
     username: boostech
     password: admin
     type: com.zaxxer.hikari.HikariDataSource

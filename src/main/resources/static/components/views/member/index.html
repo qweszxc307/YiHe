@@ -131,6 +131,10 @@
 
             // 删除
             var doDelete = function (obj) {
+                if (obj.data.level == 0) {
+                    layer.msg("当前等级为初始等级，不能删除");
+                    return;
+                }
                 layer.confirm('确定要删除吗？', function (i) {
                     layer.close(i);
                     layer.load(2);

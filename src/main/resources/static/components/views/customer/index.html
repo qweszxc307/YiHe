@@ -123,7 +123,6 @@
         crown.get('/member', {}, function (data) {
             var memberSelectData = new Array();
             for (var i = 0; i < data.result.records.length; i++) {
-
                 memberSelectData.push({name: data.result.records[i].name, value: data.result.records[i].name})
             }
             formSelects.data('members', 'local', {arr: memberSelectData});
@@ -138,9 +137,11 @@
                 offset: '120px',
                 content: $('#member-model').html(),
                 success: function () {
-
                     form.val('member-form', data);
                     formSelects.data('member', 'local', {arr: members});
+                    var rds = [data.memberName];
+                    formSelects.value('member', rds);
+                    debugger;
                 }
             });
 

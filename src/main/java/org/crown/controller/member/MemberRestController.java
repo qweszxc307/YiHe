@@ -75,7 +75,7 @@ public class MemberRestController extends SuperController {
         return success(memberService.getById(id).convert(MemberDTO.class));
     }
 
-    @Resources(auth = AuthTypeEnum.OPEN)
+    @Resources(auth = AuthTypeEnum.AUTH)
     @ApiOperation(value = "新增会员等级")
     @PostMapping
     public ApiResponses<Void> create(@RequestBody @Validated(MemberPARM.Create.class) MemberPARM memberPARM) {
@@ -88,7 +88,7 @@ public class MemberRestController extends SuperController {
      * 修改
      * 删除
      */
-    @Resources(auth = AuthTypeEnum.OPEN)
+    @Resources(auth = AuthTypeEnum.AUTH)
     @ApiOperation(value = "修改会员等级")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "会员等级ID", required = true, paramType = "path")
@@ -100,7 +100,7 @@ public class MemberRestController extends SuperController {
     }
 
 
-    @Resources(auth = AuthTypeEnum.OPEN)
+    @Resources(auth = AuthTypeEnum.AUTH)
     @ApiOperation(value = "删除客户等级")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "会员等级Id", required = true, paramType = "path")
@@ -113,7 +113,7 @@ public class MemberRestController extends SuperController {
         return success();
     }
 
-    @Resources(auth = AuthTypeEnum.AUTH)
+    @Resources(auth = AuthTypeEnum.OPEN)
     @ApiOperation("上传单个图片")
     @PostMapping(value = "/upload")
     public ApiResponses<MemberImgDTO> create(HttpServletResponse httpServletResponse, MultipartFile file) {
