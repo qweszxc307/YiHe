@@ -1,0 +1,319 @@
+<div class="layui-card">
+    <div class="layui-card-header">
+        <h2 class="header-title">分类管理</h2>
+        <span class="layui-breadcrumb pull-right">
+          <a href="#!console">首页</a>
+          <a><cite>分类</cite></a>
+        </span>
+    </div>
+    <div class="layui-tab layui-tab-card">
+        <ul class="layui-tab-title">
+            <li class="layui-this">模板分类</li>
+            <li>素材分类</li>
+        </ul>
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <div class="layui-card-body">
+                    <!-- 表格顶部操作列 -->
+                    <script type="text/html" id="sort-toolbar">
+                        <div class="layui-btn-container">
+                            {{# if({{addShow}} == true){ }}
+                            <button class="layui-btn layui-btn-normal layui-btn-sm" lay-event="add"><i
+                                    class="layui-icon">&#xe654;</i>添加
+                            </button>
+                            {{# } }}
+                        </div>
+                    </script>
+                    <!-- 数据表格 -->
+                    <table class="layui-table" id="sort-table" lay-filter="sort-table"></table>
+                </div>
+            </div>
+
+            <div class="layui-tab-item">
+                <div class="layui-card-body">
+                    <!-- 表格顶部操作列 -->
+                    <script type="text/html" id="material-toolbar">
+                        <div class="layui-btn-container">
+                            {{# if({{materialAddShow}} == true){ }}
+                            <button class="layui-btn layui-btn-normal layui-btn-sm" lay-event="material:add"><i
+                                    class="layui-icon">&#xe654;</i>添加
+                            </button>
+                            {{# } }}
+                        </div>
+                    </script>
+                    <!-- 数据表格 -->
+                    <table class="layui-table" id="material-table" lay-filter="material-table"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- 表格操作列 -->
+<script type="text/html" id="material-table-bar">
+    {{#  if({{materialUpdateShow}} == true){ }}
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="material:edit">修改</a>
+    {{#  } }}
+    {{#  if({{materialDeleteShow}} == true){ }}
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="material:delete">删除</a>
+    {{#  } }}
+
+</script>
+<!-- 表格操作列 -->
+<script type="text/html" id="sort-table-bar">
+    {{#  if({{updateShow}} == true){ }}
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>
+    {{#  } }}
+    {{#  if({{deleteShow}} == true){ }}
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>
+    {{#  } }}
+
+</script>
+
+<!-- 表单弹窗 -->
+<script type="text/html" id="material-model">
+    <form id="material-form" lay-filter="material-form" class="layui-form model-form">
+        <input name="id" type="hidden"/>
+        <div class="layui-form-item">
+            <label class="layui-form-label">素材名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="name" lay-verify="required" placeholder="请输入素材名称" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <input name="type" type="hidden" value="2"/>
+        <div class="layui-form-item model-form-footer">
+            <button class="layui-btn" lay-filter="material-form-submit" lay-submit>保存</button>
+        </div>
+    </form>
+</script>
+
+
+
+<!-- 表单弹窗 -->
+<script type="text/html" id="mould-model">
+    <form id="mould-form" lay-filter="mould-form" class="layui-form model-form">
+        <input name="id" type="hidden"/>
+        <div class="layui-form-item">
+            <label class="layui-form-label">模板名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="name" lay-verify="required" placeholder="请输入模板名称" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <input name="type" type="hidden" value="1"/>
+        <div class="layui-form-item model-form-footer">
+            <button class="layui-btn" lay-filter="mould-form-submit" lay-submit>保存</button>
+        </div>
+    </form>
+</script>
+
+<script>
+    layui.use(['form', 'table', 'config', 'crown'], function () {
+        var form = layui.form;
+        var table = layui.table;
+        var config = layui.config;
+        var layer = layui.layer;
+        var crown = layui.crown;
+        var $ = layui.jquery;
+        $('#sort-toolbar').vm({
+            addShow: crown.hasPerm("module:sort:add")
+        });
+        $('#sort-table-bar').vm({
+            deleteShow: crown.hasPerm("module:sort:delete"),
+            updateShow: crown.hasPerm("module:sort:edit")
+        });
+
+        $('#material-toolbar').vm({
+            materialAddShow: crown.hasPerm("module:material:add")
+        });
+        $('#material-table-bar').vm({
+            materialDeleteShow: crown.hasPerm("module:material:delete"),
+            materialUpdateShow: crown.hasPerm("module:material:edit")
+        });
+        //渲染表格
+        var sortTable = table.render({
+            elem: '#sort-table',
+            toolbar:'#sort-toolbar',
+            url: config.serverUrl + '/sort?type=1',
+            request: config.request,
+            parseData: config.parseData,
+            response: config.response,
+            headers: {Authorization: config.getToken()},
+            page: true,
+            cols: [[
+                {field: 'id', width: 60, title: 'ID', hide: true},
+                {field: 'name', align: 'center',  sort: true, title: '名称',width: 532},
+                {field: 'type', align: 'center',templet: function (e) {
+                        if (e.type === '1') {
+                            return '模板';
+                        }
+                        if (e.type === '2') {
+                            return '素材';
+                        }
+                    }, sort: true, title: '类型',width: 532},
+                {align: 'center', toolbar: '#sort-table-bar', title: '操作',width: 532}
+            ]]
+        });
+
+        //渲染表格
+        var materialTable = table.render({
+            elem: '#material-table',
+            toolbar:'#material-toolbar',
+            url: config.serverUrl + '/sort?type=2',
+            request: config.request,
+            parseData: config.parseData,
+            response: config.response,
+            headers: {Authorization: config.getToken()},
+            page: true,
+            cols: [[
+                {field: 'id', width: 60, title: 'ID', hide: true},
+                {field: 'name', align: 'center',  sort: true, title: '名称',width: 532},
+                {field: 'type', align: 'center',templet: function (e) {
+                        if (e.type === '1') {
+                            return '模板';
+                        }
+                        if (e.type === '2') {
+                            return '素材';
+                        }
+                    }, sort: true, title: '类型',width: 532},
+                {align: 'center', toolbar: '#material-table-bar', title: '操作',width: 532}
+            ]]
+        });
+        // 表格顶部操作列
+        table.on('toolbar(sort-table)', function (obj) {
+            if (obj.event === 'add') {
+                showEditModel();
+            }
+        });
+        // 表格顶部操作列
+        table.on('toolbar(material-table)', function (obj) {
+            if (obj.event === 'material:add') {
+                materialEditModel();
+            }
+        });
+        //显示表单弹窗
+        var materialEditModel = function (data) {
+            layer.open({
+                type: 1,
+                title: data ? '修改素材分类' : '添加素材分类',
+                area: '450px',
+                offset: '120px',
+                content: $('#material-model').html(),
+                success: function () {
+                    if (data) {
+                        form.val('material-form', data);
+                    }
+                    $('#material-form.close').click(function () {
+                        layer.closeAll('page');
+                    });
+                }
+            });
+        };
+
+
+        //显示表单弹窗
+        var showEditModel = function (data) {
+            layer.open({
+                type: 1,
+                title: data ? '修改模板分类' : '添加模板分类',
+                area: '450px',
+                offset: '120px',
+                content: $('#mould-model').html(),
+                success: function () {
+                    if (data) {
+                        form.val('mould-form', data);
+                    }
+                    $('#mould-form.close').click(function () {
+                        layer.closeAll('page');
+                    });
+                }
+            });
+        };
+        // 表格操作列事件
+        table.on('tool(sort-table)', function (obj) {
+            var data = obj.data;
+            var layEvent = obj.event;
+
+            if (layEvent === 'edit') {
+                // 修改
+                showEditModel(data);
+            }else if (layEvent === 'delete') {
+                // 删除
+                doDelete(obj);
+            }
+        });
+
+        // 表格操作列事件
+        table.on('tool(material-table)', function (obj) {
+            var data = obj.data;
+            var layEvent = obj.event;
+
+            if (layEvent === 'material:edit') {
+                // 修改
+                materialEditModel(data);
+            }else if (layEvent === 'material:delete') {
+                // 删除
+                doDelete(obj);
+            }
+        });
+
+        // 删除
+        var doDelete = function (obj) {
+            layer.confirm('确定要删除吗？', function (i) {
+                layer.close(i);
+                layer.load(2);
+                crown.delete('/sort/' + obj.data.id, {}, function () {
+                    layer.closeAll('loading');
+                    layer.msg('删除成功', {icon: 1});
+                    obj.del();
+                });
+            });
+        };
+
+
+        // 表单提交事件
+        form.on('submit(material-form-submit)', function (data) {
+            layer.load(2);
+            if (data.field.id) {
+                crown.put('/sort/' + data.field.id, {data: data.field}, function () {
+                    layer.closeAll('loading');
+                    layer.msg('修改成功', {icon: 1});
+                    materialTable.reload('material-table');
+                    layer.closeAll('page');
+                });
+            } else {
+                crown.post('/sort', {data: data.field}, function () {
+                    layer.closeAll('loading');
+                    layer.msg('添加成功', {icon: 1});
+                    materialTable.reload('material-table');
+                    layer.closeAll('page');
+                });
+            }
+            return false;
+        });
+
+        // 表单提交事件
+        form.on('submit(mould-form-submit)', function (data) {
+            layer.load(2);
+            if (data.field.id) {
+                crown.put('/sort/' + data.field.id, {data: data.field}, function () {
+                    layer.closeAll('loading');
+                    layer.msg('修改成功', {icon: 1});
+                    sortTable.reload('sort-table');
+                    layer.closeAll('page');
+                });
+            } else {
+                crown.post('/sort', {data: data.field}, function () {
+                    layer.closeAll('loading');
+                    layer.msg('添加成功', {icon: 1});
+                    sortTable.reload('sort-table');
+                    layer.closeAll('page');
+                });
+            }
+            return false;
+        });
+    });
+
+</script>

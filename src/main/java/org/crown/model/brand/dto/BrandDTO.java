@@ -8,8 +8,6 @@ import lombok.NoArgsConstructor;
 import org.crown.enums.StatusEnum;
 import org.crown.framework.model.convert.Convert;
 
-import java.time.LocalDateTime;
-
 /**
  * @version V1.0
  * @package org.crown.model.image.dto
