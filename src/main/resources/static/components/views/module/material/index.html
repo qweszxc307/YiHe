@@ -1,0 +1,132 @@
+<div class="layui-card">
+    <div class="layui-card-header">
+        <h2 class="header-title">素材</h2>
+        <span class="layui-breadcrumb pull-right">
+          <a href="#!console">首页</a>
+          <a><cite>素材管理</cite></a>
+        </span>
+    </div>
+    <div class="layui-card-body">
+        <!-- 表格顶部操作列 -->
+        <script type="text/html" id="material-toolbar">
+            <div class="layui-btn-container">
+                {{# if({{addShow}} == true){ }}
+                <button class="layui-btn layui-btn-normal layui-btn-sm" lay-event="add"><i
+                        class="layui-icon">&#xe654;</i>添加
+                </button>
+                {{# } }}
+            </div>
+        </script>
+        <!-- 数据表格 -->
+        <table class="layui-table" id="material-table" lay-filter="material-table"></table>
+    </div>
+</div>
+
+<!-- 表格操作列 -->
+<script type="text/html" id="material-table-bar">
+    {{#  if({{editShow}} == true){ }}
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>
+    {{#  } }}
+    {{#  if({{deleteShow}} == true){ }}
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>
+    {{#  } }}
+
+</script>
+
+
+<script>
+    layui.use(['form', 'table', 'config', 'crown'], function () {
+        var form = layui.form;
+        var table = layui.table;
+        var config = layui.config;
+        var layer = layui.layer;
+        var crown = layui.crown;
+        var $ = layui.jquery;
+        $('#material-toolbar').vm({
+            addShow: crown.hasPerm("module:material:add")
+        });
+        $('#material-table-bar').vm({
+            deleteShow: crown.hasPerm("module:material:delete"),
+            editShow: crown.hasPerm("module:material:edit")
+        });
+        //渲染表格
+        var memberTable = table.render({
+            elem: '#material-table',
+            toolbar: '#material-toolbar',
+            url: config.serverUrl + '/material',
+            request: config.request,
+            parseData: config.parseData,
+            response: config.response,
+            headers: {Authorization: config.getToken()},
+            page: true,
+            cols: [[
+                {field: 'id', width: 60, title: '排序', hide: false},
+                {field: 'name', align: 'center', sort: true, title: '素材名称'},
+                {
+                    field: 'sortDTO', align: 'center', width: 500, sort: true, templet: function (e) {
+                        return e.sortDTO.name;
+                    }, title: '素材等级'
+                },
+                {
+                    field: 'image', align: 'center',
+                    templet: function (d) {
+                        return "<img  width='100px' onclick='window.open(\"http://" + d.image + "\")' title='点击预览图片' style='cursor: pointer;' src='" + "http://" + d.image + "\'\>"
+                    }, title: '素材图片'
+                },
+                {align: 'center', toolbar: '#material-table-bar', title: '操作'}
+            ]]
+        });
+        // 表格顶部操作列
+        table.on('toolbar(material-table)', function (obj) {
+            if (obj.event === 'add') {
+                showEditModel();
+            }
+        });
+
+
+        //显示表单弹窗
+        var showEditModel = function (data) {
+            crown.putTempData('t_material', data);
+            crown.popupCenter({
+                type: 1,
+                resize: false,
+                title: data ? '修改素材' : '添加素材',
+                area: ['35%', '70%'],
+                offset: 'auto',
+                path: '/components/views/module/material/form.html',
+                finish: function () {
+                    memberTable.reload('material-table', {});
+                }
+            });
+        };
+
+
+        // 表格操作列事件
+        table.on('tool(material-table)', function (obj) {
+            var data = obj.data;
+            var layEvent = obj.event;
+            if (layEvent === 'edit') {
+                // 修改
+                showEditModel(data);
+            } else if (layEvent === 'delete') {
+                // 删除
+                doDelete(obj);
+            }
+        });
+
+        // 删除
+        var doDelete = function (obj) {
+            layer.confirm('确定要删除吗？', function (i) {
+                layer.close(i);
+                layer.load(2);
+                crown.delete('/material/' + obj.data.id, {}, function () {
+                    layer.closeAll('loading');
+                    layer.msg('删除成功', {icon: 1});
+                    obj.del();
+                });
+            });
+        };
+
+    });
+
+</script>

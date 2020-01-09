@@ -1,0 +1,158 @@
+<!-- material 表单弹窗 -->
+
+<form id="material-form" lay-filter="material-form" class="layui-form model-form" style="padding-right:0px;height:100%">
+    <div style=" height:80%;overflow: auto;padding-right:10px;padding-left:10px">
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+            <legend>素材管理</legend>
+        </fieldset>
+        <input name="id" type="hidden"/>
+        <input name="image" type="hidden" id="image"/>
+        <input name="width" type="hidden" id="width"/>
+        <input name="high" type="hidden" id="high"/>
+        <div class="layui-form-item">
+            <label class="layui-form-label">素材名称:</label>
+            <div class="layui-input-inline">
+                <input type="text" name="name" autocomplete="off" lay-verify="required"
+                       class="layui-input" placeholder="请输入素材名称">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">素材上级</label>
+            <div class="layui-input-inline">
+                <select name="sortId" xm-select-radio="" xm-select-search="" xm-select="sortId" lay-verify="required">
+                </select>
+            </div>
+        </div>
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+            <legend>素材上传</legend>
+        </fieldset>
+        <div style="padding: 10px; background-color: #F1F1F1;">
+            <div class="layui-row layui-col-space12">
+                <div class="layui-card-header">素材图片</div>
+                <div class="layui-card-body">
+                    <div class="layui-upload">
+                        <button type="button" class="layui-btn" id="image_button" style="margin-left: 20px;">上传素材图片
+                        </button>
+                        <div class="layui-upload-list" style="text-align: center">
+                            <img class="layui-upload-img" id="masthead_image"
+                                 style="max-width: 20%;max-height: 350px;vertical-align: middle;">
+                            <p id="image_txt"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="layui-form-item model-form-footer" style="margin-top:10px">
+        <button class="layui-btn layui-btn-primary close" type="button">取消</button>
+        <button class="layui-btn" lay-filter="material-form-submit" lay-submit>保存</button>
+    </div>
+</form>
+
+<script>
+    layui.use(['form', 'table', 'config', 'crown','upload', 'formSelects'], function () {
+        var $ = layui.jquery
+            , upload = layui.upload;
+        var crown = layui.crown;
+        var config = layui.config;
+        var layer = layui.layer;
+        var form = layui.form;
+        var formSelects = layui.formSelects;
+        var material = crown.getTempData('t_material');
+        // 有值就是修改，没值就是新增
+        if (material) {
+            crown.fromVal('material-form', material);
+            if (material.image) {
+                $('#masthead_image').attr('src', "http://" + material.image); //图片链接（base64）
+            }
+        }
+
+        //品牌图片上传
+        var uploadImage = upload.render({
+            elem: '#image_button'
+            , url: 'material/upload'
+            , size: 2048 //限制文件大小，单位 KB
+            , headers: {Authorization: config.getToken()}
+            , before: function (obj) {
+                layer.load(2);
+                //预读本地文件示例，不支持ie8
+                obj.preview(function (index, file, result) {
+                    $('#masthead_image').attr('src', result); //图片链接（base64）
+                });
+            }
+            , done: function (res) {
+                layer.closeAll('loading');
+                //上传成功
+                var data = res.result;
+                if (data.image) {
+                    $("#image").val(data.image);
+                    $("#width").val(data.width);
+                    $("#high").val(data.high);
+                    return layer.msg('上传成功');
+                }
+            }
+            , error: function () {
+                //如果上传失败
+                layer.closeAll('loading');
+                //演示失败状态，并实现重传
+                var demoText = $('#special_img_txt');
+                demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+                demoText.find('.demo-reload').on('click', function () {
+                    uploadImage.upload();
+                });
+            }
+        });
+
+
+
+
+
+        //下拉框
+        crown.get('/sort?type=2', {}, function (data) {
+            var sort = new Array();
+            for (var i = 0; i < data.result.records.length; i++) {
+                sort.push({name: data.result.records[i].name, value: data.result.records[i].id})
+            }
+            formSelects.data('sortId', 'local', {arr: sort});
+            var rds = [material.sortDTO.id];
+            formSelects.value('sortId', rds);
+
+        });
+
+
+
+
+
+
+
+
+
+        // 表单提交事件
+        form.on('submit(material-form-submit)', function (data) {
+            layer.load(2);
+            if (data.field.id) {
+                crown.put('/material/' + data.field.id, {data: data.field}, function () {
+                    layer.closeAll('loading');
+                    layer.msg('修改成功', {icon: 1});
+                    crown.finishPopupCenter();
+                });
+            } else {
+                data.field.status = 0;
+                crown.post('/material', {data: data.field}, function () {
+                    layer.closeAll('loading');
+                    layer.msg('添加成功', {icon: 1});
+                    crown.finishPopupCenter();
+                });
+            }
+            return false;
+        });
+
+    });
+
+
+
+
+
+
+</script>
