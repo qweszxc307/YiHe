@@ -31,13 +31,7 @@ import org.crown.framework.controller.SuperController;
 import org.crown.framework.responses.ApiResponses;
 import org.crown.model.product.dto.CarriageDTO;
 import org.crown.model.product.entity.Carriage;
-import org.crown.model.product.entity.CarriageAreaCity;
-import org.crown.model.product.entity.CarriageConfig;
-import org.crown.model.product.entity.CarriageConfigPrice;
 import org.crown.model.product.parm.CarriagePARM;
-import org.crown.service.product.ICarriageAreaCityService;
-import org.crown.service.product.ICarriageConfigPriceService;
-import org.crown.service.product.ICarriageConfigService;
 import org.crown.service.product.ICarriageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -62,12 +56,6 @@ public class CarriageRestController extends SuperController {
 
         @Autowired
         private ICarriageService carriageService;
-        @Autowired
-        private ICarriageConfigService carriageConfigService;
-        @Autowired
-        private ICarriageConfigPriceService carriageConfigPriceService;
-        @Autowired
-        private ICarriageAreaCityService carriageAreaCityService;
 
         @Resources(auth = AuthTypeEnum.AUTH)
         @ApiOperation("查询所有运费模板")
